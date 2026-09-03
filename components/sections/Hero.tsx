@@ -2,6 +2,7 @@ import Reveal from "@/components/ui/Reveal";
 import RevealText from "@/components/ui/RevealText";
 import MagneticButton from "@/components/ui/MagneticButton";
 import SignatureObject from "@/components/three/SignatureObject";
+import MeshField from "@/components/hero/MeshField";
 import { site, mailtoHref } from "@/config/site";
 
 export default function Hero() {
@@ -12,12 +13,13 @@ export default function Hero() {
     >
       {/* grounds */}
       <div className="pointer-events-none absolute inset-0 bg-[radial-gradient(760px_760px_at_50%_42%,rgba(139,92,246,0.22),rgba(34,211,238,0.06)_46%,transparent_68%)]" />
-      <div className="grid-texture pointer-events-none absolute inset-0 [mask-image:radial-gradient(920px_620px_at_50%_46%,transparent_26%,#000_92%)]" />
+      <MeshField className="absolute inset-0 opacity-90 [mask-image:radial-gradient(1200px_800px_at_50%_46%,#000_36%,transparent_92%)]" />
+      <div className="grid-texture pointer-events-none absolute inset-0 opacity-60 [mask-image:radial-gradient(920px_620px_at_50%_46%,transparent_26%,#000_92%)]" />
       <div className="noise-overlay pointer-events-none absolute inset-0 opacity-[0.045] mix-blend-soft-light" />
 
       {/* signature object — luminous centrepiece behind the type */}
-      <div className="pointer-events-none absolute inset-0 z-0 flex items-start justify-center pt-[8vh]">
-        <div className="relative h-[min(72vh,600px)] w-[min(72vh,600px)] max-w-[92vw]">
+      <div className="pointer-events-none absolute inset-0 z-0 flex items-start justify-center pt-[4vh]">
+        <div className="relative h-[min(70vh,580px)] w-[min(70vh,580px)] max-w-[92vw]">
           <SignatureObject className="absolute inset-0" />
         </div>
       </div>

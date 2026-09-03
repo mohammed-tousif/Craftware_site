@@ -1,154 +1,153 @@
 "use client";
 
-import { useEffect, useRef, type CSSProperties } from "react";
+import { useEffect, useMemo, useRef, type CSSProperties } from "react";
 import { useIsTouch, useReducedMotion } from "@/lib/hooks";
 
 /* ------------------------------------------------------------------ *
  *  Fractured glass cube — the CraftWare signature object.
- *  Pure CSS 3D (no WebGL): a 3x3 glass body with a few blocks pulled
- *  out and floating. Slow yaw + cursor tilt + gentle bob.
+ *  27 translucent glass voxels form a 3x3x3 cube. Corner/edge pieces
+ *  continuously break away and re-assemble on staggered loops, so the
+ *  cube is forever rebuilding itself. Pure CSS 3D — no WebGL.
  * ------------------------------------------------------------------ */
 
-type Accent = "glass" | "violet" | "cyan" | "blue" | "white";
+const PITCH = 62; // distance between voxel centres
+const VOX = 54; // voxel edge
 
-const accentBg: Record<Accent, string> = {
-  glass:
-    "linear-gradient(145deg, rgba(214,220,255,0.16), rgba(139,92,246,0.10) 55%, rgba(34,211,238,0.06))",
-  violet: "linear-gradient(145deg, #a78bfa, #6d28d9)",
-  cyan: "linear-gradient(145deg, #67e8f9, #0891b2)",
-  blue: "linear-gradient(145deg, #60a5fa, #2563eb)",
-  white: "linear-gradient(145deg, #ffffff, #cdd2f0)",
+type Accent = "violet" | "cyan" | "blue" | "white";
+
+const ACCENT_FILL: Record<Accent, string> = {
+  violet: "linear-gradient(145deg, rgba(167,139,250,0.62), rgba(109,40,217,0.5))",
+  cyan: "linear-gradient(145deg, rgba(103,232,249,0.6), rgba(8,145,178,0.46))",
+  blue: "linear-gradient(145deg, rgba(96,165,250,0.6), rgba(37,99,235,0.48))",
+  white: "linear-gradient(145deg, rgba(255,255,255,0.7), rgba(205,210,240,0.5))",
 };
 
-const FACES = [
-  { key: "front", t: (h: number) => `translateZ(${h}px)` },
-  { key: "back", t: (h: number) => `rotateY(180deg) translateZ(${h}px)` },
-  { key: "right", t: (h: number) => `rotateY(90deg) translateZ(${h}px)` },
-  { key: "left", t: (h: number) => `rotateY(-90deg) translateZ(${h}px)` },
-  { key: "top", t: (h: number) => `rotateX(90deg) translateZ(${h}px)` },
-  { key: "bottom", t: (h: number) => `rotateX(-90deg) translateZ(${h}px)` },
-] as const;
-
-/** which cells on which face get an accent tint (index 0-8, row-major) */
-const BODY_ACCENTS: Record<string, Partial<Record<number, Accent>>> = {
-  front: { 1: "violet", 6: "blue" },
-  right: { 2: "cyan", 4: "violet" },
-  top: { 0: "white", 8: "cyan" },
-  back: { 4: "violet" },
-  left: { 7: "blue" },
+// face fills by orientation (fake lighting: top brightest, right darkest)
+const FACE = {
+  top: "linear-gradient(145deg, rgba(224,229,255,0.44), rgba(163,143,242,0.30))",
+  front: "linear-gradient(145deg, rgba(165,145,238,0.34), rgba(96,196,224,0.22))",
+  right: "linear-gradient(145deg, rgba(124,104,190,0.34), rgba(48,38,80,0.38))",
 };
+
+const OUT = 0.5; // fracture distance factor — smaller = pieces stay closer
+
+type Loose = {
+  ox: number;
+  oy: number;
+  oz: number;
+  dur: number;
+  delay: number;
+  rx: number;
+  ry: number;
+};
+
+type Vox = {
+  x: -1 | 0 | 1;
+  y: -1 | 0 | 1;
+  z: -1 | 0 | 1;
+  accent?: Accent;
+  loose?: Loose;
+};
+
+// 3x3x3 minus the hidden centre
+function buildVoxels(): Vox[] {
+  const out: Vox[] = [];
+  const accents: Record<string, Accent> = {
+    "1,1,1": "cyan",
+    "-1,-1,1": "blue",
+    "1,-1,-1": "violet",
+    "-1,1,-1": "white",
+    "0,1,1": "violet",
+  };
+  // the 8 corner pieces break away straight along their diagonal — no tilt.
+  // one shared period, evenly-spaced phases -> calm, ~1 piece out at a time.
+  const PERIOD = 11;
+  const corners: Array<[number, number, number]> = [
+    [1, 1, 1],
+    [-1, 1, 1],
+    [1, -1, 1],
+    [-1, -1, 1],
+    [1, 1, -1],
+    [-1, 1, -1],
+    [1, -1, -1],
+    [-1, -1, -1],
+  ];
+  const looseCfg: Record<string, Loose> = {};
+  corners.forEach(([cx, cy, cz], i) => {
+    looseCfg[`${cx},${cy},${cz}`] = {
+      ox: cx * 150,
+      oy: -cy * 150,
+      oz: cz * 150,
+      dur: PERIOD,
+      delay: -(i / corners.length) * PERIOD,
+      rx: 0,
+      ry: 0,
+    };
+  });
+
+  const axis: Array<-1 | 0 | 1> = [-1, 0, 1];
+  for (const x of axis)
+    for (const y of axis)
+      for (const z of axis) {
+        if (x === 0 && y === 0 && z === 0) continue;
+        const k = `${x},${y},${z}`;
+        out.push({ x, y, z, accent: accents[k], loose: looseCfg[k] });
+      }
+  return out;
+}
 
 function Face({
-  size,
   transform,
-  grid,
-  accents,
-  solid,
+  fill,
+  bright,
 }: {
-  size: number;
   transform: string;
-  grid: boolean;
-  accents?: Partial<Record<number, Accent>>;
-  solid?: Accent;
+  fill: string;
+  bright: boolean;
 }) {
-  const base: CSSProperties = {
+  const s: CSSProperties = {
     position: "absolute",
-    width: size,
-    height: size,
+    width: VOX,
+    height: VOX,
     transform,
-    borderRadius: grid ? 10 : 5,
-    border: "1px solid rgba(139,92,246,0.35)",
-    boxShadow: "0 0 26px rgba(139,92,246,0.18)",
-    background: "rgba(9,9,15,0.55)",
+    background: fill,
+    border: `1px solid rgba(202,211,255,${bright ? 0.72 : 0.5})`,
+    borderRadius: 4,
+    boxShadow: bright
+      ? "inset 0 0 16px rgba(139,92,246,0.22), 0 0 20px rgba(139,92,246,0.28)"
+      : "inset 0 0 13px rgba(139,92,246,0.16)",
     backfaceVisibility: "hidden",
   };
+  return <div style={s} />;
+}
 
-  if (!grid) {
-    return (
-      <div
-        style={{
-          ...base,
-          background: accentBg[solid ?? "glass"],
-          border: "1px solid rgba(255,255,255,0.32)",
-          boxShadow:
-            "inset 0 1px 0 rgba(255,255,255,0.35), 0 0 34px rgba(139,92,246,0.45)",
-        }}
-      />
-    );
-  }
+function Voxel({ v }: { v: Vox }) {
+  const h = VOX / 2;
+  const outer = Math.abs(v.x) + Math.abs(v.y) + Math.abs(v.z) >= 2;
+  const fill = v.accent ? ACCENT_FILL[v.accent] : null;
+  const home = `translate3d(${v.x * PITCH}px, ${-v.y * PITCH}px, ${v.z * PITCH}px)`;
+
+  const style: CSSProperties = {
+    position: "absolute",
+    left: -h,
+    top: -h,
+    width: VOX,
+    height: VOX,
+    transformStyle: "preserve-3d",
+    transform: v.loose ? undefined : home,
+    animation: v.loose
+      ? `cw-vx-${v.x + 1}${v.y + 1}${v.z + 1} ${v.loose.dur}s ease-in-out ${v.loose.delay}s infinite`
+      : undefined,
+  };
 
   return (
-    <div
-      style={{
-        ...base,
-        display: "grid",
-        gridTemplateColumns: "repeat(3, 1fr)",
-        gap: size * 0.03,
-        padding: size * 0.03,
-      }}
-    >
-      {Array.from({ length: 9 }).map((_, i) => (
-        <div
-          key={i}
-          style={{
-            borderRadius: 4,
-            background: accentBg[accents?.[i] ?? "glass"],
-            border: "1px solid rgba(255,255,255,0.12)",
-            boxShadow:
-              "inset 0 0 12px rgba(0,0,0,0.35), inset 0 1px 0 rgba(255,255,255,0.14)",
-          }}
-        />
-      ))}
+    <div style={style}>
+      <Face transform={`translateZ(${h}px)`} fill={fill ?? FACE.front} bright={outer} />
+      <Face transform={`rotateY(90deg) translateZ(${h}px)`} fill={fill ?? FACE.right} bright={outer} />
+      <Face transform={`rotateX(90deg) translateZ(${h}px)`} fill={fill ?? FACE.top} bright={outer} />
     </div>
   );
 }
-
-function Cube({
-  size,
-  grid = false,
-  solid,
-  accents,
-  style,
-}: {
-  size: number;
-  grid?: boolean;
-  solid?: Accent;
-  accents?: Record<string, Partial<Record<number, Accent>>>;
-  style?: CSSProperties;
-}) {
-  const h = size / 2;
-  return (
-    <div
-      style={{
-        position: "absolute",
-        width: size,
-        height: size,
-        transformStyle: "preserve-3d",
-        ...style,
-      }}
-    >
-      {FACES.map((f) => (
-        <Face
-          key={f.key}
-          size={size}
-          transform={f.t(h)}
-          grid={grid}
-          solid={solid}
-          accents={accents?.[f.key]}
-        />
-      ))}
-    </div>
-  );
-}
-
-/** floating fractured blocks: [x, y, zPx, sizePx, accent, bobDelay] (x/y in px from cube centre) */
-const FLOATERS: [number, number, number, number, Accent, number][] = [
-  [168, -120, 50, 62, "cyan", 0],
-  [-176, -46, 30, 54, "violet", -2.2],
-  [140, 96, -50, 50, "blue", -4],
-  [-150, 118, -20, 44, "glass", -1.1],
-  [16, -184, 20, 40, "white", -3.1],
-];
 
 export default function VoxelCube({
   className = "",
@@ -163,6 +162,30 @@ export default function VoxelCube({
   const live = !reduced;
   const followPointer = parallax && !isTouch && !reduced;
 
+  const voxels = useMemo(buildVoxels, []);
+
+  const keyframes = useMemo(() => {
+    if (reduced) return "";
+    return voxels
+      .filter((v) => v.loose)
+      .map((v) => {
+        const l = v.loose!;
+        const hx = v.x * PITCH;
+        const hy = -v.y * PITCH;
+        const hz = v.z * PITCH;
+        const name = `cw-vx-${v.x + 1}${v.y + 1}${v.z + 1}`;
+        const tx = (hx + l.ox * OUT).toFixed(1);
+        const ty = (hy + l.oy * OUT).toFixed(1);
+        const tz = (hz + l.oz * OUT).toFixed(1);
+        return `@keyframes ${name}{
+0%,26%{transform:translate3d(${hx}px,${hy}px,${hz}px);}
+45%,52%{transform:translate3d(${tx}px,${ty}px,${tz}px);}
+74%,100%{transform:translate3d(${hx}px,${hy}px,${hz}px);}
+}`;
+      })
+      .join("\n");
+  }, [voxels, reduced]);
+
   useEffect(() => {
     if (!followPointer) return;
     const el = tilt.current;
@@ -170,25 +193,20 @@ export default function VoxelCube({
     const onMove = (e: PointerEvent) => {
       const x = (e.clientX / window.innerWidth) * 2 - 1;
       const y = (e.clientY / window.innerHeight) * 2 - 1;
-      el.style.setProperty("--mx", `${x * 14}deg`);
-      el.style.setProperty("--my", `${-y * 12}deg`);
+      el.style.setProperty("--mx", `${x * 13}deg`);
+      el.style.setProperty("--my", `${-y * 11}deg`);
     };
     window.addEventListener("pointermove", onMove, { passive: true });
     return () => window.removeEventListener("pointermove", onMove);
   }, [followPointer]);
 
-  const BODY = 232;
-
   return (
     <div className={`pointer-events-none ${className}`} aria-hidden>
       {/* glow + floor */}
-      <div className="absolute inset-[-12%] rounded-full bg-[radial-gradient(circle_at_50%_46%,rgba(139,92,246,0.42),rgba(34,211,238,0.12)_46%,transparent_72%)] blur-3xl" />
-      <div className="absolute inset-x-[8%] bottom-[6%] h-24 rounded-[50%] bg-[radial-gradient(50%_50%_at_50%_0%,rgba(139,92,246,0.3),transparent_72%)] blur-md" />
+      <div className="absolute inset-[-10%] rounded-full bg-[radial-gradient(circle_at_50%_46%,rgba(139,92,246,0.4),rgba(34,211,238,0.12)_46%,transparent_72%)] blur-3xl" />
+      <div className="absolute inset-x-[10%] bottom-[8%] h-20 rounded-[50%] bg-[radial-gradient(50%_50%_at_50%_0%,rgba(139,92,246,0.3),transparent_72%)] blur-md" />
 
-      <div
-        className="absolute inset-0"
-        style={{ perspective: "1600px" }}
-      >
+      <div className="absolute inset-0" style={{ perspective: "1500px" }}>
         <div
           ref={tilt}
           style={{
@@ -196,7 +214,7 @@ export default function VoxelCube({
             inset: 0,
             transformStyle: "preserve-3d",
             transform:
-              "rotateX(calc(-24deg + var(--my, 0deg))) rotateY(var(--mx, 0deg))",
+              "rotateX(calc(-24deg + var(--my, 0deg))) rotateY(calc(-30deg + var(--mx, 0deg)))",
             transition: "transform 0.5s cubic-bezier(0.16,1,0.3,1)",
           }}
         >
@@ -208,63 +226,22 @@ export default function VoxelCube({
               width: 0,
               height: 0,
               transformStyle: "preserve-3d",
-              animation: live ? "cw-cube-spin 44s linear infinite" : undefined,
+              animation: live ? "cw-cube-sway 15s ease-in-out infinite" : undefined,
             }}
           >
-            <div
-              style={{
-                position: "absolute",
-                transformStyle: "preserve-3d",
-                animation: live ? "cw-cube-bob 7s ease-in-out infinite" : undefined,
-              }}
-            >
-              {/* main body */}
-              <Cube
-                size={BODY}
-                grid
-                accents={BODY_ACCENTS}
-                style={{ left: -BODY / 2, top: -BODY / 2 }}
-              />
-
-              {/* fractured floaters */}
-              {FLOATERS.map(([x, y, z, s, a, delay], i) => (
-                <div
-                  key={i}
-                  style={{
-                    position: "absolute",
-                    left: x - s / 2,
-                    top: y - s / 2,
-                    transformStyle: "preserve-3d",
-                    transform: `translateZ(${z}px)`,
-                  }}
-                >
-                  <div
-                    style={{
-                      position: "absolute",
-                      transformStyle: "preserve-3d",
-                      animation: live
-                        ? `cw-cube-bob 6s ease-in-out ${delay}s infinite`
-                        : undefined,
-                    }}
-                  >
-                    <Cube size={s} solid={a} />
-                  </div>
-                </div>
-              ))}
-            </div>
+            {voxels.map((v, i) => (
+              <Voxel key={i} v={v} />
+            ))}
           </div>
         </div>
       </div>
 
       <style>{`
-        @keyframes cw-cube-spin {
-          from { transform: rotateY(0deg); }
-          to { transform: rotateY(360deg); }
+        @keyframes cw-cube-sway {
+          0%, 100% { transform: rotateY(-15deg); }
+          50% { transform: rotateY(15deg); }
         }
-        @keyframes cw-cube-bob {
-          0%, 100% { transform: translateY(-6px); }
-          50% { transform: translateY(6px); }
-        }
+        ${keyframes}
       `}</style>
     </div>
   );
