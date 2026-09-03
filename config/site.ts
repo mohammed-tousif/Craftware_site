@@ -14,12 +14,11 @@ export const site = {
   founded: "EST. 2026 — MUMBAI",
   ethos: "DESIGN × TECHNOLOGY × MARKETING",
 
-  // TODO — real values before launch
   contact: {
-    email: "hello@craftware.studio",
-    phone: "+91 00000 00000",
-    whatsapp: "910000000000", // digits only, for wa.me/<number>
-    location: "Mumbai, India",
+    email: "craftwaretech@gmail.com",
+    phone: "+91 87229 73448",
+    whatsapp: "918722973448", // digits only, for wa.me/<number>
+    location: "Mumbai, India", // TODO confirm exact location
   },
 
   socials: [
