@@ -53,12 +53,12 @@ export default function Hero() {
       </Reveal>
 
       {/* headline stack sits over the object's lower half */}
-      <div className="relative z-10 mt-[34vh] sm:mt-[38vh]">
+      <div className="relative z-10 mt-[30vh] sm:mt-[34vh]">
         <RevealText
           as="h1"
           immediate
           delay={0.15}
-          className="mx-auto max-w-[16ch] font-display text-[clamp(2rem,5.6vw,3.4rem)] font-bold leading-[1.06] tracking-tight [text-shadow:0_2px_40px_rgba(8,8,11,0.8)] sm:max-w-[24ch]"
+          className="mx-auto max-w-[16ch] font-display text-[clamp(2rem,5.4vw,3.3rem)] font-bold leading-[1.06] tracking-tight [text-shadow:0_2px_50px_rgba(8,8,11,0.9),0_0_20px_rgba(8,8,11,0.7)] sm:max-w-[24ch]"
         >
           WE CRAFT DIGITAL EXPERIENCES THAT
         </RevealText>
@@ -66,7 +66,7 @@ export default function Hero() {
           as="span"
           immediate
           delay={0.5}
-          className="mt-1 block font-display text-[clamp(2rem,5.6vw,3.4rem)] font-bold leading-[1.06] tracking-tight text-gradient"
+          className="mt-1 block font-display text-[clamp(2rem,5.4vw,3.3rem)] font-bold leading-[1.06] tracking-tight text-gradient [filter:drop-shadow(0_0_24px_rgba(139,92,246,0.55))]"
         >
           GROW.
         </RevealText>

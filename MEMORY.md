@@ -37,10 +37,14 @@ built separately in Next.js in this same folder.
 
 ---
 
-## 3. Locked decisions (2026-09-02)
+## 3. Locked decisions (2026-09-02, stack revised 2026-09-03 during build)
 
-- **Tech stack:** Next.js 15 (App Router) · TypeScript · Tailwind CSS · three · @react-three/fiber · @react-three/drei · gsap (+ ScrollTrigger) · framer-motion · lenis
-- **Case studies:** real routed pages `/work/[slug]`, opened with a modal-morph transition from the Work rail
+- **Tech stack (as built):** Next.js **16** (App Router, Turbopack) · React 19 · TypeScript · Tailwind **v4** · **three (raw, hand-rolled renderer)** · gsap (+ ScrollTrigger) · lenis · geist.
+  - **@react-three/fiber / @react-three/drei were REMOVED** — R3F v9's reconciler never attaches to the canvas under React 19.2 / Next 16 / Turbopack (`canvas.__r3f` undefined, empty scene, no error). The signature 3D object is now `components/three/MonolithCanvas.tsx` — a plain `useEffect` that owns the `THREE.WebGLRenderer`, scene, rAF loop, resize + disposal.
+  - **framer-motion was REMOVED** for the same class of failure (motion components stuck at `initial`). Entrance/reveal animation is now CSS transitions + IntersectionObserver via `components/ui/Reveal.tsx` and `RevealText.tsx` (with a timeout failsafe so text can't stay hidden).
+- **Deployed:** GitHub `github.com/mohammed-tousif/Craftware_site` (branch `main`), auto-deploying to Vercel project `craftware-site` → **https://craftware-site.vercel.app**. Push to `main` = auto deploy.
+- **Signature object:** a frosted-violet-glass **stepped monolith** (Hubtown-inspired — user disliked the earlier revolving half-C ring) with a glowing "C" on its face, a wireframe energy field + particles. Hero + Final CTA.
+- **Case studies:** real routed pages `/work/[slug]` (SSG). Modal-morph transition from the Work rail is still TODO (currently a plain link).
 - **Contact:** `mailto:` + WhatsApp `wa.me` links only (no backend). Form UI is built so a backend (Web3Forms/Resend) can drop in later
 - **Portfolio & content:** typed data files (`content/*.ts`) + `config/site.ts`; portfolio must be trivial to update
 - **Imagery:** generated abstract placeholders now, swappable via one path in the data file
