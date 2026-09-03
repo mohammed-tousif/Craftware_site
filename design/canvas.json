@@ -1,0 +1,39 @@
+{
+  "pages": [
+    { "id": "hero-object", "name": "Hero object — pick one" },
+    { "id": "homepage", "name": "Homepage system" }
+  ],
+  "artboards": [
+    { "file": "CubeRubik.dc.html", "page": "hero-object", "x": 0, "y": 0, "w": 760, "h": 760, "title": "Option 1 — Rubik, aligned" },
+    { "file": "CubeSolve.dc.html", "page": "hero-object", "x": 880, "y": 0, "w": 760, "h": 760, "title": "Option 2 — Rubik, mid-solve" },
+    { "file": "CubeVoxelC.dc.html", "page": "hero-object", "x": 0, "y": 900, "w": 760, "h": 760, "title": "Option 3 — Voxel C" },
+    { "file": "CubeFractured.dc.html", "page": "hero-object", "x": 880, "y": 900, "w": 760, "h": 760, "title": "Option 4 — Fractured cube" },
+
+    { "file": "Main.dc.html", "page": "homepage", "x": 0, "y": 0, "w": 1440, "h": 900, "title": "Hero — A · Frosted monolith (leading)" },
+    { "file": "HeroAlt.dc.html", "page": "homepage", "x": 1560, "y": 0, "w": 1440, "h": 900, "title": "Hero — B · Light / wireframe (alternate)" },
+    { "file": "Services.dc.html", "page": "homepage", "x": 0, "y": 1080, "w": 1440, "h": 900, "title": "03 · Capabilities (hover state)" },
+    { "file": "Work.dc.html", "page": "homepage", "x": 1560, "y": 1080, "w": 1440, "h": 900, "title": "04 · Work rail" },
+    { "file": "Process.dc.html", "page": "homepage", "x": 0, "y": 2160, "w": 1440, "h": 720, "title": "05 · Process timeline" },
+    { "file": "FinalCTA.dc.html", "page": "homepage", "x": 1560, "y": 2160, "w": 1440, "h": 900, "title": "09 · Final CTA + footer" },
+    { "file": "CaseStudy.dc.html", "page": "homepage", "x": 0, "y": 3240, "w": 1440, "h": 2560, "title": "— · Case study /work/[slug]", "print": "flow" }
+  ],
+  "annotations": [
+    {
+      "id": "pick-object",
+      "page": "hero-object",
+      "x": 0,
+      "y": -180,
+      "w": 900,
+      "text": "HERO OBJECT — four takes on a cube / voxel form for the hero (and the final CTA).\nAll use the CraftWare palette on near-black, slow rotation + cursor parallax in code.\n\n1 Rubik, aligned — iconic, premium, instantly a cube. Safe.\n2 Rubik, mid-solve — a layer turning: motion + progress. Busier.\n3 Voxel C — the C built from glass blocks, a few drifting off. On the name (\"craft\"). Needs the C to read cleaner.\n4 Fractured cube — a 3x3x3 with pieces pulled out and floating: a system assembling. Most abstract.\n\nTell me the number; I build it into the Homepage hero and the live site."
+    },
+    {
+      "id": "brief",
+      "page": "homepage",
+      "x": 0,
+      "y": -220,
+      "w": 1000,
+      "text": "CRAFTWARE — FINALIZED DESIGN\nDark, cinematic, restrained. Space Grotesk (display) + Geist (body). Violet #8B5CF6 → cyan #22D3EE used sparingly on near-black #08080B. One recurring signature object in the hero + final CTA (see the 'Hero object' page).\n\nHERO A/B — composition:\n• A (leading) — object centred, headline over its lower third. Calm, premium.\n• B — object pushed right, headline large on the left. More overtly digital.\n\nMotion (built in code): Lenis smooth scroll · headline mask-reveal line by line · object slow rotation + mouse parallax · Services row hover expands type + blooms glow + floats keyword tags · Work: vertical scroll drives the rail horizontally, centre panel scales · Process: gradient line draws left-to-right on scroll · Case study: metrics count up on enter."
+    }
+  ],
+  "launch": { "view": "canvas", "page": "hero-object" }
+}

@@ -1,0 +1,81 @@
+<!doctype html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+  <style>
+    @import url('https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&family=Geist:wght@300;400;500&display=swap');
+    * { box-sizing: border-box; }
+    body { margin: 0; }
+    a { color: #C4B5FD; } a:hover { color: #22D3EE; }
+    .cw-mono { font-family: 'Space Grotesk', system-ui, sans-serif; }
+    .cw-body { font-family: 'Geist', system-ui, sans-serif; }
+
+    .rk-cell { border-radius: 7px; box-shadow: inset 0 0 14px rgba(0,0,0,0.45), inset 0 1px 0 rgba(255,255,255,0.14); }
+    .rk-base { background: linear-gradient(150deg, rgba(203,208,255,0.22), rgba(139,92,246,0.16)); }
+    .rk-violet { background: linear-gradient(150deg, #a78bfa, #7c3aed); }
+    .rk-cyan { background: linear-gradient(150deg, #67e8f9, #0891b2); }
+    .rk-blue { background: linear-gradient(150deg, #60a5fa, #2563eb); }
+    .rk-white { background: linear-gradient(150deg, #ffffff, #cdd2f0); }
+  </style>
+</helmet>
+
+<div class="cw-body" style="width: 760px; height: 760px; position: relative; overflow: hidden; background:
+      radial-gradient(560px 460px at 50% 42%, rgba(139,92,246,0.24), rgba(34,211,238,0.05) 46%, transparent 72%),
+      #08080B; color: #F4F4F6;">
+
+  <div style="position: absolute; inset: 0; background-image:
+      linear-gradient(rgba(255,255,255,0.03) 1px, transparent 1px),
+      linear-gradient(90deg, rgba(255,255,255,0.03) 1px, transparent 1px);
+      background-size: 60px 60px;
+      -webkit-mask-image: radial-gradient(520px 420px at 50% 44%, #000 8%, transparent 82%);
+              mask-image: radial-gradient(520px 420px at 50% 44%, #000 8%, transparent 82%);"></div>
+
+  <!-- floor glow / reflection -->
+  <div style="position: absolute; left: 50%; top: 566px; width: 420px; height: 120px; transform: translateX(-50%); background: radial-gradient(50% 50% at 50% 0%, rgba(139,92,246,0.28), transparent 72%); filter: blur(6px);"></div>
+
+  <!-- stage -->
+  <div style="position: absolute; inset: 0; display: flex; align-items: center; justify-content: center; perspective: 1500px;">
+    <div style="position: relative; width: 264px; height: 264px; transform-style: preserve-3d; transform: translateY(-14px) rotateX(-26deg) rotateY(-36deg);">
+
+      <!-- FRONT -->
+      <div style="position: absolute; width: 264px; height: 264px; display: grid; grid-template-columns: repeat(3, 1fr); gap: 8px; padding: 8px; border-radius: 12px; background: #0B0B12; border: 1px solid rgba(139,92,246,0.55); box-shadow: 0 0 40px rgba(139,92,246,0.35); transform: translateZ(132px);">
+        <div class="rk-cell rk-base"></div><div class="rk-cell rk-violet"></div><div class="rk-cell rk-base"></div>
+        <div class="rk-cell rk-cyan"></div><div class="rk-cell rk-base"></div><div class="rk-cell rk-base"></div>
+        <div class="rk-cell rk-base"></div><div class="rk-cell rk-base"></div><div class="rk-cell rk-blue"></div>
+      </div>
+
+      <!-- RIGHT -->
+      <div style="position: absolute; width: 264px; height: 264px; display: grid; grid-template-columns: repeat(3, 1fr); gap: 8px; padding: 8px; border-radius: 12px; background: #0A0A10; border: 1px solid rgba(34,211,238,0.4); box-shadow: 0 0 40px rgba(34,211,238,0.22); transform: rotateY(90deg) translateZ(132px); filter: brightness(0.82);">
+        <div class="rk-cell rk-base"></div><div class="rk-cell rk-base"></div><div class="rk-cell rk-cyan"></div>
+        <div class="rk-cell rk-base"></div><div class="rk-cell rk-violet"></div><div class="rk-cell rk-base"></div>
+        <div class="rk-cell rk-white"></div><div class="rk-cell rk-base"></div><div class="rk-cell rk-base"></div>
+      </div>
+
+      <!-- TOP -->
+      <div style="position: absolute; width: 264px; height: 264px; display: grid; grid-template-columns: repeat(3, 1fr); gap: 8px; padding: 8px; border-radius: 12px; background: #0D0D16; border: 1px solid rgba(255,255,255,0.22); box-shadow: 0 0 46px rgba(139,92,246,0.30); transform: rotateX(90deg) translateZ(132px); filter: brightness(1.12);">
+        <div class="rk-cell rk-base"></div><div class="rk-cell rk-base"></div><div class="rk-cell rk-violet"></div>
+        <div class="rk-cell rk-base"></div><div class="rk-cell rk-white"></div><div class="rk-cell rk-base"></div>
+        <div class="rk-cell rk-blue"></div><div class="rk-cell rk-base"></div><div class="rk-cell rk-base"></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- sparks -->
+  <div style="position: absolute; left: 20%; top: 34%; width: 5px; height: 5px; border-radius: 50%; background: #22D3EE; box-shadow: 0 0 12px #22D3EE;"></div>
+  <div style="position: absolute; right: 22%; top: 52%; width: 6px; height: 6px; border-radius: 50%; background: #8B5CF6; box-shadow: 0 0 14px #8B5CF6;"></div>
+  <div style="position: absolute; left: 30%; bottom: 16%; width: 3px; height: 3px; border-radius: 50%; background: #fff; box-shadow: 0 0 9px #fff;"></div>
+
+  <!-- caption -->
+  <div style="position: absolute; left: 44px; right: 44px; bottom: 40px;">
+    <div class="cw-mono" style="font-size: 12px; letter-spacing: 0.22em; text-transform: uppercase; color: #F4F4F6;">Option 1 — Rubik, aligned</div>
+    <div style="margin-top: 8px; font-size: 12px; line-height: 1.6; color: #9A9AA6; max-width: 560px;">A solved 3×3×3 cube in the CraftWare palette. Iconic, instantly readable, premium. In code it rotates slowly and reacts to the cursor. Trade‑off: the most expected shape — safe, not surprising.</div>
+  </div>
+</div>
+</x-dc>
+</body>
+</html>

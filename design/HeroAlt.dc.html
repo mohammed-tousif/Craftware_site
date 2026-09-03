@@ -1,0 +1,98 @@
+<!doctype html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+  <style>
+    @import url('https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&family=Geist:wght@300;400;500&display=swap');
+    * { box-sizing: border-box; }
+    body { margin: 0; }
+    a { color: #C4B5FD; text-decoration: none; } a:hover { color: #22D3EE; }
+    .cw-mono { font-family: 'Space Grotesk', system-ui, sans-serif; }
+    .cw-body { font-family: 'Geist', system-ui, sans-serif; }
+  </style>
+</helmet>
+
+<div class="cw-body" style="width: 1440px; height: 900px; position: relative; overflow: hidden; background:
+      radial-gradient(820px 620px at 68% 42%, rgba(139,92,246,0.18), transparent 68%),
+      #08080B; color: #F4F4F6;">
+
+  <div style="position: absolute; inset: 0; background-image:
+      linear-gradient(rgba(255,255,255,0.026) 1px, transparent 1px),
+      linear-gradient(90deg, rgba(255,255,255,0.026) 1px, transparent 1px);
+      background-size: 68px 68px;
+      -webkit-mask-image: radial-gradient(1100px 700px at 62% 46%, #000 10%, transparent 82%);
+              mask-image: radial-gradient(1100px 700px at 62% 46%, #000 10%, transparent 82%);"></div>
+  <div style="position: absolute; inset: 0; opacity: 0.05; mix-blend-mode: soft-light; background-image:
+      url(&quot;data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='160' height='160'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='2'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E&quot;);"></div>
+
+  <!-- nav -->
+  <div class="cw-mono" style="position: absolute; top: 0; left: 0; right: 0; z-index: 20; display: flex; align-items: center; justify-content: space-between; padding: 30px 60px;">
+    <div style="display: flex; align-items: center; gap: 12px;">
+      <svg width="22" height="22" viewBox="0 0 24 24" fill="none"><path d="M20 6.4A9 9 0 1 0 20 17.6" stroke="#8B5CF6" stroke-width="2.4" stroke-linecap="round"/></svg>
+      <span style="font-weight: 600; font-size: 19px; letter-spacing: -0.01em;">CraftWare</span>
+    </div>
+    <div style="display: flex; align-items: center; gap: 40px;">
+      <div style="display: flex; gap: 30px; font-size: 11.5px; letter-spacing: 0.16em; text-transform: uppercase; color: #9A9AA6;">
+        <span style="color: #F4F4F6;">Home</span><span>Services</span><span>Work</span><span>About</span><span>Process</span><span>Contact</span>
+      </div>
+      <div style="display: flex; align-items: center; gap: 9px; border: 1px solid rgba(255,255,255,0.16); border-radius: 999px; padding: 10px 18px; font-size: 11.5px; letter-spacing: 0.1em; text-transform: uppercase;">Let's Talk
+        <svg width="12" height="12" viewBox="0 0 24 24" fill="none"><path d="M5 12h14M13 6l6 6-6 6" stroke="#F4F4F6" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+      </div>
+    </div>
+  </div>
+
+  <!-- ALT B badge -->
+  <div class="cw-mono" style="position: absolute; left: 60px; top: 108px; z-index: 15; font-size: 10.5px; letter-spacing: 0.2em; color: #6C6C78;">ALT B — LIGHT / WIREFRAME OBJECT · ASYMMETRIC</div>
+
+  <!-- wireframe light object (right) -->
+  <div style="position: absolute; right: 120px; top: 190px; width: 420px; height: 480px;">
+    <div style="position: absolute; left: 50%; top: 50%; width: 520px; height: 520px; transform: translate(-50%,-50%); background: radial-gradient(circle at 50% 46%, rgba(139,92,246,0.42), rgba(34,211,238,0.10) 44%, transparent 70%); filter: blur(52px);"></div>
+    <svg viewBox="0 0 420 480" style="position: absolute; inset: 0; width: 100%; height: 100%;">
+      <defs>
+        <linearGradient id="wf" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#22D3EE"/><stop offset="0.5" stop-color="#8B5CF6"/><stop offset="1" stop-color="#3B82F6"/></linearGradient>
+      </defs>
+      <g stroke="url(#wf)" stroke-width="1.6" fill="none" opacity="0.9" style="filter: drop-shadow(0 0 8px rgba(139,92,246,0.5));">
+        <!-- back face -->
+        <path d="M120 120 L300 120 L300 380 L120 380 Z"/>
+        <!-- front face -->
+        <path d="M90 160 L270 160 L270 420 L90 420 Z"/>
+        <!-- connectors -->
+        <path d="M120 120 L90 160 M300 120 L270 160 M300 380 L270 420 M120 380 L90 420"/>
+        <!-- stepped top -->
+        <path d="M270 96 L330 96 L330 150 L270 150 Z" opacity="0.7"/>
+        <path d="M300 120 L330 96 M300 150 L330 150" opacity="0.7"/>
+      </g>
+      <path d="M232 210 A46 46 0 1 0 232 330" fill="none" stroke="url(#wf)" stroke-width="12" stroke-linecap="round" style="filter: drop-shadow(0 0 16px rgba(139,92,246,0.8));"/>
+      <path d="M232 210 A46 46 0 1 0 232 330" fill="none" stroke="rgba(255,255,255,0.7)" stroke-width="1.4" stroke-linecap="round"/>
+      <circle cx="60" cy="200" r="2.5" fill="#22D3EE"/><circle cx="360" cy="300" r="3" fill="#8B5CF6"/><circle cx="180" cy="70" r="2" fill="#fff"/>
+    </svg>
+  </div>
+
+  <!-- headline (left) -->
+  <div style="position: absolute; left: 60px; top: 300px; z-index: 15; max-width: 640px;">
+    <div class="cw-mono" style="font-size: 11px; letter-spacing: 0.26em; text-transform: uppercase; color: #9A9AA6;">CraftWare — Digital Growth Studio</div>
+    <h1 class="cw-mono" style="margin: 20px 0 0; font-weight: 700; font-size: 66px; line-height: 1.02; letter-spacing: -0.03em;">
+      WE CRAFT<br>DIGITAL<br>EXPERIENCES<br>THAT <span style="background: linear-gradient(96deg, #8B5CF6, #22D3EE); -webkit-background-clip: text; background-clip: text; color: transparent;">GROW.</span>
+    </h1>
+    <p style="margin: 24px 0 0; max-width: 400px; font-size: 13.5px; line-height: 1.6; color: #9A9AA6;">
+      Websites. Social. Ads. SEO. Everything your brand needs to dominate digitally.
+    </p>
+    <div style="display: flex; gap: 20px; align-items: center; margin-top: 30px;">
+      <div class="cw-mono" style="display: flex; align-items: center; gap: 10px; background: linear-gradient(120deg, #8B5CF6, #6366F1); color: #fff; padding: 15px 28px; border-radius: 999px; font-size: 12.5px; letter-spacing: 0.04em; box-shadow: 0 0 46px rgba(139,92,246,0.45);">Start a Project
+        <svg width="13" height="13" viewBox="0 0 24 24" fill="none"><path d="M5 12h14M13 6l6 6-6 6" stroke="#fff" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+      </div>
+      <div class="cw-mono" style="font-size: 12px; letter-spacing: 0.1em; text-transform: uppercase; color: #C7C7D0; border-bottom: 1px solid rgba(255,255,255,0.28); padding-bottom: 4px;">Explore our work →</div>
+    </div>
+  </div>
+
+  <div class="cw-mono" style="position: absolute; left: 60px; bottom: 30px; font-size: 10.5px; letter-spacing: 0.26em; color: #6C6C78;">SCROLL ↓</div>
+  <div class="cw-mono" style="position: absolute; right: 60px; bottom: 30px; font-size: 10.5px; letter-spacing: 0.22em; color: #6C6C78;">01 / 09</div>
+</div>
+</x-dc>
+</body>
+</html>

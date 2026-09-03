@@ -16,11 +16,14 @@ export default function Hero() {
       <div className="noise-overlay pointer-events-none absolute inset-0 opacity-[0.045] mix-blend-soft-light" />
 
       {/* signature object — luminous centrepiece behind the type */}
-      <div className="pointer-events-none absolute inset-0 z-0 flex items-center justify-center">
-        <div className="relative h-[min(78vh,640px)] w-[min(78vh,640px)] max-w-[92vw] translate-y-[-4%]">
+      <div className="pointer-events-none absolute inset-0 z-0 flex items-start justify-center pt-[8vh]">
+        <div className="relative h-[min(72vh,600px)] w-[min(72vh,600px)] max-w-[92vw]">
           <SignatureObject className="absolute inset-0" />
         </div>
       </div>
+
+      {/* legibility scrim under the headline block */}
+      <div className="pointer-events-none absolute inset-x-0 top-[46%] z-[5] h-[46%] bg-[radial-gradient(60%_60%_at_50%_50%,rgba(8,8,11,0.82),transparent_75%)]" />
 
       {/* corner meta */}
       <Reveal
@@ -53,7 +56,7 @@ export default function Hero() {
       </Reveal>
 
       {/* headline stack sits over the object's lower half */}
-      <div className="relative z-10 mt-[30vh] sm:mt-[34vh]">
+      <div className="relative z-10 mt-[32vh] sm:mt-[36vh]">
         <RevealText
           as="h1"
           immediate
@@ -66,7 +69,7 @@ export default function Hero() {
           as="span"
           immediate
           delay={0.5}
-          className="mt-1 block font-display text-[clamp(2rem,5.4vw,3.3rem)] font-bold leading-[1.06] tracking-tight text-gradient [filter:drop-shadow(0_0_24px_rgba(139,92,246,0.55))]"
+          className="mt-1 block bg-[linear-gradient(96deg,#c4b5fd,#7dd3fc)] bg-clip-text font-display text-[clamp(2.1rem,5.6vw,3.5rem)] font-bold leading-[1.06] tracking-tight text-transparent [filter:drop-shadow(0_0_40px_rgba(139,92,246,0.9))_drop-shadow(0_2px_26px_rgba(8,8,11,0.98))]"
         >
           GROW.
         </RevealText>
@@ -84,14 +87,34 @@ export default function Hero() {
         <Reveal
           immediate
           delay={1}
-          className="mt-6 flex flex-wrap items-center justify-center gap-3.5"
+          className="mt-7 flex flex-wrap items-center justify-center gap-6"
         >
           <MagneticButton href={mailtoHref("Start a project")} cursor="Let's Talk">
             Start a Project
           </MagneticButton>
-          <MagneticButton href="/#work" variant="ghost" cursor="View Work">
-            Explore Our Work
-          </MagneticButton>
+          <a
+            href="/#work"
+            data-cursor-label="View Work"
+            className="group inline-flex items-center gap-2 border-b border-white/25 pb-1 font-display text-[12px] uppercase tracking-[0.14em] text-text-mid transition-colors hover:border-cyan hover:text-text-hi"
+          >
+            Explore our work
+            <svg
+              width="12"
+              height="12"
+              viewBox="0 0 24 24"
+              fill="none"
+              className="transition-transform group-hover:translate-x-0.5"
+              aria-hidden
+            >
+              <path
+                d="M5 12h14M13 6l6 6-6 6"
+                stroke="currentColor"
+                strokeWidth="2"
+                strokeLinecap="round"
+                strokeLinejoin="round"
+              />
+            </svg>
+          </a>
         </Reveal>
       </div>
 
