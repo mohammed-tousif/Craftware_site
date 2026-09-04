@@ -27,18 +27,14 @@ export default function ProjectArt({
 
   return (
     <div
-      className={`relative flex flex-col justify-between overflow-hidden bg-[linear-gradient(150deg,#fbeef0,#f6e6e8)] p-6 ${className}`}
+      className={`relative flex items-center justify-center overflow-hidden bg-[linear-gradient(150deg,#fbeef0,#f6e6e8)] ${className}`}
       aria-hidden
     >
-      {typeof index === "number" ? (
-        <span className="font-display text-[13px] font-semibold tracking-[0.14em] text-red/70">
-          {String(index).padStart(2, "0")}
-        </span>
-      ) : (
-        <span />
-      )}
-      <span className="font-display text-xl font-bold leading-tight tracking-tight text-ink/70 sm:text-2xl">
-        {project.name}
+      <span className="font-display text-6xl font-bold leading-none tracking-tight text-red/15 sm:text-7xl">
+        {typeof index === "number" ? String(index).padStart(2, "0") : "•"}
+      </span>
+      <span className="absolute left-5 top-5 rounded-full border border-red/15 bg-paper/70 px-2.5 py-1 text-[10px] uppercase tracking-[0.12em] text-red/80">
+        {project.industry}
       </span>
     </div>
   );
