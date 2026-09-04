@@ -1,53 +1,29 @@
-import RevealText from "@/components/ui/RevealText";
-import Reveal from "@/components/ui/Reveal";
-
-const team = ["A", "B", "C", "D"];
+import SectionHeader from "@/components/ui/SectionHeader";
 
 export default function About() {
   return (
-    <section id="about" className="relative overflow-hidden py-24 sm:py-32">
-      <div className="mx-auto max-w-[1600px] px-6 sm:px-10">
-        <p className="kicker">
-          <span className="font-display text-red">07</span> — Studio
-        </p>
+    <section id="about" className="py-20 sm:py-28">
+      <div className="mx-auto max-w-[1200px] px-6 sm:px-10">
+        <div className="grid gap-8 md:grid-cols-[0.85fr_1.15fr] md:gap-16">
+          <SectionHeader index="07" label="Studio" title="WE'RE CRAFTWARE." />
 
-        <div className="mt-8 grid gap-10 lg:grid-cols-[0.9fr_1.1fr] lg:gap-20">
-          <RevealText
-            as="h2"
-            className="font-display text-[clamp(2rem,5vw,3.25rem)] font-bold leading-[1.05] tracking-tight text-ink"
-          >
-            WE&apos;RE CRAFTWARE.
-          </RevealText>
-
-          <div>
-            <div className="space-y-4 text-[15px] leading-relaxed text-ink-mid sm:text-base">
-              <p>
-                We&apos;re a digital growth studio built for businesses that
-                don&apos;t want to blend in.
-              </p>
-              <p>
-                We combine design, technology and performance marketing to create
-                digital experiences that look exceptional and deliver measurable
-                results.
-              </p>
-            </div>
-
-            <Reveal className="mt-10 flex gap-3">
-              {team.map((t) => (
-                <div
-                  key={t}
-                  className="h-16 w-16 rounded-full border border-hair bg-surface"
-                  aria-hidden
-                />
-              ))}
-            </Reveal>
+          <div className="space-y-5 text-[15px] leading-relaxed text-ink-mid sm:text-base md:pt-9">
+            <p>
+              We&apos;re a digital growth studio built for businesses that
+              don&apos;t want to blend in.
+            </p>
+            <p>
+              We combine design, technology and performance marketing to create
+              digital experiences that look exceptional and deliver measurable
+              results.
+            </p>
+            <p className="text-ink">
+              Design, code, content and campaigns under one roof — so nothing
+              gets lost in the hand-off.
+            </p>
           </div>
         </div>
       </div>
-
-      <span className="meta-label pointer-events-none absolute bottom-6 right-6 sm:right-10">
-        07 / 09
-      </span>
     </section>
   );
 }

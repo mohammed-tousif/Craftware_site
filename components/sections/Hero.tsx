@@ -9,7 +9,7 @@ export default function Hero() {
   return (
     <section
       id="top"
-      className="relative flex min-h-[100svh] flex-col items-center justify-center overflow-hidden px-6 pb-24 pt-32 text-center"
+      className="relative flex min-h-[100svh] flex-col items-center justify-center overflow-hidden px-6 pb-20 pt-28 text-center"
     >
       {/* grounds */}
       <div className="pointer-events-none absolute inset-0 bg-[radial-gradient(900px_620px_at_50%_38%,rgba(200,16,46,0.06),transparent_70%)]" />
@@ -22,7 +22,7 @@ export default function Hero() {
         immediate
         delay={0.4}
         y={0}
-        className="meta-label absolute left-6 top-24 z-10 hidden sm:block sm:left-10"
+        className="meta-label absolute left-6 top-28 z-10 hidden sm:block sm:left-10"
       >
         {site.ethos}
       </Reveal>
@@ -31,7 +31,7 @@ export default function Hero() {
         immediate
         delay={0.4}
         y={0}
-        className="meta-label absolute right-6 top-24 z-10 hidden sm:block sm:right-10"
+        className="meta-label absolute right-6 top-28 z-10 hidden sm:block sm:right-10"
       >
         {site.founded}
       </Reveal>
@@ -51,7 +51,7 @@ export default function Hero() {
           as="h1"
           immediate
           delay={0.1}
-          className="mx-auto max-w-[13ch] font-display text-[clamp(2.6rem,8vw,5.25rem)] font-bold leading-[1.02] tracking-[-0.03em] text-ink sm:max-w-[16ch]"
+          className="mx-auto max-w-[13ch] font-display text-[clamp(2.3rem,7vw,4.25rem)] font-bold leading-[1.02] tracking-[-0.03em] text-ink sm:max-w-[15ch]"
         >
           WE CRAFT DIGITAL EXPERIENCES THAT
         </RevealText>
@@ -59,7 +59,7 @@ export default function Hero() {
           as="span"
           immediate
           delay={0.45}
-          className="mt-1 block font-display text-[clamp(2.6rem,8vw,5.25rem)] font-bold leading-[1.02] tracking-[-0.03em] text-red"
+          className="mt-1 block font-display text-[clamp(2.3rem,7vw,4.25rem)] font-bold leading-[1.02] tracking-[-0.03em] text-red"
         >
           GROW.
         </RevealText>
@@ -116,9 +116,6 @@ export default function Hero() {
       >
         Scroll ↓
       </Reveal>
-      <span className="meta-label absolute bottom-8 right-6 z-10 hidden sm:block sm:right-10">
-        01 / 09
-      </span>
     </section>
   );
 }

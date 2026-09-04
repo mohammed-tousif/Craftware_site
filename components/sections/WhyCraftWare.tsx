@@ -1,6 +1,6 @@
 "use client";
 
-import RevealText from "@/components/ui/RevealText";
+import SectionHeader from "@/components/ui/SectionHeader";
 import { values } from "@/content/values";
 import { useReducedMotion } from "@/lib/hooks";
 
@@ -18,23 +18,18 @@ export default function WhyCraftWare() {
   const reduced = useReducedMotion();
 
   return (
-    <section id="why" className="relative overflow-hidden py-24 sm:py-36">
-      <div className="pointer-events-none absolute left-1/2 top-1/2 h-[420px] w-[420px] -translate-x-1/2 -translate-y-1/2 rounded-full bg-[radial-gradient(circle,rgba(200,16,46,0.07),transparent_70%)]" />
-
-      <div className="mx-auto max-w-[1600px] px-6 text-center sm:px-10">
-        <p className="kicker">
-          <span className="font-display text-red">06</span> — Why CraftWare
-        </p>
-        <RevealText
-          as="h2"
-          className="mx-auto mt-4 font-display text-[clamp(1.8rem,4.6vw,2.75rem)] font-bold tracking-tight text-ink"
-        >
-          Design × Technology × Marketing
-        </RevealText>
+    <section id="why" className="overflow-hidden py-20 sm:py-28">
+      <div className="mx-auto max-w-[1200px] px-6 sm:px-10">
+        <SectionHeader
+          index="06"
+          label="Why CraftWare"
+          title="Design × Technology × Marketing"
+          align="center"
+        />
       </div>
 
-      {/* orbit */}
-      <div className="relative mx-auto mt-16 flex h-[240px] w-[240px] scale-90 items-center justify-center sm:mt-20 sm:h-[440px] sm:w-[440px] sm:scale-100">
+      <div className="relative mx-auto mt-16 flex h-[260px] w-[260px] scale-90 items-center justify-center sm:h-[420px] sm:w-[420px] sm:scale-100">
+        <div className="pointer-events-none absolute left-1/2 top-1/2 h-[70%] w-[70%] -translate-x-1/2 -translate-y-1/2 rounded-full bg-[radial-gradient(circle,rgba(200,16,46,0.06),transparent_70%)]" />
         <div className="absolute inset-0 rounded-full border border-hair" />
         <div className="absolute inset-[14%] rounded-full border border-hair" />
 
@@ -72,10 +67,6 @@ export default function WhyCraftWare() {
           <div className="meta-label mt-1">The engine</div>
         </div>
       </div>
-
-      <span className="meta-label pointer-events-none absolute bottom-6 right-6 sm:right-10">
-        06 / 09
-      </span>
 
       <style>{`
         @keyframes cw-orbit {

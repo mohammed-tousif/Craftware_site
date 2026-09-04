@@ -45,7 +45,7 @@ function Social({ label }: { label: string }) {
 export default function Footer() {
   return (
     <footer id="contact" className="border-t border-hair bg-paper-2">
-      <div className="mx-auto grid max-w-[1600px] gap-12 px-6 py-16 sm:px-10 md:grid-cols-[1.4fr_1fr_1fr_auto]">
+      <div className="mx-auto grid max-w-[1200px] gap-10 px-6 py-14 sm:px-10 md:grid-cols-[1.6fr_1fr_1.2fr]">
         <div className="max-w-xs">
           <Logo size={18} />
           <p className="mt-4 text-[13px] leading-relaxed text-ink-mid">{site.tagline}</p>
@@ -88,7 +88,7 @@ export default function Footer() {
           <span>{site.contact.location}</span>
         </div>
 
-        <div className="self-end text-[11px] text-ink-low">
+        <div className="text-[11px] text-ink-low md:col-span-3 md:mt-4 md:border-t md:border-hair md:pt-6">
           © 2026 CraftWare. All rights reserved.
         </div>
       </div>

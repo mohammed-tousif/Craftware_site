@@ -1,19 +1,14 @@
 import Image from "next/image";
 import type { Project } from "@/content/projects";
 
-const wash: Record<Project["accent"], string> = {
-  violet:
-    "radial-gradient(600px 320px at 30% 22%, rgba(200,16,46,0.14), transparent 62%), linear-gradient(160deg, #fbf1f2, #f4e9ea)",
-  blue: "radial-gradient(600px 320px at 30% 22%, rgba(200,16,46,0.1), transparent 62%), linear-gradient(160deg, #f7eef0, #f1e7e8)",
-  cyan: "radial-gradient(600px 320px at 30% 22%, rgba(158,12,36,0.12), transparent 62%), linear-gradient(160deg, #faf0f1, #f3e8e9)",
-};
-
-/** Screenshot when available, else a branded abstract placeholder. */
+/** Screenshot when available, else a legible branded placeholder panel. */
 export default function ProjectArt({
   project,
+  index,
   className = "",
 }: {
   project: Project;
+  index?: number;
   className?: string;
 }) {
   if (project.image) {
@@ -23,7 +18,7 @@ export default function ProjectArt({
           src={project.image}
           alt={`${project.name} — project preview`}
           fill
-          sizes="(max-width: 768px) 92vw, 640px"
+          sizes="(max-width: 768px) 92vw, 560px"
           className="object-cover"
         />
       </div>
@@ -32,12 +27,18 @@ export default function ProjectArt({
 
   return (
     <div
-      className={`relative flex items-center justify-center overflow-hidden ${className}`}
-      style={{ background: wash[project.accent] }}
+      className={`relative flex flex-col justify-between overflow-hidden bg-[linear-gradient(150deg,#fbeef0,#f6e6e8)] p-6 ${className}`}
       aria-hidden
     >
-      <span className="px-6 text-center font-display text-2xl font-bold tracking-tight text-ink/25 sm:text-4xl">
-        {project.name.split(" ").slice(0, 2).join(" ").toUpperCase()}
+      {typeof index === "number" ? (
+        <span className="font-display text-[13px] font-semibold tracking-[0.14em] text-red/70">
+          {String(index).padStart(2, "0")}
+        </span>
+      ) : (
+        <span />
+      )}
+      <span className="font-display text-xl font-bold leading-tight tracking-tight text-ink/70 sm:text-2xl">
+        {project.name}
       </span>
     </div>
   );

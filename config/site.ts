@@ -11,14 +11,14 @@ export const site = {
     "CraftWare builds high-performance websites, manages social media, runs Meta & Google Ads, and grows brands through SEO and complete digital marketing.",
   url: "https://craftware.studio", // TODO real domain
   locale: "en_IN",
-  founded: "EST. 2026 — MUMBAI",
+  founded: "EST. 2026 — KARNATAKA",
   ethos: "DESIGN × TECHNOLOGY × MARKETING",
 
   contact: {
     email: "craftwaretech@gmail.com",
     phone: "+91 87229 73448",
     whatsapp: "918722973448", // digits only, for wa.me/<number>
-    location: "Mumbai, India", // TODO confirm exact location
+    location: "Karnataka, India", // TODO confirm exact location
   },
 
   socials: [
