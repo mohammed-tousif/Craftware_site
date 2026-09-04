@@ -135,6 +135,34 @@ a {
   }
 }
 
+/* Word-by-word heading reveal — pure CSS, plays once on mount. */
+.cw-reveal-word {
+  animation: cw-reveal-word 0.8s cubic-bezier(0.16, 1, 0.3, 1) both;
+}
+@keyframes cw-reveal-word {
+  from {
+    transform: translateY(110%);
+  }
+  to {
+    transform: translateY(0);
+  }
+}
+
+/* Generic fade + rise reveal for non-text elements. */
+.cw-reveal {
+  animation: cw-reveal 0.8s ease both;
+}
+@keyframes cw-reveal {
+  from {
+    opacity: 0;
+    transform: var(--cw-reveal-from, translateY(16px));
+  }
+  to {
+    opacity: 1;
+    transform: none;
+  }
+}
+
 /* Reduced motion ------------------------------------------------------ */
 @media (prefers-reduced-motion: reduce) {
   *,

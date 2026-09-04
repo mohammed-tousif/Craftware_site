@@ -1,14 +1,4 @@
-"use client";
-
-import {
-  useCallback,
-  useEffect,
-  useRef,
-  useState,
-  type CSSProperties,
-  type ReactNode,
-} from "react";
-import { useReducedMotion } from "@/lib/hooks";
+import { createElement, type CSSProperties, type ReactNode } from "react";
 
 type Tag = "div" | "span" | "p" | "header" | "section" | "li";
 
@@ -22,15 +12,14 @@ type Props = {
   /** seconds */
   delay?: number;
   duration?: number;
-  /** unused now — kept for call-site compatibility */
+  /** unused now — the CSS reveal always plays once on mount */
   immediate?: boolean;
 };
 
 /**
- * Entrance animation: fade + slide-in once the element scrolls into view
- * (or immediately if it is already on screen at mount). IntersectionObserver
- * drives it; a rAF fallback reveals anything still hidden a beat after mount,
- * so content is never stuck invisible even if the observer never fires.
+ * Fade + slide entrance, driven entirely by a CSS animation
+ * (animation-fill-mode: both) — no JS, no refs, no observers, so it can
+ * never get stuck hidden. Server component.
  */
 export default function Reveal({
   children,
@@ -39,89 +28,13 @@ export default function Reveal({
   y = 16,
   x = 0,
   delay = 0,
-  duration = 0.7,
+  duration = 0.8,
 }: Props) {
-  const node = useRef<HTMLElement | null>(null);
-  const setNode = useCallback((el: HTMLElement | null) => {
-    node.current = el;
-  }, []);
-  const reduced = useReducedMotion();
-  const [shown, setShown] = useState(false);
+  const style: CSSProperties & Record<string, string> = {
+    animationDuration: `${duration}s`,
+    animationDelay: `${delay}s`,
+    "--cw-reveal-from": `translate(${x}px, ${y}px)`,
+  };
 
-  useEffect(() => {
-    if (reduced) return;
-    const el = node.current;
-    let io: IntersectionObserver | null = null;
-
-    if (el && "IntersectionObserver" in window) {
-      io = new IntersectionObserver(
-        (entries) => {
-          if (entries[0]?.isIntersecting) {
-            setShown(true);
-            io?.disconnect();
-          }
-        },
-        { rootMargin: "0px 0px -8% 0px" }
-      );
-      io.observe(el);
-    }
-
-    // fallback: if the element is on screen (or the observer never fires),
-    // reveal shortly after mount.
-    const t = window.setTimeout(() => setShown(true), 600);
-
-    return () => {
-      io?.disconnect();
-      window.clearTimeout(t);
-    };
-  }, [reduced]);
-
-  const style: CSSProperties | undefined = reduced
-    ? undefined
-    : {
-        opacity: shown ? 1 : 0,
-        transform: shown ? "none" : `translate(${x}px, ${y}px)`,
-        transition: `opacity ${duration}s ease, transform ${duration}s cubic-bezier(0.16,1,0.3,1)`,
-        transitionDelay: `${delay}s`,
-        willChange: "opacity, transform",
-      };
-
-  switch (as) {
-    case "span":
-      return (
-        <span ref={setNode} className={className} style={style}>
-          {children}
-        </span>
-      );
-    case "p":
-      return (
-        <p ref={setNode} className={className} style={style}>
-          {children}
-        </p>
-      );
-    case "header":
-      return (
-        <header ref={setNode} className={className} style={style}>
-          {children}
-        </header>
-      );
-    case "section":
-      return (
-        <section ref={setNode} className={className} style={style}>
-          {children}
-        </section>
-      );
-    case "li":
-      return (
-        <li ref={setNode} className={className} style={style}>
-          {children}
-        </li>
-      );
-    default:
-      return (
-        <div ref={setNode} className={className} style={style}>
-          {children}
-        </div>
-      );
-  }
+  return createElement(as, { className: `cw-reveal ${className}`, style }, children);
 }
