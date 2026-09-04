@@ -4,22 +4,21 @@ import { stats } from "@/content/stats";
 
 export default function Trust() {
   return (
-    <section id="machines" className="relative overflow-hidden py-28 sm:py-36">
-      <div className="noise-overlay pointer-events-none absolute inset-0 opacity-[0.04] mix-blend-soft-light" />
+    <section id="machines" className="relative overflow-hidden py-24 sm:py-32">
       <div className="mx-auto max-w-[1600px] px-6 sm:px-10">
         <p className="kicker">
-          <span className="font-display text-violet">02</span> — Machines
+          <span className="font-display text-red">02</span> — Machines
         </p>
 
         <div className="mt-8 grid gap-12 lg:grid-cols-[1.15fr_0.85fr] lg:gap-20">
           <RevealText
             as="h2"
-            className="max-w-[18ch] font-display text-[clamp(1.9rem,4.6vw,3.25rem)] font-bold leading-[1.06] tracking-tight"
+            className="max-w-[18ch] font-display text-[clamp(1.9rem,4.6vw,3.25rem)] font-bold leading-[1.06] tracking-tight text-ink"
           >
             WE DON&apos;T JUST BUILD WEBSITES. WE BUILD DIGITAL MACHINES.
           </RevealText>
 
-          <p className="max-w-[52ch] self-end text-[15px] leading-relaxed text-text-mid">
+          <p className="max-w-[52ch] self-end text-[15px] leading-relaxed text-ink-mid">
             We combine design, technology, content, advertising and search into
             digital systems that move businesses forward — not disconnected
             deliverables, but one engine built to compound.

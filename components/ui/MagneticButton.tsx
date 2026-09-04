@@ -9,7 +9,7 @@ type Common = {
   children: ReactNode;
   variant?: "solid" | "ghost";
   className?: string;
-  /** custom-cursor label shown on hover */
+  /** kept for call-site compatibility; no longer used (custom cursor removed) */
   cursor?: string;
 };
 
@@ -19,13 +19,13 @@ type AsButton = Common & { href?: never; onClick?: () => void; external?: never 
 type Props = AsLink | AsButton;
 
 const base =
-  "group relative inline-flex items-center gap-2 rounded-full px-6 py-3.5 text-[13px] font-medium transition-colors duration-300 will-change-transform";
+  "group relative inline-flex items-center gap-2 rounded-full px-6 py-3.5 text-[13px] font-medium transition-[background-color,color,border-color,box-shadow] duration-300 will-change-transform";
 
 const styles = {
   solid:
-    "text-white bg-[linear-gradient(120deg,#8b5cf6,#6366f1)] shadow-[0_0_44px_rgba(139,92,246,0.42)] hover:shadow-[0_0_60px_rgba(139,92,246,0.6)]",
+    "text-white bg-red hover:bg-red-deep shadow-[0_10px_30px_-8px_rgba(200,16,46,0.45)] hover:shadow-[0_14px_36px_-8px_rgba(200,16,46,0.6)]",
   ghost:
-    "text-text-hi border border-hair-strong hover:border-white/40 hover:bg-white/[0.03]",
+    "text-ink border border-hair-strong hover:border-red hover:text-red",
 };
 
 function Arrow() {
@@ -50,7 +50,7 @@ function Arrow() {
 }
 
 export default function MagneticButton(props: Props) {
-  const { children, variant = "solid", className = "", cursor } = props;
+  const { children, variant = "solid", className = "" } = props;
   const ref = useRef<HTMLAnchorElement>(null);
   const isTouch = useIsTouch();
   const reduced = useReducedMotion();
@@ -70,22 +70,23 @@ export default function MagneticButton(props: Props) {
   };
 
   const cls = `${base} ${styles[variant]} ${className}`;
-  const cursorAttr = cursor ? { "data-cursor-label": cursor } : {};
 
   if ("href" in props && props.href) {
     const isHash = props.href.startsWith("#") || props.href.startsWith("/#");
-    const external = props.external || /^https?:|^mailto:|^tel:/.test(props.href);
+    const external =
+      props.external || /^https?:|^mailto:|^tel:/.test(props.href);
     if (external || isHash) {
       return (
         <a
           ref={ref}
           href={props.href}
-          target={external && !props.href.startsWith("mailto:") ? "_blank" : undefined}
+          target={
+            external && !props.href.startsWith("mailto:") ? "_blank" : undefined
+          }
           rel={external ? "noopener noreferrer" : undefined}
           className={cls}
           onMouseMove={onMove}
           onMouseLeave={onLeave}
-          {...cursorAttr}
         >
           {children}
           <Arrow />
@@ -99,7 +100,6 @@ export default function MagneticButton(props: Props) {
         className={cls}
         onMouseMove={onMove}
         onMouseLeave={onLeave}
-        {...cursorAttr}
       >
         {children}
         <Arrow />
@@ -115,7 +115,6 @@ export default function MagneticButton(props: Props) {
       className={cls}
       onMouseMove={onMove}
       onMouseLeave={onLeave}
-      {...cursorAttr}
     >
       {children}
       <Arrow />

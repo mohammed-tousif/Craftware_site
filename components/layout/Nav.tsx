@@ -1,6 +1,7 @@
 "use client";
 
 import { useEffect, useState } from "react";
+import Link from "next/link";
 import Reveal from "@/components/ui/Reveal";
 import { site, mailtoHref } from "@/config/site";
 import Logo from "./Logo";
@@ -12,9 +13,12 @@ export default function Nav() {
 
   useEffect(() => {
     const onScroll = () => setScrolled(window.scrollY > 24);
-    onScroll();
+    const id = requestAnimationFrame(onScroll);
     window.addEventListener("scroll", onScroll, { passive: true });
-    return () => window.removeEventListener("scroll", onScroll);
+    return () => {
+      cancelAnimationFrame(id);
+      window.removeEventListener("scroll", onScroll);
+    };
   }, []);
 
   return (
@@ -26,20 +30,23 @@ export default function Nav() {
         delay={0.15}
         className={`fixed inset-x-0 top-0 z-50 transition-[background-color,backdrop-filter,border-color] duration-500 ${
           scrolled
-            ? "border-b border-hair bg-ink/70 backdrop-blur-xl"
+            ? "border-b border-hair bg-paper/80 backdrop-blur-xl"
             : "border-b border-transparent bg-transparent"
         }`}
       >
         <div className="mx-auto flex max-w-[1600px] items-center justify-between px-6 py-5 sm:px-10">
-          <a href="/#top" aria-label="CraftWare home">
+          <Link href="/#top" aria-label="CraftWare home">
             <Logo size={20} />
-          </a>
+          </Link>
 
           <nav className="hidden items-center gap-9 lg:flex">
-            <ul className="flex gap-7 text-[12px] uppercase tracking-[0.14em] text-text-mid">
+            <ul className="flex gap-7 text-[12px] uppercase tracking-[0.14em] text-ink-mid">
               {site.nav.map((item) => (
                 <li key={item.href}>
-                  <a href={item.href} className="transition-colors hover:text-text-hi">
+                  <a
+                    href={item.href}
+                    className="transition-colors hover:text-red"
+                  >
                     {item.label}
                   </a>
                 </li>
@@ -47,7 +54,7 @@ export default function Nav() {
             </ul>
             <a
               href={mailtoHref()}
-              className="group inline-flex items-center gap-2 rounded-full border border-hair-strong px-4 py-2.5 text-[12px] uppercase tracking-[0.08em] transition-colors hover:border-white/40 hover:bg-white/[0.03]"
+              className="group inline-flex items-center gap-2 rounded-full border border-hair-strong px-4 py-2.5 text-[12px] uppercase tracking-[0.08em] transition-colors hover:border-red hover:text-red"
             >
               Let&apos;s Talk
               <svg
@@ -74,8 +81,8 @@ export default function Nav() {
             aria-label="Open menu"
             className="flex flex-col gap-[5px] p-1 lg:hidden"
           >
-            <span className="block h-px w-6 bg-text-hi" />
-            <span className="block h-px w-6 bg-text-hi" />
+            <span className="block h-px w-6 bg-ink" />
+            <span className="block h-px w-6 bg-ink" />
           </button>
         </div>
       </Reveal>

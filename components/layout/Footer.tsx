@@ -44,12 +44,12 @@ function Social({ label }: { label: string }) {
 
 export default function Footer() {
   return (
-    <footer id="contact" className="border-t border-hair bg-ink">
+    <footer id="contact" className="border-t border-hair bg-paper-2">
       <div className="mx-auto grid max-w-[1600px] gap-12 px-6 py-16 sm:px-10 md:grid-cols-[1.4fr_1fr_1fr_auto]">
         <div className="max-w-xs">
           <Logo size={18} />
-          <p className="mt-4 text-[13px] leading-relaxed text-text-mid">{site.tagline}</p>
-          <div className="mt-5 flex gap-4 text-text-mid">
+          <p className="mt-4 text-[13px] leading-relaxed text-ink-mid">{site.tagline}</p>
+          <div className="mt-5 flex gap-4 text-ink-low">
             {site.socials.map((s) => (
               <a
                 key={s.label}
@@ -57,7 +57,7 @@ export default function Footer() {
                 target="_blank"
                 rel="noopener noreferrer"
                 aria-label={s.label}
-                className="transition-colors hover:text-text-hi"
+                className="transition-colors hover:text-red"
               >
                 <Social label={s.label} />
               </a>
@@ -65,30 +65,30 @@ export default function Footer() {
           </div>
         </div>
 
-        <div className="flex flex-col gap-3 text-[13px] text-text-mid">
+        <div className="flex flex-col gap-3 text-[13px] text-ink-mid">
           <span className="meta-label">Menu</span>
           {menu.map((m) => (
-            <a key={m.href} href={m.href} className="w-fit transition-colors hover:text-text-hi">
+            <a key={m.href} href={m.href} className="w-fit transition-colors hover:text-red">
               {m.label}
             </a>
           ))}
         </div>
 
-        <div className="flex flex-col gap-3 text-[13px] text-text-mid">
+        <div className="flex flex-col gap-3 text-[13px] text-ink-mid">
           <span className="meta-label">Contact</span>
-          <a href={mailtoHref()} className="w-fit transition-colors hover:text-text-hi">
+          <a href={mailtoHref()} className="w-fit transition-colors hover:text-red">
             {site.contact.email}
           </a>
           <a
             href={`tel:${site.contact.phone.replace(/\s+/g, "")}`}
-            className="w-fit transition-colors hover:text-text-hi"
+            className="w-fit transition-colors hover:text-red"
           >
             {site.contact.phone}
           </a>
           <span>{site.contact.location}</span>
         </div>
 
-        <div className="self-end text-[11px] text-text-low">
+        <div className="self-end text-[11px] text-ink-low">
           © 2026 CraftWare. All rights reserved.
         </div>
       </div>

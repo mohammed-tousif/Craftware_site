@@ -5,12 +5,12 @@ import { useIsTouch, useReducedMotion } from "@/lib/hooks";
 
 /* ------------------------------------------------------------------ *
  *  Interactive dot mesh for the hero background.
- *  A drifting field of dots linked by faint lines. Near the cursor,
- *  dots brighten, swell, and pull toward it; links to the cursor
- *  light up. Canvas 2D, rAF, pauses when off-screen.
+ *  A drifting field of mild-red dots linked by faint lines. Near the
+ *  cursor they brighten to cherry, swell, and pull toward it, with
+ *  lit connector lines. Canvas 2D, rAF, pauses when off-screen.
  * ------------------------------------------------------------------ */
 
-type Dot = { x: number; y: number; hx: number; hy: number; vx: number; vy: number };
+type Dot = { x: number; y: number; hx: number; hy: number; vx: number; vy: number; p?: number };
 
 export default function MeshField({ className = "" }: { className?: string }) {
   const wrap = useRef<HTMLDivElement>(null);
@@ -32,13 +32,13 @@ export default function MeshField({ className = "" }: { className?: string }) {
     let dpr = 1;
     const dots: Dot[] = [];
     const mouse = { x: -9999, y: -9999, active: false };
-    const LINK = 132;
-    const MOUSE = 168;
+    const LINK = 130;
+    const MOUSE = 170;
     const interactive = !isTouch;
 
     const seed = () => {
       dots.length = 0;
-      const density = Math.max(28, Math.min(90, Math.round((w * h) / 21000)));
+      const density = Math.max(24, Math.min(84, Math.round((w * h) / 22000)));
       for (let i = 0; i < density; i++) {
         const x = Math.random() * w;
         const y = Math.random() * h;
@@ -47,8 +47,8 @@ export default function MeshField({ className = "" }: { className?: string }) {
           y,
           hx: x,
           hy: y,
-          vx: (Math.random() - 0.5) * 0.16,
-          vy: (Math.random() - 0.5) * 0.16,
+          vx: (Math.random() - 0.5) * 0.15,
+          vy: (Math.random() - 0.5) * 0.15,
         });
       }
     };
@@ -91,13 +91,13 @@ export default function MeshField({ className = "" }: { className?: string }) {
           const dist = Math.hypot(dx, dy);
           if (dist < MOUSE) {
             pull = 1 - dist / MOUSE;
-            tx = d.hx + dx * pull * 0.32;
-            ty = d.hy + dy * pull * 0.32;
+            tx = d.hx + dx * pull * 0.3;
+            ty = d.hy + dy * pull * 0.3;
           }
         }
         d.x += (tx - d.x) * 0.12;
         d.y += (ty - d.y) * 0.12;
-        (d as Dot & { p?: number }).p = pull;
+        d.p = pull;
       }
 
       // links between dots
@@ -108,7 +108,7 @@ export default function MeshField({ className = "" }: { className?: string }) {
           const dist = Math.hypot(a.x - b.x, a.y - b.y);
           if (dist < LINK) {
             const t = 1 - dist / LINK;
-            ctx.strokeStyle = `rgba(139,92,246,${t * 0.22})`;
+            ctx.strokeStyle = `rgba(200,16,46,${t * 0.16})`;
             ctx.lineWidth = 1;
             ctx.beginPath();
             ctx.moveTo(a.x, a.y);
@@ -118,26 +118,27 @@ export default function MeshField({ className = "" }: { className?: string }) {
         }
       }
 
-      // links to cursor + dots
+      // cursor links + dots
       for (const d of dots) {
-        const p = (d as Dot & { p?: number }).p ?? 0;
+        const p = d.p ?? 0;
         if (interactive && mouse.active && p > 0) {
-          ctx.strokeStyle = `rgba(34,211,238,${p * 0.6})`;
+          ctx.strokeStyle = `rgba(200,16,46,${p * 0.55})`;
           ctx.lineWidth = 1;
           ctx.beginPath();
           ctx.moveTo(d.x, d.y);
           ctx.lineTo(mouse.x, mouse.y);
           ctx.stroke();
         }
-        const r = 1.3 + p * 3.2;
+        const r = 1.3 + p * 3;
         ctx.beginPath();
         ctx.arc(d.x, d.y, r, 0, Math.PI * 2);
         if (p > 0.02) {
-          ctx.fillStyle = `rgba(${lerp(160, 40, p)},${lerp(155, 215, p)},${lerp(205, 240, p)},${0.55 + p * 0.45})`;
-          ctx.shadowColor = "rgba(34,211,238,0.9)";
-          ctx.shadowBlur = p * 16;
+          // soft red -> cherry as it nears the cursor
+          ctx.fillStyle = `rgba(${lerp(227, 200, p)},${lerp(93, 16, p)},${lerp(114, 46, p)},${0.6 + p * 0.4})`;
+          ctx.shadowColor = "rgba(200,16,46,0.85)";
+          ctx.shadowBlur = p * 15;
         } else {
-          ctx.fillStyle = "rgba(160,160,200,0.55)";
+          ctx.fillStyle = "rgba(227,93,114,0.5)";
           ctx.shadowBlur = 0;
         }
         ctx.fill();

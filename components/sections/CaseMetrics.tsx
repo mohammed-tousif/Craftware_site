@@ -25,11 +25,7 @@ function Tile({ metric, delay }: { metric: Metric; delay: number }) {
   const raf = useRef<number | null>(null);
 
   useEffect(() => {
-    if (!inView || parsed.target === null) return;
-    if (reduced) {
-      setN(parsed.target);
-      return;
-    }
+    if (!inView || parsed.target === null || reduced) return;
     const start = performance.now();
     const from = delay * 1000;
     const tick = (now: number) => {
@@ -48,20 +44,19 @@ function Tile({ metric, delay }: { metric: Metric; delay: number }) {
     };
   }, [inView, reduced, parsed.target, delay]);
 
+  const display = reduced && parsed.target !== null ? parsed.target : n;
+
   return (
-    <div
-      ref={ref}
-      className="rounded-xl border border-hair bg-white/[0.02] p-7 sm:p-8"
-    >
-      <div className="font-display text-4xl font-bold tracking-tight text-gradient sm:text-[2.5rem]">
+    <div ref={ref} className="rounded-xl border border-hair bg-paper p-7 sm:p-8">
+      <div className="font-display text-4xl font-bold tracking-tight text-red sm:text-[2.5rem]">
         {parsed.target === null
           ? metric.value
-          : `${parsed.prefix}${n.toLocaleString("en-US", {
+          : `${parsed.prefix}${display.toLocaleString("en-US", {
               minimumFractionDigits: parsed.decimals,
               maximumFractionDigits: parsed.decimals,
             })}${parsed.suffix}`}
       </div>
-      <div className="mt-3 text-[12px] text-text-mid">{metric.label}</div>
+      <div className="mt-3 text-[12px] text-ink-mid">{metric.label}</div>
     </div>
   );
 }

@@ -30,8 +30,8 @@ export default function TechConstellation() {
         nodes.push({
           x: Math.random() * w,
           y: Math.random() * h,
-          vx: (Math.random() - 0.5) * 0.22,
-          vy: (Math.random() - 0.5) * 0.22,
+          vx: (Math.random() - 0.5) * 0.2,
+          vy: (Math.random() - 0.5) * 0.2,
           label: techStack[i],
         });
       }
@@ -63,21 +63,21 @@ export default function TechConstellation() {
           const dy = n.y - mouse.y;
           const d2 = dx * dx + dy * dy;
           if (d2 < 120 * 120) {
-            const f = (1 - Math.sqrt(d2) / 120) * 0.6;
-            n.x += (dx / (Math.sqrt(d2) || 1)) * f;
-            n.y += (dy / (Math.sqrt(d2) || 1)) * f;
+            const d = Math.sqrt(d2) || 1;
+            const f = (1 - d / 120) * 0.6;
+            n.x += (dx / d) * f;
+            n.y += (dy / d) * f;
           }
         }
       }
 
-      // links
       for (let i = 0; i < nodes.length; i++) {
         for (let j = i + 1; j < nodes.length; j++) {
           const a = nodes[i];
           const b = nodes[j];
           const dist = Math.hypot(a.x - b.x, a.y - b.y);
           if (dist < 170) {
-            ctx.strokeStyle = `rgba(139,92,246,${(1 - dist / 170) * 0.28})`;
+            ctx.strokeStyle = `rgba(200,16,46,${(1 - dist / 170) * 0.22})`;
             ctx.lineWidth = 1;
             ctx.beginPath();
             ctx.moveTo(a.x, a.y);
@@ -87,16 +87,15 @@ export default function TechConstellation() {
         }
       }
 
-      // nodes + labels
       ctx.font =
         '11px var(--font-space-grotesk), "Space Grotesk", system-ui, sans-serif';
       ctx.textBaseline = "middle";
       for (const n of nodes) {
         ctx.beginPath();
-        ctx.arc(n.x, n.y, 2.4, 0, Math.PI * 2);
-        ctx.fillStyle = "#22d3ee";
+        ctx.arc(n.x, n.y, 2.6, 0, Math.PI * 2);
+        ctx.fillStyle = "#c8102e";
         ctx.fill();
-        ctx.fillStyle = "rgba(244,244,246,0.72)";
+        ctx.fillStyle = "rgba(26,17,19,0.62)";
         ctx.fillText(n.label, n.x + 9, n.y);
       }
 
@@ -132,7 +131,7 @@ export default function TechConstellation() {
   return (
     <div
       ref={wrap}
-      className="relative h-[320px] w-full overflow-hidden rounded-lg border border-hair bg-surface/40 sm:h-[380px]"
+      className="relative h-[300px] w-full overflow-hidden rounded-xl border border-hair bg-paper-2 sm:h-[380px]"
     >
       <canvas ref={canvas} className="absolute inset-0" />
     </div>

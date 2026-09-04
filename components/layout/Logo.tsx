@@ -5,13 +5,13 @@ export default function Logo({ size = 22 }: { size?: number }) {
       <svg width={size} height={size} viewBox="0 0 24 24" fill="none" aria-hidden>
         <path
           d="M20 6.5A9 9 0 1 0 20 17.5"
-          stroke="#8B5CF6"
-          strokeWidth="2.4"
+          stroke="var(--color-red)"
+          strokeWidth="2.6"
           strokeLinecap="round"
         />
       </svg>
       <span
-        className="font-display font-semibold"
+        className="font-display font-semibold text-ink"
         style={{ fontSize: size * 0.86 }}
       >
         CraftWare

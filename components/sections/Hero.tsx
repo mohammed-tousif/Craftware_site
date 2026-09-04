@@ -1,7 +1,7 @@
+import Link from "next/link";
 import Reveal from "@/components/ui/Reveal";
 import RevealText from "@/components/ui/RevealText";
 import MagneticButton from "@/components/ui/MagneticButton";
-import SignatureObject from "@/components/three/SignatureObject";
 import MeshField from "@/components/hero/MeshField";
 import { site, mailtoHref } from "@/config/site";
 
@@ -9,29 +9,18 @@ export default function Hero() {
   return (
     <section
       id="top"
-      className="relative flex min-h-[100svh] flex-col items-center justify-center overflow-hidden px-6 pb-20 pt-28 text-center"
+      className="relative flex min-h-[100svh] flex-col items-center justify-center overflow-hidden px-6 pb-24 pt-32 text-center"
     >
       {/* grounds */}
-      <div className="pointer-events-none absolute inset-0 bg-[radial-gradient(760px_760px_at_50%_42%,rgba(139,92,246,0.22),rgba(34,211,238,0.06)_46%,transparent_68%)]" />
-      <MeshField className="absolute inset-0 opacity-90 [mask-image:radial-gradient(1200px_800px_at_50%_46%,#000_36%,transparent_92%)]" />
-      <div className="grid-texture pointer-events-none absolute inset-0 opacity-60 [mask-image:radial-gradient(920px_620px_at_50%_46%,transparent_26%,#000_92%)]" />
-      <div className="noise-overlay pointer-events-none absolute inset-0 opacity-[0.045] mix-blend-soft-light" />
-
-      {/* signature object — luminous centrepiece behind the type */}
-      <div className="pointer-events-none absolute inset-0 z-0 flex items-start justify-center pt-[4vh]">
-        <div className="relative h-[min(70vh,580px)] w-[min(70vh,580px)] max-w-[92vw]">
-          <SignatureObject className="absolute inset-0" />
-        </div>
-      </div>
-
-      {/* legibility scrim under the headline block */}
-      <div className="pointer-events-none absolute inset-x-0 top-[46%] z-[5] h-[46%] bg-[radial-gradient(60%_60%_at_50%_50%,rgba(8,8,11,0.82),transparent_75%)]" />
+      <div className="pointer-events-none absolute inset-0 bg-[radial-gradient(900px_620px_at_50%_38%,rgba(200,16,46,0.06),transparent_70%)]" />
+      <MeshField className="absolute inset-0 [mask-image:radial-gradient(1200px_820px_at_50%_46%,#000_28%,transparent_92%)]" />
+      <div className="grid-texture pointer-events-none absolute inset-0 opacity-40 [mask-image:radial-gradient(960px_640px_at_50%_46%,transparent_24%,#000_92%)]" />
 
       {/* corner meta */}
       <Reveal
         as="span"
         immediate
-        delay={0.5}
+        delay={0.4}
         y={0}
         className="meta-label absolute left-6 top-24 z-10 hidden sm:block sm:left-10"
       >
@@ -40,38 +29,37 @@ export default function Hero() {
       <Reveal
         as="span"
         immediate
-        delay={0.5}
+        delay={0.4}
         y={0}
         className="meta-label absolute right-6 top-24 z-10 hidden sm:block sm:right-10"
       >
         {site.founded}
       </Reveal>
 
-      {/* kicker */}
-      <Reveal
-        as="p"
-        immediate
-        delay={0.3}
-        className="kicker relative z-10 tracking-[0.24em]"
-      >
-        {site.name} — Digital Growth Studio
-      </Reveal>
+      <div className="relative z-10 flex flex-col items-center">
+        <Reveal
+          as="p"
+          immediate
+          delay={0.2}
+          className="kicker mb-6 flex items-center gap-3 tracking-[0.24em]"
+        >
+          <span className="inline-block h-1.5 w-1.5 rounded-full bg-red" />
+          {site.name} — Digital Growth Studio
+        </Reveal>
 
-      {/* headline stack sits over the object's lower half */}
-      <div className="relative z-10 mt-[32vh] sm:mt-[36vh]">
         <RevealText
           as="h1"
           immediate
-          delay={0.15}
-          className="mx-auto max-w-[16ch] font-display text-[clamp(2rem,5.4vw,3.3rem)] font-bold leading-[1.06] tracking-tight [text-shadow:0_2px_50px_rgba(8,8,11,0.9),0_0_20px_rgba(8,8,11,0.7)] sm:max-w-[24ch]"
+          delay={0.1}
+          className="mx-auto max-w-[13ch] font-display text-[clamp(2.6rem,8vw,5.25rem)] font-bold leading-[1.02] tracking-[-0.03em] text-ink sm:max-w-[16ch]"
         >
           WE CRAFT DIGITAL EXPERIENCES THAT
         </RevealText>
         <RevealText
           as="span"
           immediate
-          delay={0.5}
-          className="mt-1 block bg-[linear-gradient(96deg,#c4b5fd,#7dd3fc)] bg-clip-text font-display text-[clamp(2.1rem,5.6vw,3.5rem)] font-bold leading-[1.06] tracking-tight text-transparent [filter:drop-shadow(0_0_40px_rgba(139,92,246,0.9))_drop-shadow(0_2px_26px_rgba(8,8,11,0.98))]"
+          delay={0.45}
+          className="mt-1 block font-display text-[clamp(2.6rem,8vw,5.25rem)] font-bold leading-[1.02] tracking-[-0.03em] text-red"
         >
           GROW.
         </RevealText>
@@ -79,8 +67,8 @@ export default function Hero() {
         <Reveal
           as="p"
           immediate
-          delay={0.85}
-          className="mx-auto mt-4 max-w-[46ch] text-[13.5px] leading-relaxed text-text-mid sm:text-sm"
+          delay={0.8}
+          className="mx-auto mt-7 max-w-[44ch] text-[14px] leading-relaxed text-ink-mid sm:text-[15px]"
         >
           Websites. Social. Ads. SEO. Everything your brand needs to dominate
           digitally.
@@ -88,16 +76,15 @@ export default function Hero() {
 
         <Reveal
           immediate
-          delay={1}
-          className="mt-7 flex flex-wrap items-center justify-center gap-6"
+          delay={0.95}
+          className="mt-9 flex flex-wrap items-center justify-center gap-6"
         >
-          <MagneticButton href={mailtoHref("Start a project")} cursor="Let's Talk">
+          <MagneticButton href={mailtoHref("Start a project")}>
             Start a Project
           </MagneticButton>
-          <a
+          <Link
             href="/#work"
-            data-cursor-label="View Work"
-            className="group inline-flex items-center gap-2 border-b border-white/25 pb-1 font-display text-[12px] uppercase tracking-[0.14em] text-text-mid transition-colors hover:border-cyan hover:text-text-hi"
+            className="group inline-flex items-center gap-2 border-b border-hair-strong pb-1 font-display text-[12px] uppercase tracking-[0.14em] text-ink-mid transition-colors hover:border-red hover:text-ink"
           >
             Explore our work
             <svg
@@ -116,21 +103,20 @@ export default function Hero() {
                 strokeLinejoin="round"
               />
             </svg>
-          </a>
+          </Link>
         </Reveal>
       </div>
 
-      {/* baseline */}
       <Reveal
         as="div"
         immediate
-        delay={1.3}
+        delay={1.2}
         y={0}
-        className="meta-label absolute inset-x-0 bottom-7 z-10 text-center tracking-[0.24em]"
+        className="meta-label absolute inset-x-0 bottom-8 z-10 text-center tracking-[0.24em]"
       >
         Scroll ↓
       </Reveal>
-      <span className="meta-label absolute bottom-7 right-6 z-10 hidden sm:block sm:right-10">
+      <span className="meta-label absolute bottom-8 right-6 z-10 hidden sm:block sm:right-10">
         01 / 09
       </span>
     </section>

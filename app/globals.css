@@ -2,37 +2,36 @@
 
 /* ------------------------------------------------------------------ *
  *  CraftWare — design system
- *  Dark, cinematic. Violet / blue / cyan light on near-black.
+ *  Clean, editorial. Cherry red on white. Warm near-black ink.
  * ------------------------------------------------------------------ */
 
 @theme {
-  --color-ink: #08080b;          /* page ground            */
-  --color-surface: #0f0f14;      /* raised charcoal        */
-  --color-surface-2: #14141c;    /* card / panel           */
+  --color-paper: #ffffff;        /* primary ground              */
+  --color-paper-2: #fbf7f6;      /* warm off-white section band */
+  --color-surface: #f5efee;      /* raised warm card            */
+  --color-surface-2: #efe6e5;    /* deeper card / hover         */
 
-  --color-violet: #8b5cf6;
-  --color-blue: #3b82f6;
-  --color-cyan: #22d3ee;
+  --color-ink: #1a1113;          /* primary text (warm black)   */
+  --color-ink-mid: #6b5c5f;      /* secondary text              */
+  --color-ink-low: #a2969a;      /* tertiary / meta text        */
 
-  --color-text-hi: #f4f4f6;
-  --color-text-mid: #9a9aa6;
-  --color-text-low: #6c6c78;
+  --color-red: #c8102e;          /* cherry — the one accent     */
+  --color-red-deep: #9e0c24;     /* pressed / dense red         */
+  --color-red-soft: #e35d72;     /* tints, glows                */
 
-  --color-hair: rgba(255, 255, 255, 0.1);
-  --color-hair-strong: rgba(255, 255, 255, 0.16);
+  --color-hair: rgba(26, 17, 19, 0.1);
+  --color-hair-strong: rgba(26, 17, 19, 0.2);
 
   --font-display: var(--font-space-grotesk), "Space Grotesk", system-ui, sans-serif;
   --font-body: var(--font-geist-sans), "Geist", system-ui, sans-serif;
 
   --ease-out-expo: cubic-bezier(0.16, 1, 0.3, 1);
-
-  --shadow-glow-violet: 0 0 44px rgba(139, 92, 246, 0.42);
 }
 
 :root {
-  color-scheme: dark;
-  --bg: var(--color-ink);
-  --fg: var(--color-text-hi);
+  color-scheme: light;
+  --bg: var(--color-paper);
+  --fg: var(--color-ink);
 }
 
 * {
@@ -89,8 +88,8 @@ a {
 }
 
 ::selection {
-  background: rgba(139, 92, 246, 0.32);
-  color: #fff;
+  background: rgba(200, 16, 46, 0.16);
+  color: var(--color-red-deep);
 }
 
 /* Utility layer ---------------------------------------------------- */
@@ -99,8 +98,13 @@ a {
     font-family: var(--font-display);
   }
 
+  .text-accent {
+    color: var(--color-red);
+  }
+
+  /* kept as a name; now a subtle cherry gradient for display words */
   .text-gradient {
-    background: linear-gradient(96deg, var(--color-violet), var(--color-cyan));
+    background: linear-gradient(96deg, var(--color-red), var(--color-red-soft));
     -webkit-background-clip: text;
     background-clip: text;
     color: transparent;
@@ -110,35 +114,24 @@ a {
     font-size: 0.75rem;
     letter-spacing: 0.22em;
     text-transform: uppercase;
-    color: var(--color-text-mid);
+    color: var(--color-ink-mid);
   }
 
   .meta-label {
     font-size: 0.6875rem;
     letter-spacing: 0.18em;
     text-transform: uppercase;
-    color: var(--color-text-low);
+    color: var(--color-ink-low);
   }
 
   .grid-texture {
-    background-image: linear-gradient(rgba(255, 255, 255, 0.03) 1px, transparent 1px),
-      linear-gradient(90deg, rgba(255, 255, 255, 0.03) 1px, transparent 1px);
+    background-image: linear-gradient(rgba(26, 17, 19, 0.045) 1px, transparent 1px),
+      linear-gradient(90deg, rgba(26, 17, 19, 0.045) 1px, transparent 1px);
     background-size: 64px 64px;
   }
 
-  .noise-overlay {
-    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='140' height='140'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='2'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
-  }
-
-  /* headline reveal — the line-mask primitive */
-  .reveal-line {
-    display: block;
-    overflow: hidden;
-  }
-  .reveal-line > span {
-    display: block;
-    transform: translateY(110%);
-    will-change: transform;
+  .rule {
+    border-color: var(--color-hair);
   }
 }
 
@@ -152,14 +145,4 @@ a {
     transition-duration: 0.001ms !important;
     scroll-behavior: auto !important;
   }
-  .reveal-line > span {
-    transform: none !important;
-  }
-}
-
-/* Hide native cursor only when the custom one is live */
-body[data-cursor="on"],
-body[data-cursor="on"] a,
-body[data-cursor="on"] button {
-  cursor: none;
 }

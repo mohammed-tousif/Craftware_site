@@ -1,4 +1,3 @@
-import Preloader from "@/components/sections/Preloader";
 import Hero from "@/components/sections/Hero";
 import Trust from "@/components/sections/Trust";
 import Services from "@/components/sections/Services";
@@ -12,7 +11,6 @@ import FinalCta from "@/components/sections/FinalCta";
 export default function HomePage() {
   return (
     <>
-      <Preloader />
       <Hero />
       <Trust />
       <Services />

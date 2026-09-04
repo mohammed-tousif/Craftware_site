@@ -5,7 +5,6 @@ import { GeistSans } from "geist/font/sans";
 import "./globals.css";
 import { site } from "@/config/site";
 import SmoothScroll from "@/components/layout/SmoothScroll";
-import CustomCursor from "@/components/ui/CustomCursor";
 import Nav from "@/components/layout/Nav";
 import Footer from "@/components/layout/Footer";
 
@@ -55,8 +54,8 @@ export const metadata: Metadata = {
 };
 
 export const viewport: Viewport = {
-  themeColor: "#08080b",
-  colorScheme: "dark",
+  themeColor: "#ffffff",
+  colorScheme: "light",
 };
 
 export default function RootLayout({
@@ -70,9 +69,8 @@ export default function RootLayout({
       className={`${spaceGrotesk.variable} ${GeistSans.variable}`}
       suppressHydrationWarning
     >
-      <body className="min-h-screen antialiased">
+      <body className="min-h-screen bg-paper text-ink antialiased">
         <SmoothScroll>
-          <CustomCursor />
           <Nav />
           <main>{children}</main>
           <Footer />

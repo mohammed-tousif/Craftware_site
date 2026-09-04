@@ -61,19 +61,30 @@ export function useInViewOnce<T extends Element>(
   const [seen, setSeen] = useState(false);
 
   useEffect(() => {
-    if (seen || !ref.current) return;
+    if (seen) return;
     const el = ref.current;
-    const io = new IntersectionObserver(
-      (entries) => {
-        if (entries[0]?.isIntersecting) {
-          setSeen(true);
-          io.disconnect();
-        }
-      },
-      { rootMargin }
-    );
-    io.observe(el);
-    return () => io.disconnect();
+    let io: IntersectionObserver | null = null;
+
+    if (el && "IntersectionObserver" in window) {
+      io = new IntersectionObserver(
+        (entries) => {
+          if (entries[0]?.isIntersecting) {
+            setSeen(true);
+            io?.disconnect();
+          }
+        },
+        { rootMargin }
+      );
+      io.observe(el);
+    }
+
+    // fallback so dependent animations never stall if the observer is inert
+    const t = window.setTimeout(() => setSeen(true), 700);
+
+    return () => {
+      io?.disconnect();
+      window.clearTimeout(t);
+    };
   }, [seen, rootMargin]);
 
   return [ref, seen];

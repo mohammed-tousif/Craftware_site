@@ -18,33 +18,29 @@ export default function WhyCraftWare() {
   const reduced = useReducedMotion();
 
   return (
-    <section id="why" className="relative overflow-hidden py-28 sm:py-40">
-      <div className="pointer-events-none absolute left-1/2 top-1/2 h-[420px] w-[420px] -translate-x-1/2 -translate-y-1/2 rounded-full bg-[radial-gradient(circle,rgba(139,92,246,0.16),transparent_70%)] blur-2xl" />
+    <section id="why" className="relative overflow-hidden py-24 sm:py-36">
+      <div className="pointer-events-none absolute left-1/2 top-1/2 h-[420px] w-[420px] -translate-x-1/2 -translate-y-1/2 rounded-full bg-[radial-gradient(circle,rgba(200,16,46,0.07),transparent_70%)]" />
 
       <div className="mx-auto max-w-[1600px] px-6 text-center sm:px-10">
         <p className="kicker">
-          <span className="font-display text-violet">06</span> — Why CraftWare
+          <span className="font-display text-red">06</span> — Why CraftWare
         </p>
         <RevealText
           as="h2"
-          className="mx-auto mt-4 font-display text-[clamp(1.8rem,4.6vw,2.75rem)] font-bold tracking-tight"
+          className="mx-auto mt-4 font-display text-[clamp(1.8rem,4.6vw,2.75rem)] font-bold tracking-tight text-ink"
         >
           Design × Technology × Marketing
         </RevealText>
       </div>
 
       {/* orbit */}
-      <div className="relative mx-auto mt-20 flex h-[340px] w-[340px] items-center justify-center sm:h-[440px] sm:w-[440px]">
+      <div className="relative mx-auto mt-16 flex h-[240px] w-[240px] scale-90 items-center justify-center sm:mt-20 sm:h-[440px] sm:w-[440px] sm:scale-100">
         <div className="absolute inset-0 rounded-full border border-hair" />
-        <div className="absolute inset-[14%] rounded-full border border-white/[0.06]" />
+        <div className="absolute inset-[14%] rounded-full border border-hair" />
 
         <div
           className="absolute inset-0"
-          style={
-            reduced
-              ? undefined
-              : { animation: "cw-orbit 44s linear infinite" }
-          }
+          style={reduced ? undefined : { animation: "cw-orbit 46s linear infinite" }}
         >
           {values.map((v, i) => {
             const pos = ORBIT[i % ORBIT.length];
@@ -55,11 +51,11 @@ export default function WhyCraftWare() {
                 style={{ left: pos.left, top: pos.top }}
               >
                 <span
-                  className="block whitespace-nowrap rounded-full border border-hair-strong bg-ink/80 px-3.5 py-1.5 text-[11px] uppercase tracking-[0.12em] text-text-hi backdrop-blur-sm"
+                  className="block whitespace-nowrap rounded-full border border-hair-strong bg-paper px-2.5 py-1 text-[8.5px] uppercase tracking-[0.1em] text-ink shadow-[0_6px_18px_-10px_rgba(26,17,19,0.3)] sm:px-3.5 sm:py-1.5 sm:text-[11px] sm:tracking-[0.12em]"
                   style={
                     reduced
                       ? undefined
-                      : { animation: "cw-orbit 44s linear infinite reverse" }
+                      : { animation: "cw-orbit 46s linear infinite reverse" }
                   }
                 >
                   {v}
@@ -70,7 +66,7 @@ export default function WhyCraftWare() {
         </div>
 
         <div className="text-center">
-          <div className="font-display text-sm font-semibold tracking-[0.18em] text-gradient">
+          <div className="font-display text-sm font-semibold tracking-[0.18em] text-red">
             CRAFTWARE
           </div>
           <div className="meta-label mt-1">The engine</div>

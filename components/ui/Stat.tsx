@@ -17,11 +17,7 @@ export default function Stat({ stat }: { stat: StatData }) {
   const raf = useRef<number | null>(null);
 
   useEffect(() => {
-    if (!inView) return;
-    if (reduced) {
-      setN(stat.value);
-      return;
-    }
+    if (!inView || reduced) return;
     const start = performance.now();
     const dur = 1400;
     const tick = (now: number) => {
@@ -36,16 +32,16 @@ export default function Stat({ stat }: { stat: StatData }) {
     };
   }, [inView, reduced, stat.value]);
 
+  const display = reduced ? stat.value : n;
+
   return (
-    <div ref={ref} className="border-t border-hair pt-5">
-      <div className="font-display text-4xl font-bold leading-none tracking-tight sm:text-5xl">
-        <span className="text-gradient">
-          {stat.prefix}
-          {fmt(n, stat.decimals)}
-          {stat.suffix}
-        </span>
+    <div ref={ref} className="border-t-2 border-red/70 pt-5">
+      <div className="font-display text-4xl font-bold leading-none tracking-tight text-ink sm:text-5xl">
+        {stat.prefix}
+        {fmt(display, stat.decimals)}
+        <span className="text-red">{stat.suffix}</span>
       </div>
-      <div className="mt-3 text-[13px] text-text-mid">{stat.label}</div>
+      <div className="mt-3 text-[13px] text-ink-mid">{stat.label}</div>
     </div>
   );
 }
