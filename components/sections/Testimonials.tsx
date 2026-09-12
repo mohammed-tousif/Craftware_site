@@ -24,7 +24,6 @@ function Card({ t }: { t: (typeof testimonials)[number] }) {
 
 export default function Testimonials() {
   const reduced = useReducedMotion();
-  const loop = [...testimonials, ...testimonials];
 
   return (
     <section id="voices" className="overflow-hidden py-20 sm:py-28">
@@ -46,9 +45,16 @@ export default function Testimonials() {
           </div>
         ) : (
           <div className="flex w-max gap-5 px-3 [animation:cw-marquee_50s_linear_infinite] group-hover:[animation-play-state:paused]">
-            {loop.map((t, i) => (
-              <Card key={i} t={t} />
+            {testimonials.map((t, i) => (
+              <Card key={`a-${i}`} t={t} />
             ))}
+            {/* Visual-only duplicate for the seamless loop — hidden from assistive tech
+                so screen readers don't announce every quote twice. */}
+            <div className="flex shrink-0 gap-5" aria-hidden="true">
+              {testimonials.map((t, i) => (
+                <Card key={`b-${i}`} t={t} />
+              ))}
+            </div>
           </div>
         )}
       </div>

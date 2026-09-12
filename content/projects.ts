@@ -15,8 +15,6 @@ export type Project = {
   result: string | null;
   year: string;
   timeline: string;
-  /** Accent used for the placeholder art + case-study wash. */
-  accent: "violet" | "blue" | "cyan";
   /** Swap this for a real screenshot in /public/work when available. */
   image: string | null;
   summary: string;
@@ -33,7 +31,6 @@ export const projects: Project[] = [
     result: "+180% package enquiries in 90 days",
     year: "2025",
     timeline: "8 weeks",
-    accent: "violet",
     image: null,
     summary:
       "A modern digital presence that turns curated travel packages into booked enquiries.",
@@ -79,7 +76,6 @@ export const projects: Project[] = [
     result: null,
     year: "2025",
     timeline: "10 weeks",
-    accent: "blue",
     image: null,
     summary:
       "A calm, trustworthy product identity for a healthcare platform that patients actually want to use.",
@@ -125,7 +121,6 @@ export const projects: Project[] = [
     result: null,
     year: "2024",
     timeline: "6 weeks",
-    accent: "cyan",
     image: null,
     summary:
       "An identity and content engine for a café that wanted to be talked about, not just visited.",
@@ -171,7 +166,6 @@ export const projects: Project[] = [
     result: null,
     year: "2024",
     timeline: "7 weeks",
-    accent: "violet",
     image: null,
     summary:
       "A website and paid-social engine that fills tables on the nights that used to be quiet.",
