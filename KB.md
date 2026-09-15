@@ -10,7 +10,7 @@ things are built the way they are.
 
 - **CraftWare** — real digital agency, Hubli, Karnataka, India.
 - Team of 3: Nisar B, Tousif M, Mahir S.
-- Contact: craftware@gmail.com, +91 90196 50790.
+- Contact: craftwaretech@gmail.com, +91 87229 73448.
 - Real client example used in the portfolio: **Quba International**
   (Umrah/Hajj/Ziyarat travel agency) — their live site
   (qubainternationaltravelshubli.com) was also used as a direct style

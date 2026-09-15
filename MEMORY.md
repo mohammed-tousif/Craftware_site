@@ -1,5 +1,15 @@
 # CraftWare — Project Memory / Handoff
 
+> **STATUS UPDATE — 2026-09-15: everything below describes the Next.js build, which is
+> no longer what's live or on `main`.** Teammate Mahir built a separate, complete static
+> HTML site (`craftware-design-v2.html` + `assets/`, documented in `CLAUDE.md` / `KB.md`
+> at the repo root). That static site is now what's deployed at
+> `craftware-site.vercel.app` and is now the content of `main`. The old Next.js app is
+> preserved in full on the `nextjs-app` branch (nothing was deleted) — `git checkout
+> nextjs-app` gets it back. Read `CLAUDE.md` and `KB.md` first for anything going
+> forward; this file and `SESSION-HANDOFF.md` are kept as historical record of the
+> Next.js build's design decisions.
+
 > Single source of truth for the CraftWare website build. Read this first in any new session.
 > For the full conversation narrative + the verbatim original brief, see `SESSION-HANDOFF.md`
 > in this folder.
