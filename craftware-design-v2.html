@@ -459,45 +459,46 @@
 
   /* ---- MARQUEE ---- */
   /* ---- INTEGRATIONS (3D orb + services grid) ---- */
-  section.integrations{ position:relative; background:var(--hero-bg); color:var(--ink); overflow:hidden; }
-  #jellyfishCanvas{ position:absolute; inset:0; width:100%; height:100%; pointer-events:none; z-index:0; }
-  .glow-orb{
-    position:absolute; z-index:0; pointer-events:none;
-    top:50%; left:50%; transform:translate(-50%,-50%);
-    width:min(56vw, 620px); height:min(56vw, 620px); border-radius:50%;
+  section.integrations{ position:relative; background:#03040a; color:var(--cream); overflow:hidden; }
+  .bh-video-el{ position:absolute; inset:0; width:100%; height:100%; object-fit:cover; pointer-events:none; z-index:0; filter:brightness(0.55) saturate(1.05); }
+  #blackHoleCanvas{ position:absolute; inset:0; width:100%; height:100%; pointer-events:none; z-index:0; display:block; }
+  #blackHoleCanvas[hidden]{ display:none; }
+  .bh-fallback{
+    position:absolute; inset:0; z-index:0; pointer-events:none; overflow:hidden;
+  }
+  .bh-fallback::before{
+    content:""; position:absolute; inset:0;
     background:
-      radial-gradient(circle at 34% 30%, rgba(255,255,255,0.5) 0%, rgba(255,255,255,0) 24%),
-      radial-gradient(circle at 50% 50%, color-mix(in srgb, var(--sky) 45%, transparent) 0%, transparent 70%);
-    box-shadow:
-      0 0 90px 30px color-mix(in srgb, var(--yellow) 20%, transparent),
-      0 0 160px 60px color-mix(in srgb, var(--sky) 14%, transparent);
-    opacity:0.32;
-    animation:orbPulse 6s ease-in-out infinite;
+      radial-gradient(circle at 50% 50%, #000 0 9%, rgba(0,0,0,0) 9.2%),
+      radial-gradient(ellipse 46% 9% at 50% 50%, rgba(255,255,255,0.9) 0%, rgba(255,240,215,0.5) 40%, rgba(255,240,215,0) 72%),
+      radial-gradient(circle at 50% 50%, rgba(255,255,255,0.55) 0%, rgba(255,255,255,0) 11%),
+      radial-gradient(circle at 20% 25%, rgba(255,255,255,0.5) 0%, transparent 0.4%),
+      radial-gradient(circle at 78% 62%, rgba(255,255,255,0.4) 0%, transparent 0.3%),
+      radial-gradient(circle at 65% 18%, rgba(255,255,255,0.35) 0%, transparent 0.3%),
+      radial-gradient(circle at 12% 70%, rgba(255,255,255,0.3) 0%, transparent 0.3%);
   }
-  @keyframes orbPulse{
-    0%,100%{ opacity:0.26; box-shadow:0 0 90px 30px color-mix(in srgb, var(--yellow) 16%, transparent), 0 0 160px 60px color-mix(in srgb, var(--sky) 12%, transparent); }
-    50%{ opacity:0.38; box-shadow:0 0 120px 45px color-mix(in srgb, var(--yellow) 24%, transparent), 0 0 200px 80px color-mix(in srgb, var(--sky) 18%, transparent); }
-  }
-  @media (max-width:700px){ .glow-orb{ width:80vw; height:80vw; } }
   .int-pill{
-    display:inline-block; font-size:12px; font-weight:700; letter-spacing:.04em; color:var(--sky-dim);
-    border:1px solid rgba(87,194,239,0.4); background:rgba(87,194,239,0.1); border-radius:20px; padding:8px 18px; text-transform:none;
+    display:inline-block; font-size:12px; font-weight:700; letter-spacing:.04em; color:var(--sky);
+    border:1px solid rgba(87,194,239,0.5); background:rgba(87,194,239,0.12); border-radius:20px; padding:8px 18px; text-transform:none;
   }
-  .int-title{ margin-top:22px; font-size:clamp(28px,4.2vw,50px); color:var(--ink); }
-  .int-orb-wrap{ position:relative; z-index:1; max-width:980px; margin:60px auto 0; }
+  .int-title{ margin-top:22px; font-size:clamp(28px,4.2vw,50px); color:var(--cream); }
+  .integrations .int-tile span{ color:var(--cream); }
+  .int-orb-wrap{
+    position:relative; z-index:1; margin-top:60px;
+    width:100vw; margin-left:calc(50% - 50vw); margin-right:calc(50% - 50vw);
+  }
   .int-grid-row{
     position:relative; z-index:1; display:flex; gap:10px; width:max-content;
   }
   .int-grid-row-a{ animation:intGridScrollLeft 46s linear infinite; margin-bottom:10px; }
 
   .int-grid-row-b{ animation:intGridScrollRight 46s linear infinite; }
-  .int-grid-viewport{ overflow:hidden; width:100%; position:relative; }
+  .int-grid-viewport{ overflow:hidden; width:100%; position:relative; padding:0 clamp(20px,5vw,64px); box-sizing:border-box; }
   .glass-light-sweep{
     position:absolute; inset:0; z-index:5; pointer-events:none;
     background:radial-gradient(circle 260px at var(--sun-x, 50%) -10%, rgba(255,255,255,0.55), rgba(255,240,200,0.18) 45%, transparent 70%);
     mix-blend-mode:overlay;
   }
-  .int-grid-viewport:hover .int-grid-row{ animation-play-state:paused; }
   @keyframes intGridScrollLeft{ from{ transform:translateX(0); } to{ transform:translateX(-33.3333%); } }
   @keyframes intGridScrollRight{ from{ transform:translateX(-33.3333%); } to{ transform:translateX(0); } }
   .int-tile{
@@ -904,8 +905,11 @@
 
   <!-- INTEGRATIONS -->
   <section class="integrations pad">
-    <canvas id="jellyfishCanvas" aria-hidden="true"></canvas>
-    <div class="glow-orb" aria-hidden="true"></div>
+    <video class="bh-video-el" autoplay muted loop playsinline aria-hidden="true">
+      <source src="assets/blackhole-bg.mp4" type="video/mp4">
+    </video>
+    <canvas id="blackHoleCanvas" aria-hidden="true" hidden></canvas>
+    <div id="blackHoleFallback" class="bh-fallback" aria-hidden="true" hidden></div>
     <div class="wrap" style="text-align:center; position:relative; z-index:1;">
       <span class="int-pill">EVERYTHING WE DO</span>
       <h2 class="int-title">One team, every service<br>your brand needs.</h2>
@@ -1386,234 +1390,242 @@
   }, 2000);
 
 
-  // drifting jellyfish background (Canvas 2D) — original code inspired by a
-  // WebGPU jellyfish simulation the user shared, rebuilt here with plain
-  // Canvas so it works in any browser without needing WebGPU support. Each
-  // jellyfish is a soft bezier bell with wavy trailing tentacles, gently
-  // pulsing like a real swim stroke, drifting slowly behind the icon grid.
-  (function initJellyfish(){
-    const canvas = document.getElementById('jellyfishCanvas');
+  // realtime black hole background (WebGL / Three.js) — a raymarched
+  // Schwarzschild-style lens: rays are bent toward the horizon step by
+  // step, an accretion disk plane is sampled on every crossing (so the
+  // lensed disk shows both in front of AND arced above the silhouette,
+  // like the reference photo), and anything that falls inside the
+  // horizon radius reads back pure black. Falls back to a static CSS
+  // rendition (#blackHoleFallback) if WebGL/Three is unavailable, or if
+  // the visitor prefers reduced motion — never leaves the section blank.
+  (function initBlackHole(){
+    // shader parked for now — a real black hole video is used instead
+    // (see .bh-video-el). Flip this back on to resume the WebGL version.
+    const USE_SHADER = false;
+    if (!USE_SHADER) return;
+
+    const canvas = document.getElementById('blackHoleCanvas');
+    const fallback = document.getElementById('blackHoleFallback');
     const section = document.querySelector('section.integrations');
-    if (!canvas || !section || prefersReduced) return;
-    const ctx = canvas.getContext('2d');
-    let W = 0, H = 0, DPR = Math.min(window.devicePixelRatio || 1, 2);
+    if (!canvas || !section) return;
+
+    function showFallback(){
+      canvas.style.display = 'none';
+      if (fallback) fallback.hidden = false;
+    }
+
+    if (prefersReduced || typeof THREE === 'undefined') { showFallback(); return; }
+
+    let renderer;
+    try {
+      renderer = new THREE.WebGLRenderer({ canvas, antialias:true, alpha:false, powerPreference:'low-power' });
+    } catch (e) { showFallback(); return; }
+    if (!renderer || !renderer.getContext()) { showFallback(); return; }
+    renderer.setClearColor(0x03040a, 1);
+
+    const scene = new THREE.Scene();
+    const camera = new THREE.OrthographicCamera(-1, 1, 1, -1, 0, 1);
+    const geo = new THREE.PlaneGeometry(2, 2);
+
+    const uniforms = {
+      uTime: { value: 0 },
+      uResolution: { value: new THREE.Vector2(1, 1) },
+    };
+
+    const vertexShader = `
+      varying vec2 vUv;
+      void main(){
+        vUv = uv;
+        gl_Position = vec4(position.xy, 0.0, 1.0);
+      }
+    `;
+
+    const fragmentShader = `
+      precision highp float;
+      varying vec2 vUv;
+      uniform float uTime;
+      uniform vec2 uResolution;
+
+      float hash13(vec3 p3){
+        p3 = fract(p3 * 0.1031);
+        p3 += dot(p3, p3.yzx + 33.33);
+        return fract((p3.x + p3.y) * p3.z);
+      }
+      float hash12(vec2 p){
+        vec3 p3 = fract(vec3(p.xyx) * 0.1031);
+        p3 += dot(p3, p3.yzx + 33.33);
+        return fract((p3.x + p3.y) * p3.z);
+      }
+      float noise(vec2 p){
+        vec2 i = floor(p), f = fract(p);
+        float a = hash12(i);
+        float b = hash12(i + vec2(1.0, 0.0));
+        float c = hash12(i + vec2(0.0, 1.0));
+        float d = hash12(i + vec2(1.0, 1.0));
+        vec2 u = f * f * (3.0 - 2.0 * f);
+        return mix(a, b, u.x) + (c - a) * u.y * (1.0 - u.x) + (d - b) * u.x * u.y;
+      }
+      float fbm(vec2 p){
+        float v = 0.0, a = 0.5;
+        for (int i = 0; i < 5; i++){
+          v += a * noise(p);
+          p *= 2.03;
+          a *= 0.55;
+        }
+        return v;
+      }
+      float starField(vec3 dir, float t){
+        vec3 p = dir * 380.0;
+        vec3 g = floor(p);
+        float h = hash13(g);
+        float s = smoothstep(0.985, 1.0, h);
+        float tw = 0.55 + 0.45 * sin(t * 1.4 + h * 62.831);
+        return s * tw;
+      }
+
+      void main(){
+        vec2 uv = (vUv - 0.5) * 2.0;
+        float aspect = uResolution.x / max(uResolution.y, 1.0);
+        uv.x *= aspect;
+
+        float camDist = 30.0;
+        float elevation = radians(9.0);
+        vec3 camPos = vec3(0.0, camDist * sin(elevation), -camDist * cos(elevation));
+        vec3 fwd = normalize(-camPos);
+        vec3 worldUp = vec3(0.0, 1.0, 0.0);
+        vec3 right0 = normalize(cross(fwd, worldUp));
+        vec3 up0 = cross(right0, fwd);
+        float roll = radians(5.0);
+        vec3 right = right0 * cos(roll) + up0 * sin(roll);
+        vec3 up = up0 * cos(roll) - right0 * sin(roll);
+
+        float fov = radians(36.0);
+        float fl = 1.0 / tan(fov * 0.5);
+        vec3 dir = normalize(uv.x * right + uv.y * up + fl * fwd);
+        vec3 pos = camPos;
+
+        float Rs = 1.0;
+        float diskInner = 1.7;
+        float diskOuter = 9.5;
+
+        vec3 diskAccum = vec3(0.0);
+        float diskAlpha = 0.0;
+        bool captured = false;
+        float minR = 1000.0;
+
+        for (int i = 0; i < 130; i++){
+          float r = length(pos);
+          minR = min(minR, r);
+          if (r < Rs * 1.02){ captured = true; break; }
+          if (r > 70.0){ break; }
+
+          float step = clamp(r * 0.09, 0.025, 0.9);
+          vec3 toCenter = -pos;
+          vec3 accel = normalize(toCenter) * (1.6 * Rs / max(r * r, 0.0001));
+          dir = normalize(dir + accel * step);
+
+          vec3 newPos = pos + dir * step;
+
+          if (diskAlpha < 0.92 && ((pos.y > 0.0 && newPos.y <= 0.0) || (pos.y < 0.0 && newPos.y >= 0.0))){
+            float tCross = pos.y / (pos.y - newPos.y);
+            vec3 hitP = mix(pos, newPos, tCross);
+            float rd = length(hitP.xz);
+            if (rd > diskInner && rd < diskOuter){
+              float radial = (rd - diskInner) / (diskOuter - diskInner);
+              float phi = atan(hitP.z, hitP.x);
+              float flow = phi + uTime * 0.1 - rd * 0.5;
+              float turb = fbm(vec2(flow * 1.6, rd * 0.9));
+              float grooves = 0.72 + 0.28 * sin(rd * 13.0 - uTime * 0.5 + turb * 2.4);
+              float brightness = pow(1.0 - radial, 1.15) * (0.5 + 0.8 * turb * turb) * grooves;
+              float side = max(cos(phi - 1.0), 0.0);
+              brightness *= 0.5 + 0.8 * side;
+              vec3 innerCol = vec3(1.0, 0.93, 0.78);
+              vec3 midCol = vec3(1.0, 0.55, 0.16);
+              vec3 outerCol = vec3(0.62, 0.16, 0.05);
+              vec3 diskCol = mix(innerCol, midCol, smoothstep(0.0, 0.45, radial));
+              diskCol = mix(diskCol, outerCol, smoothstep(0.45, 1.0, radial));
+              float a = clamp(brightness, 0.0, 1.0) * (1.0 - diskAlpha);
+              diskAccum += diskCol * a * 1.25;
+              diskAlpha += a;
+            }
+          }
+
+          pos = newPos;
+        }
+
+        vec3 col = vec3(0.0);
+        if (!captured){
+          float s = starField(dir, uTime);
+          vec3 bg = vec3(s);
+          float haze = smoothstep(0.4, -0.6, abs(dir.y)) * 0.05;
+          bg += vec3(0.09, 0.10, 0.14) * haze;
+          col = bg;
+        }
+
+        col = col * (1.0 - diskAlpha) + diskAccum;
+
+        if (!captured){
+          float ringCore = 1.0 - smoothstep(1.42, 1.58, minR);
+          float ringGlow = 1.0 - smoothstep(1.3, 2.1, minR);
+          col += vec3(1.0, 1.0, 1.0) * ringCore * 1.1;
+          col += vec3(1.0, 0.97, 0.9) * ringGlow * 0.18;
+        }
+
+        col = pow(clamp(col, 0.0, 1.4), vec3(1.05));
+        gl_FragColor = vec4(col, 1.0);
+      }
+    `;
+
+    const mat = new THREE.ShaderMaterial({ uniforms, vertexShader, fragmentShader, depthTest:false, depthWrite:false });
+    const mesh = new THREE.Mesh(geo, mat);
+    scene.add(mesh);
+
+    let W = 0, H = 0;
+    const DPR = Math.min(window.devicePixelRatio || 1, 1.5);
+    const isSmall = window.matchMedia('(max-width:700px)').matches;
+    const renderScale = isSmall ? 0.6 : 0.85;
 
     function sizeCanvas(){
       W = section.clientWidth; H = section.clientHeight;
-      canvas.width = W * DPR; canvas.height = H * DPR;
-      canvas.style.width = W + 'px'; canvas.style.height = H + 'px';
-      ctx.setTransform(DPR, 0, 0, DPR, 0, 0);
+      if (!W || !H) return;
+      renderer.setPixelRatio(DPR * renderScale);
+      renderer.setSize(W, H, false);
+      uniforms.uResolution.value.set(W * DPR * renderScale, H * DPR * renderScale);
     }
     sizeCanvas();
     window.addEventListener('resize', sizeCanvas);
-
-    function makeJelly(seed, baseX, baseY, hue){
-      return {
-        seed, baseX, baseY,
-        scale: 0.7 + (seed * 1.7) % 0.6,
-        hue,
-        driftSpeed: 0.00006 + seed * 0.00003,
-        pulseSpeed: 0.0013 + seed * 0.0004,
-        phase: seed * 12.3,
-        tentacles: 7,
-      };
-    }
-    const jellies = [
-      makeJelly(0, 0.07, 0.16, '154,199,239'),
-      makeJelly(1, 0.93, 0.2, '196,168,255'),
-      makeJelly(2, 0.5, 0.86, '255,205,150'),
-    ];
-
-    function drawJelly(t, j){
-      const cx = W * (j.baseX + Math.sin(t * j.driftSpeed + j.phase) * 0.06);
-      const cy = H * (j.baseY + Math.cos(t * j.driftSpeed * 0.7 + j.phase) * 0.08);
-      const pulse = 1 + Math.sin(t * j.pulseSpeed + j.phase) * 0.09;
-      const bellW = 62 * j.scale * pulse;
-      const bellH = 44 * j.scale * pulse;
-
-      ctx.save();
-      ctx.translate(cx, cy);
-
-      // bell — soft dome with a scalloped bottom margin
-      ctx.beginPath();
-      ctx.moveTo(-bellW, 0);
-      ctx.bezierCurveTo(-bellW, -bellH * 1.35, bellW, -bellH * 1.35, bellW, 0);
-      const scallops = 8;
-      for (let i = scallops; i >= 0; i--) {
-        const u = i / scallops;
-        const x = bellW - u * bellW * 2;
-        const wobble = Math.sin(u * Math.PI * scallops + t * 0.002 + j.phase) * 3;
-        ctx.quadraticCurveTo(x + (bellW * 2 / scallops) * 0.25, bellH * 0.12 + wobble, x, bellH * 0.05 + wobble * 0.6);
-      }
-      ctx.closePath();
-      const grad = ctx.createLinearGradient(0, -bellH, 0, bellH * 0.2);
-      grad.addColorStop(0, `rgba(${j.hue},0.34)`);
-      grad.addColorStop(1, `rgba(${j.hue},0.08)`);
-      ctx.fillStyle = grad;
-      ctx.fill();
-      ctx.lineWidth = 1.2;
-      ctx.strokeStyle = `rgba(${j.hue},0.4)`;
-      ctx.stroke();
-
-      // a couple of faint interior bands, following the bell's dome curve
-      ctx.strokeStyle = `rgba(${j.hue},0.22)`;
-      ctx.lineWidth = 1;
-      [0.4, 0.7].forEach(f => {
-        ctx.beginPath();
-        ctx.moveTo(-bellW * f, 0);
-        ctx.bezierCurveTo(-bellW * f, -bellH * 1.2 * f, bellW * f, -bellH * 1.2 * f, bellW * f, 0);
-        ctx.stroke();
-      });
-
-      // trailing tentacles — wavy soft lines undulating beneath the bell
-      for (let i = 0; i < j.tentacles; i++) {
-        const u = i / (j.tentacles - 1);
-        const startX = -bellW * 0.82 + u * bellW * 1.64;
-        const len = (50 + (i % 3) * 14) * j.scale;
-        ctx.beginPath();
-        ctx.moveTo(startX, bellH * 0.1);
-        const segs = 10;
-        for (let s = 1; s <= segs; s++) {
-          const sf = s / segs;
-          const wave = Math.sin(sf * 5 + t * 0.0022 + j.phase + i) * (6 + sf * 10);
-          ctx.lineTo(startX + wave, bellH * 0.1 + sf * len);
-        }
-        ctx.strokeStyle = `rgba(${j.hue},${0.28 - u * 0.05})`;
-        ctx.lineWidth = 1.4;
-        ctx.stroke();
-      }
-
-      // short frilly oral arms near the center, thicker and shorter
-      for (let i = 0; i < 3; i++) {
-        const off = (i - 1) * 8;
-        ctx.beginPath();
-        ctx.moveTo(off, bellH * 0.05);
-        const segs = 6;
-        for (let s = 1; s <= segs; s++) {
-          const sf = s / segs;
-          const wave = Math.sin(sf * 4 + t * 0.003 + j.phase + i * 2) * 5;
-          ctx.lineTo(off + wave, bellH * 0.05 + sf * 26 * j.scale);
-        }
-        ctx.strokeStyle = `rgba(${j.hue},0.3)`;
-        ctx.lineWidth = 2;
-        ctx.stroke();
-      }
-
-      ctx.restore();
+    if ('ResizeObserver' in window) {
+      new ResizeObserver(sizeCanvas).observe(section);
+    } else {
+      // fallback for browsers without ResizeObserver: retry briefly until layout settles
+      let tries = 0;
+      const retry = setInterval(() => { sizeCanvas(); if (W && H || ++tries > 20) clearInterval(retry); }, 100);
     }
 
-    // sun rays — soft diagonal light beams from above, as if sunlight is
-    // filtering down through water, drawn behind the jellyfish
-    const RAY_COUNT = 12;
-    const rays = Array.from({length: RAY_COUNT}, (_, i) => ({
-      angle: 8 + i * (58 / (RAY_COUNT - 1)) + (i % 2 === 0 ? -2 : 2),
-      widthDeg: 4 + (i % 3) * 2,
-      phase: i * 1.7,
-      speed: 0.0004 + (i % 4) * 0.0001,
-    }));
-
-    function drawSunrays(t){
-      const sourceX = -W * 0.08;
-      const sourceY = -H * 0.08;
-      const len = H * 2.3;
-      // a soft glow bloom right at the light source, brightest at center
-      const bloom = ctx.createRadialGradient(sourceX, sourceY, 0, sourceX, sourceY, H * 0.7);
-      bloom.addColorStop(0, 'rgba(255,232,170,0.35)');
-      bloom.addColorStop(0.5, 'rgba(255,222,150,0.12)');
-      bloom.addColorStop(1, 'rgba(255,222,150,0)');
-      ctx.fillStyle = bloom;
-      ctx.fillRect(0, 0, W, H);
-
-      ctx.save();
-      ctx.translate(sourceX, sourceY);
-      rays.forEach(r => {
-        const shimmer = 0.6 + Math.sin(t * r.speed + r.phase) * 0.4;
-        const angRad = (r.angle * Math.PI) / 180;
-        const halfW = (r.widthDeg * Math.PI) / 180;
-        ctx.save();
-        ctx.rotate(angRad);
-        ctx.beginPath();
-        ctx.moveTo(0, 0);
-        ctx.lineTo(-Math.sin(-halfW) * len, Math.cos(-halfW) * len);
-        ctx.lineTo(-Math.sin(halfW) * len, Math.cos(halfW) * len);
-        ctx.closePath();
-        const grad = ctx.createLinearGradient(0, 0, 0, len);
-        grad.addColorStop(0, `rgba(255,225,160,${0.34 * shimmer})`);
-        grad.addColorStop(0.45, `rgba(255,222,150,${0.16 * shimmer})`);
-        grad.addColorStop(1, 'rgba(255,222,150,0)');
-        ctx.fillStyle = grad;
-        ctx.fill();
-        ctx.restore();
-      });
-      ctx.restore();
-    }
-
-    // small fish — simple oval body + tail fin, swimming across the scene
-    // with a gentle wavy tail motion
-    function makeFish(seed, baseY, dir, hue, size){
-      return { seed, baseY, dir, hue, size, phase: seed * 7.7, speed: 0.00004 + (seed % 3) * 0.000015 };
-    }
-    const fishes = [
-      makeFish(0, 0.36, 1, '255,159,110', 14),
-      makeFish(1, 0.48, -1, '120,200,180', 11),
-      makeFish(2, 0.63, 1, '255,205,90', 12),
-      makeFish(3, 0.72, -1, '150,170,255', 10),
-      makeFish(4, 0.3, 1, '255,140,170', 9),
-    ];
-
-    function drawFish(t, f){
-      const cycle = (t * f.speed + f.phase) % 1;
-      const x = f.dir === 1 ? -0.08 + cycle * 1.16 : 1.08 - cycle * 1.16;
-      const cx = W * x;
-      const cy = H * f.baseY + Math.sin(t * 0.0016 + f.phase) * 14;
-      const s = f.size;
-      const tailWag = Math.sin(t * 0.012 + f.phase) * 0.35;
-
-      ctx.save();
-      ctx.translate(cx, cy);
-      ctx.scale(f.dir, 1);
-
-      // tail fin
-      ctx.beginPath();
-      ctx.moveTo(-s * 1.1, 0);
-      ctx.lineTo(-s * 2, -s * 0.7 + s * tailWag);
-      ctx.lineTo(-s * 2, s * 0.7 + s * tailWag);
-      ctx.closePath();
-      ctx.fillStyle = `rgba(${f.hue},0.4)`;
-      ctx.fill();
-
-      // body
-      ctx.beginPath();
-      ctx.ellipse(0, 0, s * 1.1, s * 0.62, 0, 0, Math.PI * 2);
-      const bodyGrad = ctx.createLinearGradient(-s, 0, s, 0);
-      bodyGrad.addColorStop(0, `rgba(${f.hue},0.55)`);
-      bodyGrad.addColorStop(1, `rgba(${f.hue},0.32)`);
-      ctx.fillStyle = bodyGrad;
-      ctx.fill();
-
-      // small eye
-      ctx.beginPath();
-      ctx.arc(s * 0.62, -s * 0.08, s * 0.1, 0, Math.PI * 2);
-      ctx.fillStyle = 'rgba(255,255,255,0.7)';
-      ctx.fill();
-
-      ctx.restore();
+    let running = true;
+    if ('IntersectionObserver' in window) {
+      const io = new IntersectionObserver((entries) => {
+        entries.forEach(e => { running = e.isIntersecting; });
+      }, { threshold: 0.01 });
+      io.observe(section);
     }
 
     const glassSweepEl = document.getElementById('glassLightSweep');
-    function animateJellyfish(t){
-      ctx.clearRect(0, 0, W, H);
-      drawSunrays(t);
-      fishes.forEach(f => drawFish(t, f));
-      jellies.forEach(j => drawJelly(t, j));
+    const startTime = performance.now();
+    function animate(now){
+      requestAnimationFrame(animate);
+      if (!running) return;
+      const t = (now - startTime) / 1000;
+      uniforms.uTime.value = t;
+      renderer.render(scene, camera);
       if (glassSweepEl) {
-        const sunX = 50 + Math.sin(t * 0.00035) * 34;
+        const sunX = 50 + Math.sin(t * 0.35) * 34;
         glassSweepEl.style.setProperty('--sun-x', sunX + '%');
       }
-      requestAnimationFrame(animateJellyfish);
     }
-    requestAnimationFrame(animateJellyfish);
+    requestAnimationFrame(animate);
   })();
+
 
   // integrations tiles — rise-in entrance triggered once the section scrolls into view
   const intTiles = document.querySelectorAll('.int-tile');
