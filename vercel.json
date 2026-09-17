@@ -4,7 +4,6 @@
   "installCommand": null,
   "outputDirectory": null,
   "rewrites": [
-    { "source": "/", "destination": "/craftware-design-v2.html" },
-    { "source": "/admin", "destination": "/admin.html" }
+    { "source": "/", "destination": "/craftware-design-v2.html" }
   ]
 }
