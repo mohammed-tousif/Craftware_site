@@ -593,12 +593,14 @@
 
   /* ---- CASE STUDIES ---- */
   section.cases{ background:var(--cream); color:var(--ink); padding-bottom:clamp(90px,12vw,150px); }
-  .case{ display:grid; grid-template-columns:1fr 1fr; border-top:1px solid var(--line-light); }
+  /* text leads, the visual is a small fixed-size mark, not a half-width
+     block — a 650px square of flat color was carrying no real information */
+  .case{ display:grid; grid-template-columns:1fr 220px; align-items:center; gap:clamp(24px,4vw,56px); border-top:1px solid var(--line-light); }
   .case:last-child{ border-bottom:1px solid var(--line-light); }
-  .case-info{ padding:60px clamp(20px,5vw,64px) 60px 0; display:flex; flex-direction:column; justify-content:center; }
+  .case-info{ padding:44px clamp(20px,5vw,64px) 44px 0; display:flex; flex-direction:column; justify-content:center; }
   .case:nth-child(even){ direction:rtl; }
   .case:nth-child(even) .case-info, .case:nth-child(even) .case-visual{ direction:ltr; }
-  .case:nth-child(even) .case-info{ padding:60px 0 60px clamp(20px,5vw,64px); }
+  .case:nth-child(even) .case-info{ padding:44px 0 44px clamp(20px,5vw,64px); }
   .case-idx{ font-family:var(--display); font-size:14px; color:var(--sky-dim); margin-bottom:14px; text-transform:none; font-weight:700; }
   .case-title{ font-size:clamp(30px,4.4vw,54px); margin-bottom:18px; }
   .case-desc{ font-size:14.5px; line-height:1.7; color:var(--ink-soft); max-width:380px; text-transform:none; font-weight:400; margin-bottom:24px; }
@@ -608,7 +610,12 @@
   .case-tags span:nth-child(4n+2){ background:rgba(255,205,60,0.24); color:#8a6308; }
   .case-tags span:nth-child(4n+3){ background:rgba(255,107,107,0.14); color:#c23f3f; }
   .case-tags span:nth-child(4n+4){ background:rgba(87,194,239,0.16); color:var(--sky-dim); }
-  .case-visual{ display:block; position:relative; aspect-ratio:1/1; overflow:hidden; }
+  .case-visual{
+    display:block; position:relative; aspect-ratio:1/1; overflow:hidden;
+    border-radius:16px; box-shadow:0 20px 40px -22px rgba(10,15,28,0.35);
+    transition:transform .35s var(--ease), box-shadow .35s var(--ease);
+  }
+  .case-visual:hover{ transform:translateY(-3px); box-shadow:0 26px 48px -20px rgba(10,15,28,0.42); }
   .case-visual .fill{ position:absolute; inset:0; }
   .case-visual .fill::after{ content:""; position:absolute; inset:0; background-image:radial-gradient(rgba(242,237,226,0.08) 1px, transparent 1px); background-size:5px 5px; mix-blend-mode:overlay; opacity:.5; }
   .case-visual.has-image{ aspect-ratio:16/10; }
@@ -618,21 +625,22 @@
   .fill-c{ background:linear-gradient(140deg,#16324a,#0c1a2c 60%,#05080f); }
   .fill-d{ background:linear-gradient(155deg,#332a09,#1a150a 55%,#05080f); }
   .fill-e{ background:linear-gradient(150deg,#3d2e12,#1e150a 55%,#05080f); }
-  /* large faint index numeral on abstract (non-screenshot) case visuals */
+  /* faint index numeral on abstract (non-screenshot) case visuals — sized
+     for a small fixed-width mark now, not a half-width block */
   .fill-mark{
     position:absolute; inset:0; display:flex; align-items:center; justify-content:center;
-    font-family:var(--display); font-weight:900; font-size:clamp(70px,11vw,150px); line-height:1;
-    color:rgba(242,237,226,0.09); pointer-events:none; user-select:none;
+    font-family:var(--display); font-weight:900; font-size:clamp(40px,7vw,64px); line-height:1;
+    color:rgba(242,237,226,0.12); pointer-events:none; user-select:none;
   }
-  .case-badge{ position:absolute; right:22px; bottom:22px; width:88px; height:88px; }
+  .case-badge{ position:absolute; right:12px; bottom:12px; width:56px; height:56px; }
   @keyframes spin{ to{ transform:rotate(360deg); } }
   .case-badge svg{ width:100%; height:100%; animation:spin 14s linear infinite; }
   .case-badge .arrow{ position:absolute; inset:0; display:flex; align-items:center; justify-content:center; }
-  .case-badge .arrow svg{ width:16px; height:16px; animation:none; }
+  .case-badge .arrow svg{ width:12px; height:12px; animation:none; }
   @media (max-width:860px){
-    .case, .case:nth-child(even){ grid-template-columns:1fr; direction:ltr; }
+    .case, .case:nth-child(even){ grid-template-columns:1fr; direction:ltr; gap:24px; }
     .case-info, .case:nth-child(even) .case-info{ padding:40px 0; order:2; }
-    .case-visual{ order:1; }
+    .case-visual{ order:1; max-width:200px; }
   }
   .case.hidden{ display:none; }
 
@@ -1278,14 +1286,28 @@
       <div class="case" data-cat="branding web">
         <div class="case-info">
           <span class="case-idx">05</span>
-          <h3 class="case-title">Gabriella &amp; Zachary</h3>
-          <p class="case-desc">A vintage-luxury digital wedding invitation — one of the custom event and celebration pieces we design and build for clients who want their invite to feel as considered as the day itself.</p>
+          <h3 class="case-title">Sumera &amp; Hayat</h3>
+          <p class="case-desc">A vintage-luxury digital Nikah invitation — one of the custom event and celebration pieces we design and build for clients who want their invite to feel as considered as the day itself.</p>
           <div class="case-tags"><span>Branding</span><span>Creative design</span><span>Live project</span></div>
         </div>
-        <a class="case-visual" href="https://example1-seven-iota.vercel.app" target="_blank" rel="noopener noreferrer">
+        <a class="case-visual" href="https://gabriella-zachary.vercel.app" target="_blank" rel="noopener noreferrer">
           <div class="fill fill-e"></div>
           <div class="fill-mark">05</div>
           <div class="case-badge"><svg viewBox="0 0 120 120"><defs><path id="cp5" d="M60,60 m-46,0 a46,46 0 1,1 92,0 a46,46 0 1,1 -92,0"/></defs><circle cx="60" cy="60" r="58" fill="none" stroke="var(--cream)" stroke-width="1" opacity="0.3"/><text font-size="10" font-weight="700" letter-spacing="1.4" fill="var(--cream)"><textPath href="#cp5">VISIT SITE • VISIT SITE • </textPath></text></svg><div class="arrow"><svg viewBox="0 0 24 24" fill="none" stroke="var(--cream)" stroke-width="1.8"><path d="M7 17L17 7M17 7H8M17 7V16"/></svg></div></div>
+        </a>
+      </div>
+
+      <div class="case" data-cat="branding web">
+        <div class="case-info">
+          <span class="case-idx">06</span>
+          <h3 class="case-title">Mohammed Yusuf</h3>
+          <p class="case-desc">A digital invitation for a Chilla ceremony, built the same way as our other event pieces — animated, self-contained, and ready to share in one link.</p>
+          <div class="case-tags"><span>Branding</span><span>Creative design</span><span>Live project</span></div>
+        </div>
+        <a class="case-visual" href="https://chilla-mohammed-yusuf.vercel.app" target="_blank" rel="noopener noreferrer">
+          <div class="fill fill-a"></div>
+          <div class="fill-mark">06</div>
+          <div class="case-badge"><svg viewBox="0 0 120 120"><defs><path id="cp6" d="M60,60 m-46,0 a46,46 0 1,1 92,0 a46,46 0 1,1 -92,0"/></defs><circle cx="60" cy="60" r="58" fill="none" stroke="var(--cream)" stroke-width="1" opacity="0.3"/><text font-size="10" font-weight="700" letter-spacing="1.4" fill="var(--cream)"><textPath href="#cp6">VISIT SITE • VISIT SITE • </textPath></text></svg><div class="arrow"><svg viewBox="0 0 24 24" fill="none" stroke="var(--cream)" stroke-width="1.8"><path d="M7 17L17 7M17 7H8M17 7V16"/></svg></div></div>
         </a>
       </div>
     </div>
