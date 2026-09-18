@@ -6,6 +6,7 @@
 <title>CraftWare — Web Design, SEO &amp; Digital Marketing Agency in Hubli, Karnataka</title>
 <meta name="description" content="CraftWare is a founder-led digital growth studio in Hubli, Karnataka building websites, running Meta &amp; Google Ads, and driving SEO, branding and WhatsApp automation for ambitious brands.">
 <link rel="canonical" href="https://craftware.co.in/">
+<link rel="preload" as="video" href="assets/hero-showreel.mp4" fetchpriority="high">
 <meta name="robots" content="index, follow">
 <meta name="theme-color" content="#05080f">
 <link rel="icon" href="/favicon.svg" type="image/svg+xml">
@@ -887,10 +888,10 @@
   <!-- HERO -->
   <section class="hero">
     <div class="hero-media" id="heroMedia">
-      <video class="hero-video-ambient" aria-hidden="true" autoplay muted loop playsinline>
-        <source src="assets/hero-showreel.mp4" type="video/mp4">
+      <video class="hero-video-ambient" id="heroVideoAmbient" aria-hidden="true" muted loop playsinline preload="none">
+        <source data-src="assets/hero-showreel.mp4" type="video/mp4">
       </video>
-      <video class="hero-video-el" autoplay muted loop playsinline poster="assets/hero-poster.jpg">
+      <video class="hero-video-el" autoplay muted loop playsinline poster="assets/hero-poster.jpg" preload="auto">
         <source src="assets/hero-showreel.mp4" type="video/mp4">
       </video>
     </div>
@@ -1493,7 +1494,7 @@
   // first one) until it actually sticks, and poll for a few seconds after
   // load as a last-resort safety net.
   if (!prefersReduced) {
-    const bgVideos = Array.from(document.querySelectorAll('.hero-video-el, .hero-video-ambient, .bh-video-el'));
+    const bgVideos = Array.from(document.querySelectorAll('.hero-video-el, .bh-video-el'));
     if (bgVideos.length) {
       bgVideos.forEach(v => { v.muted = true; v.playsInline = true; });
       const stillPaused = () => bgVideos.some(v => v.paused);
@@ -1519,6 +1520,35 @@
         if (!stillPaused() || pollCount > 20) { clearInterval(pollId); return; }
         tryPlayAll();
       }, 500);
+    }
+  }
+
+  // the mobile ambient-glow video (a blurred duplicate of the hero showreel
+  // behind the crisp one) deliberately has no real <source> at load — two
+  // <video> elements both eagerly fetching/decoding the same file at once
+  // was competing for bandwidth right at startup, adding real delay before
+  // the crisp video the visitor actually looks at could start playing.
+  // Instead it only gets its source (and starts loading) once the crisp
+  // video has already begun playing, so it never competes for that
+  // critical first-paint window.
+  const heroAmbientEl = document.getElementById('heroVideoAmbient');
+  const heroCrispEl = document.querySelector('.hero-video-el');
+  if (heroAmbientEl && heroCrispEl && !prefersReduced) {
+    const startAmbient = () => {
+      const src = heroAmbientEl.querySelector('source');
+      if (src && src.dataset.src) {
+        src.src = src.dataset.src;
+        heroAmbientEl.load();
+        heroAmbientEl.muted = true;
+        heroAmbientEl.playsInline = true;
+        heroAmbientEl.play().catch(() => {});
+      }
+      heroCrispEl.removeEventListener('playing', startAmbient);
+    };
+    if (heroCrispEl.readyState > 2 && !heroCrispEl.paused) {
+      startAmbient();
+    } else {
+      heroCrispEl.addEventListener('playing', startAmbient);
     }
   }
 
