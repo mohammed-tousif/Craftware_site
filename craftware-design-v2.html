@@ -344,6 +344,10 @@
   .exp-row.reveal-once.in{
     opacity:1; transform:translateY(0) scale(1);
     filter:blur(0px);
+    will-change:auto;
+  }
+  @media (max-width:860px){
+    .exp-row.reveal-once{ filter:blur(6px); }
   }
   .exp-row:nth-child(2).reveal-once{ transition-delay:.06s; }
   .exp-row:nth-child(3).reveal-once{ transition-delay:.12s; }
@@ -413,7 +417,8 @@
     100%{ transform:translate(0,0) rotate(0deg); }
   }
   @media (max-width:700px){
-    .float-icon{ display:none; }
+    .float-icon{ opacity:.35; pointer-events:none; }
+    .float-icon svg{ width:24px; height:24px; }
   }
   .exp-grid{ display:grid; grid-template-columns:0.85fr 1.3fr; gap:60px; position:relative; z-index:2; }
   .exp-head h2{ font-size:clamp(34px,4.6vw,58px); margin-bottom:22px; }
@@ -483,8 +488,8 @@
        mirroring the same reveal the desktop :hover rules above use */
     .exp-row-open{ border-left-color:var(--tc, var(--sky)); background:rgba(255,255,255,0.03); padding-left:18px; }
     .exp-row-open .exp-name{ color:var(--tc, var(--sky)); }
-    .exp-row-open .exp-desc{ opacity:1; max-height:40px; transform:translateY(0); margin-top:3px; }
-    .exp-row-open .exp-tags{ opacity:1; max-height:44px; transform:translateY(0); margin-top:6px; }
+    .exp-row-open .exp-desc{ opacity:1; max-height:60px; transform:translateY(0); margin-top:3px; }
+    .exp-row-open .exp-tags{ opacity:1; max-height:90px; transform:translateY(0); margin-top:6px; }
     .exp-row-open .exp-thumb.tilt-a{ opacity:1; transform:translateX(0) rotate(-6deg) scale(1); }
     .exp-row-open .exp-thumb.tilt-b{ opacity:1; transform:translateX(0) rotate(6deg) scale(1); }
     .exp-row-open .exp-thumb{ box-shadow:0 22px 36px -10px color-mix(in srgb, var(--tc) 80%, transparent), inset 0 1px 0 rgba(255,255,255,0.5), inset 0 -6px 10px -4px rgba(0,0,0,0.35); }
@@ -1986,10 +1991,11 @@
 
   // Expertise rows: desktop reveals description/tags/badge on :hover, but touch
   // devices have no hover, so the content was previously unreachable there.
-  // On no-hover devices, tapping a row toggles .exp-row-open instead —
-  // accordion-style, one row open at a time.
+  // On no-hover devices, rows open automatically one at a time as the user
+  // scrolls — whichever row sits nearest a trigger line gets .exp-row-open —
+  // plus a tap still toggles a row directly for accessibility.
   if (window.matchMedia('(hover: none)').matches) {
-    const expRows = document.querySelectorAll('.exp-row');
+    const expRows = Array.from(document.querySelectorAll('.exp-row'));
     expRows.forEach(row => {
       row.setAttribute('tabindex', '0');
       row.setAttribute('role', 'button');
@@ -2000,6 +2006,29 @@
         if (!wasOpen) { row.classList.add('exp-row-open'); row.setAttribute('aria-expanded', 'true'); }
       });
     });
+
+    let expTicking = false;
+    function autoOpenExpRow(){
+      const vh = window.innerHeight || document.documentElement.clientHeight;
+      const triggerY = vh * 0.4;
+      let closest = null, closestDist = Infinity;
+      expRows.forEach(row => {
+        const r = row.getBoundingClientRect();
+        if (r.bottom < 0 || r.top > vh) return;
+        const dist = Math.abs((r.top + r.height / 2) - triggerY);
+        if (dist < closestDist) { closestDist = dist; closest = row; }
+      });
+      if (closest && !closest.classList.contains('exp-row-open')) {
+        expRows.forEach(r => { r.classList.remove('exp-row-open'); r.setAttribute('aria-expanded', 'false'); });
+        closest.classList.add('exp-row-open');
+        closest.setAttribute('aria-expanded', 'true');
+      }
+      expTicking = false;
+    }
+    window.addEventListener('scroll', () => {
+      if (!expTicking) { expTicking = true; requestAnimationFrame(autoOpenExpRow); }
+    }, { passive:true });
+    requestAnimationFrame(() => requestAnimationFrame(autoOpenExpRow));
   }
 
   // glass-hero melt distortion — still, except for a brief settle-in wobble the
