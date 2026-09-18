@@ -488,8 +488,15 @@
        mirroring the same reveal the desktop :hover rules above use */
     .exp-row-open{ border-left-color:var(--tc, var(--sky)); background:rgba(255,255,255,0.03); padding-left:18px; }
     .exp-row-open .exp-name{ color:var(--tc, var(--sky)); }
-    .exp-row-open .exp-desc{ opacity:1; max-height:60px; transform:translateY(0); margin-top:3px; }
-    .exp-row-open .exp-tags{ opacity:1; max-height:90px; transform:translateY(0); margin-top:6px; }
+    /* tapping a row also gives it :focus-within (tabindex+click), and that
+       desktop hover/focus rule above has HIGHER specificity (three
+       class-level selectors incl. the pseudo-class) than a plain
+       .exp-row-open rule (two) — so it silently won and re-clipped these
+       to 40/44px no matter what max-height was set here. Qualify with
+       .exp-row.exp-row-open (three class-level selectors) to beat it, and
+       size generously enough for tags wrapping to 3 lines. */
+    .exp-row.exp-row-open .exp-desc{ opacity:1; max-height:60px; transform:translateY(0); margin-top:3px; }
+    .exp-row.exp-row-open .exp-tags{ opacity:1; max-height:150px; transform:translateY(0); margin-top:6px; }
     .exp-row-open .exp-thumb.tilt-a{ opacity:1; transform:translateX(0) rotate(-6deg) scale(1); }
     .exp-row-open .exp-thumb.tilt-b{ opacity:1; transform:translateX(0) rotate(6deg) scale(1); }
     .exp-row-open .exp-thumb{ box-shadow:0 22px 36px -10px color-mix(in srgb, var(--tc) 80%, transparent), inset 0 1px 0 rgba(255,255,255,0.5), inset 0 -6px 10px -4px rgba(0,0,0,0.35); }
