@@ -2019,7 +2019,9 @@
   // Expertise rows: desktop reveals description/tags/badge on :hover, but touch
   // devices have no hover, so the content was previously unreachable there.
   // On no-hover devices, tapping a row toggles .exp-row-open instead —
-  // accordion-style, one row open at a time.
+  // accordion-style, one row open at a time. Scrolling never opens a row on
+  // its own, but if the user scrolls the currently-open row out of view it
+  // closes automatically, so it doesn't stay open somewhere off-screen.
   if (window.matchMedia('(hover: none)').matches) {
     const expRows = Array.from(document.querySelectorAll('.exp-row'));
     expRows.forEach(row => {
@@ -2032,6 +2034,24 @@
         if (!wasOpen) { row.classList.add('exp-row-open'); row.setAttribute('aria-expanded', 'true'); }
       });
     });
+
+    let expCloseTicking = false;
+    function autoCloseExpRow(){
+      const vh = window.innerHeight || document.documentElement.clientHeight;
+      const openRow = expRows.find(r => r.classList.contains('exp-row-open'));
+      if (openRow) {
+        const r = openRow.getBoundingClientRect();
+        const stillVisible = r.top < vh * 0.75 && r.bottom > vh * 0.1;
+        if (!stillVisible) {
+          openRow.classList.remove('exp-row-open');
+          openRow.setAttribute('aria-expanded', 'false');
+        }
+      }
+      expCloseTicking = false;
+    }
+    window.addEventListener('scroll', () => {
+      if (!expCloseTicking) { expCloseTicking = true; requestAnimationFrame(autoCloseExpRow); }
+    }, { passive:true });
   }
 
   // glass-hero melt distortion — still, except for a brief settle-in wobble the
