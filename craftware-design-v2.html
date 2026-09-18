@@ -914,10 +914,27 @@
   <section class="hero">
     <div class="hero-media" id="heroMedia">
       <video class="hero-video-el" autoplay muted loop playsinline poster="assets/hero-poster.jpg" preload="auto">
-        <source src="assets/hero-showreel-mobile.mp4" type="video/mp4" media="(max-width:700px)">
         <source src="assets/hero-showreel.mp4" type="video/mp4">
       </video>
-      <script>if (window.matchMedia('(max-width:700px)').matches) { document.querySelector('.hero-video-el').poster = 'assets/hero-poster-mobile.jpg'; }</script>
+      <script>
+        // <source media="..."> selection on <video> has real reliability
+        // quirks on mobile browsers (unlike <link rel="preload" media>,
+        // which is solid) — sometimes failing to autoplay at all instead
+        // of just picking a source, leaving the native play-button/poster
+        // state stuck. Swapping the src explicitly via JS before the video
+        // has meaningfully started fetching is the same data-src pattern
+        // already used for the black-hole video, and sidesteps that
+        // uncertainty entirely — the proven autoplay-retry logic below
+        // then only ever has to deal with a single plain <source>.
+        (function(){
+          var v = document.querySelector('.hero-video-el');
+          if (window.matchMedia('(max-width:700px)').matches) {
+            v.poster = 'assets/hero-poster-mobile.jpg';
+            v.querySelector('source').src = 'assets/hero-showreel-mobile.mp4';
+            v.load();
+          }
+        })();
+      </script>
     </div>
 
     <div class="hero-overlay" aria-hidden="true"></div>
