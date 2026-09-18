@@ -638,6 +638,14 @@
     .case-visual{ order:1; }
   }
   .case.hidden{ display:none; }
+  .cases-more{ display:flex; justify-content:center; padding:48px clamp(20px,5vw,64px) 0; border-top:1px solid var(--line-light); }
+  .cases-more-btn{
+    font-family:var(--body); font-size:13.5px; font-weight:700; letter-spacing:.02em; padding:14px 32px;
+    border:1px solid var(--line-light); border-radius:30px; color:var(--ink); background:none; cursor:pointer;
+    display:flex; align-items:center; gap:10px; transition:border-color .3s var(--ease), color .3s var(--ease), background-color .3s var(--ease);
+  }
+  .cases-more-btn:hover{ border-color:var(--sky-dim); background:rgba(47,127,163,0.1); }
+  .cases-more.hidden{ display:none; }
 
   /* ---- PROCESS ---- */
   section.process{ position:relative; background:var(--hero-bg); color:var(--ink); overflow:hidden; }
@@ -1279,7 +1287,11 @@
         </a>
       </div>
 
-      <div class="case" data-cat="branding web">
+      <div class="cases-more">
+        <button class="cases-more-btn" id="casesMoreBtn" type="button">More work<svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="2"><path d="M6 9l6 6 6-6"/></svg></button>
+      </div>
+
+      <div class="case case-more hidden" data-cat="branding web">
         <div class="case-info">
           <span class="case-idx">05</span>
           <h3 class="case-title">Sumera &amp; Hayat</h3>
@@ -1292,7 +1304,7 @@
         </a>
       </div>
 
-      <div class="case" data-cat="branding web">
+      <div class="case case-more hidden" data-cat="branding web">
         <div class="case-info">
           <span class="case-idx">06</span>
           <h3 class="case-title">Mohammed Yusuf</h3>
@@ -2065,19 +2077,39 @@
   }
 
   // filter pills — re-queries .case fresh on every click (rather than once
-  // at load) since admin-added work items are appended after page load
+  // at load) since admin-added work items are appended after page load.
+  // "case-more" cards stay collapsed under the More-work button until it's
+  // clicked, except while a specific category filter is active — filtering
+  // should surface every match, not just the first four.
+  let worksExpanded = false;
+  const casesMoreWrap = document.querySelector('.cases-more');
+  function applyCaseVisibility(filter){
+    document.querySelectorAll('.case').forEach(c => {
+      const cats = c.dataset.cat.split(' ');
+      const matchesFilter = filter === 'all' || cats.includes(filter);
+      const collapsed = filter === 'all' && !worksExpanded && c.classList.contains('case-more');
+      c.classList.toggle('hidden', !matchesFilter || collapsed);
+    });
+    if (casesMoreWrap) casesMoreWrap.classList.toggle('hidden', worksExpanded || filter !== 'all');
+  }
+
   const pills = document.querySelectorAll('.filter-pill');
   pills.forEach(pill => {
     pill.addEventListener('click', () => {
       pills.forEach(p => p.classList.remove('active'));
       pill.classList.add('active');
-      const f = pill.dataset.filter;
-      document.querySelectorAll('.case').forEach(c => {
-        const cats = c.dataset.cat.split(' ');
-        c.classList.toggle('hidden', f !== 'all' && !cats.includes(f));
-      });
+      applyCaseVisibility(pill.dataset.filter);
     });
   });
+
+  const casesMoreBtn = document.getElementById('casesMoreBtn');
+  if (casesMoreBtn) {
+    casesMoreBtn.addEventListener('click', () => {
+      worksExpanded = true;
+      const activeFilter = document.querySelector('.filter-pill.active')?.dataset.filter || 'all';
+      applyCaseVisibility(activeFilter);
+    });
+  }
 
 </script>
 
