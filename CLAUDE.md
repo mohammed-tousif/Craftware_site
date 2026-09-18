@@ -33,6 +33,9 @@ links, not rebuilding a custom backend.
   in the markup, that undoes the page-speed fix.
 - `favicon.svg` — brand mark (navy square, yellow diamond, matches
   `.logo-mark` in the nav).
+- `assets/work-previews/*.jpg` — real screenshots of each live Work-section
+  project (1200×750, 16:10, JPEG ~15-105KB each). See Work section below
+  for how these are captured and kept small.
 - `sitemap.xml`, `robots.txt` — at the repo root, referenced from `<head>`
   via `<link rel="canonical">` and pointed at `https://craftware.co.in/`.
   Single-page site, so the sitemap is deliberately one URL — add more only
@@ -84,21 +87,29 @@ the end of `<body>`. Section order top to bottom:
    #6) with a slow zoom-in/out + brief shake at peak zoom (`bhVideoZoom`
    keyframes). A `.glass-light-sweep` overlay makes the glass tiles catch
    the light.
-5. **Work** (`section.cases`) — five hand-built `.case` cards: Quba
-   International, Kaksha, Her Shield, MI Auto Link, and a wedding
-   invitation (Gabriella & Zachary). **Deliberately no screenshots.** Each
-   card's visual is an abstract gradient panel (`.fill` + `.fill-a`
-   through `.fill-e`) with a large faint index numeral (`.fill-mark`) and
-   the existing rotating "VISIT SITE" circular badge (`.case-badge`) —
-   linking out to the real live project instead of embedding an image of
-   it. If adding another project: give its `case-badge` circular-text
-   `<textPath>` a **unique** id (`cp6`, not another `cp1`) — duplicate SVG
-   ids make every card's circular text reference the first one. Pick an
-   unused `fill-*` class (rotate back to `fill-a` after `fill-e`) and a
+5. **Work** (`section.cases`) — six hand-built `.case` cards: Quba
+   International, Kaksha, Her Shield, MI Auto Link, and two wedding/event
+   invitations (Sumera & Hayat, Mohammed Yusuf). Equal-width `1fr 1fr`
+   grid — text column + a real screenshot of the live site as a 16:10
+   `<img class="fill-img">` inside `.case-visual`, with the existing
+   rotating "VISIT SITE" circular badge (`.case-badge`) overlaid in the
+   corner, linking out to the real live project. Screenshots live in
+   `assets/work-previews/` as real JPG files (never base64/inline — see
+   "Known gotchas" #3) — captured with headless Chrome, not a
+   screenshot-taking tool that saves inline:
+   ```
+   chrome.exe --headless --disable-gpu --no-sandbox --hide-scrollbars \
+     --window-size=1400,900 --screenshot="out.png" \
+     --virtual-time-budget=8000 "<live URL>"
+   ```
+   then cropped/resized to 1200×750 (16:10) and saved as JPEG q82 via
+   Pillow. If adding another project: give its `case-badge` circular-text
+   `<textPath>` a **unique** id (`cp7`, not another `cp1`) — duplicate SVG
+   ids make every card's circular text reference the first one. Pick a
    correct `data-cat` for the filter pills (`web`, `branding`, `marketing`
    — space-separated if more than one applies). Only add a project here
    with real, verifiable detail (what it is, why it was built, a live
-   URL if one exists) — never a placeholder/screenshot-only entry.
+   URL if one exists) — never a placeholder entry.
 6. Marquee, About, Process, Testimonials, Contact, Footer.
 
 ## Design tokens (CSS custom properties on `:root`)
@@ -147,13 +158,14 @@ the end of `<body>`. Section order top to bottom:
    position at inconsistent points mid-scroll-animation. That's why
    `.exp-row` and the glass-card use manual `getBoundingClientRect()`
    checks on `scroll`/`resize` instead.
-3. **Never embed large video as a base64 data URI.** It's unreliable across
-   real browsers even though small images work fine that way. Video must
-   be a real file referenced by relative path. (This also applies to
-   *screenshots* of other sites — the old Quba card embedded a full-res
-   screenshot as base64, which both looked bad and bloated the HTML file
-   by ~250KB. Use the `.fill`/`.fill-mark` abstract-panel treatment
-   instead — see Work section above.)
+3. **Never embed large video or images as a base64 data URI.** It's
+   unreliable across real browsers even though small images work fine
+   that way, and it bloats the HTML file. The old Quba card once embedded
+   a full-res screenshot as base64 (~250KB inline) — that's exactly why
+   the Work section's screenshots are real files in
+   `assets/work-previews/*.jpg`, referenced by a normal `<img src>`, not
+   inlined. Keep them small (crop to 1200×750, JPEG q~80) when adding or
+   replacing one.
 4. **Windows zip-preview ≠ extraction.** Double-clicking into a `.zip` in
    File Explorer only pulls the one file you open into a temp folder — the
    `assets` folder won't come with it. Users must fully extract first.

@@ -600,14 +600,12 @@
 
   /* ---- CASE STUDIES ---- */
   section.cases{ background:var(--cream); color:var(--ink); padding-bottom:clamp(90px,12vw,150px); }
-  /* text leads, the visual is a small fixed-size mark, not a half-width
-     block — a 650px square of flat color was carrying no real information */
-  .case{ display:grid; grid-template-columns:1fr 220px; align-items:center; gap:clamp(24px,4vw,56px); border-top:1px solid var(--line-light); }
+  .case{ display:grid; grid-template-columns:1fr 1fr; align-items:center; gap:clamp(24px,4vw,56px); border-top:1px solid var(--line-light); }
   .case:last-child{ border-bottom:1px solid var(--line-light); }
-  .case-info{ padding:44px clamp(20px,5vw,64px) 44px 0; display:flex; flex-direction:column; justify-content:center; }
+  .case-info{ padding:60px clamp(20px,5vw,64px) 60px 0; display:flex; flex-direction:column; justify-content:center; }
   .case:nth-child(even){ direction:rtl; }
   .case:nth-child(even) .case-info, .case:nth-child(even) .case-visual{ direction:ltr; }
-  .case:nth-child(even) .case-info{ padding:44px 0 44px clamp(20px,5vw,64px); }
+  .case:nth-child(even) .case-info{ padding:60px 0 60px clamp(20px,5vw,64px); }
   .case-idx{ font-family:var(--display); font-size:14px; color:var(--sky-dim); margin-bottom:14px; text-transform:none; font-weight:700; }
   .case-title{ font-size:clamp(30px,4.4vw,54px); margin-bottom:18px; }
   .case-desc{ font-size:14.5px; line-height:1.7; color:var(--ink-soft); max-width:380px; text-transform:none; font-weight:400; margin-bottom:24px; }
@@ -618,36 +616,23 @@
   .case-tags span:nth-child(4n+3){ background:rgba(255,107,107,0.14); color:#c23f3f; }
   .case-tags span:nth-child(4n+4){ background:rgba(87,194,239,0.16); color:var(--sky-dim); }
   .case-visual{
-    display:block; position:relative; aspect-ratio:1/1; overflow:hidden;
+    display:block; position:relative; aspect-ratio:16/10; overflow:hidden;
     border-radius:16px; box-shadow:0 20px 40px -22px rgba(10,15,28,0.35);
     transition:transform .35s var(--ease), box-shadow .35s var(--ease);
+    background:#0c1a2c;
   }
   .case-visual:hover{ transform:translateY(-3px); box-shadow:0 26px 48px -20px rgba(10,15,28,0.42); }
-  .case-visual .fill{ position:absolute; inset:0; }
-  .case-visual .fill::after{ content:""; position:absolute; inset:0; background-image:radial-gradient(rgba(242,237,226,0.08) 1px, transparent 1px); background-size:5px 5px; mix-blend-mode:overlay; opacity:.5; }
-  .case-visual.has-image{ aspect-ratio:16/10; }
+  .case-visual::after{ content:""; position:absolute; inset:0; background:linear-gradient(180deg, rgba(5,8,15,0) 55%, rgba(5,8,15,0.55) 100%); pointer-events:none; }
   .fill-img{ position:absolute; inset:0; width:100%; height:100%; object-fit:cover; object-position:top center; }
-  .fill-a{ background:linear-gradient(150deg,#123048,#0c1a2c 55%,#05080f); }
-  .fill-b{ background:linear-gradient(160deg,#3a2f0a,#1c1608 55%,#05080f); }
-  .fill-c{ background:linear-gradient(140deg,#16324a,#0c1a2c 60%,#05080f); }
-  .fill-d{ background:linear-gradient(155deg,#332a09,#1a150a 55%,#05080f); }
-  .fill-e{ background:linear-gradient(150deg,#3d2e12,#1e150a 55%,#05080f); }
-  /* faint index numeral on abstract (non-screenshot) case visuals — sized
-     for a small fixed-width mark now, not a half-width block */
-  .fill-mark{
-    position:absolute; inset:0; display:flex; align-items:center; justify-content:center;
-    font-family:var(--display); font-weight:900; font-size:clamp(40px,7vw,64px); line-height:1;
-    color:rgba(242,237,226,0.12); pointer-events:none; user-select:none;
-  }
-  .case-badge{ position:absolute; right:12px; bottom:12px; width:56px; height:56px; }
+  .case-badge{ position:absolute; right:14px; bottom:14px; width:64px; height:64px; z-index:1; }
   @keyframes spin{ to{ transform:rotate(360deg); } }
   .case-badge svg{ width:100%; height:100%; animation:spin 14s linear infinite; }
   .case-badge .arrow{ position:absolute; inset:0; display:flex; align-items:center; justify-content:center; }
-  .case-badge .arrow svg{ width:12px; height:12px; animation:none; }
+  .case-badge .arrow svg{ width:14px; height:14px; animation:none; }
   @media (max-width:860px){
     .case, .case:nth-child(even){ grid-template-columns:1fr; direction:ltr; gap:24px; }
     .case-info, .case:nth-child(even) .case-info{ padding:40px 0; order:2; }
-    .case-visual{ order:1; max-width:200px; }
+    .case-visual{ order:1; }
   }
   .case.hidden{ display:none; }
 
@@ -1245,8 +1230,7 @@
           <div class="case-tags"><span>Web development</span><span>Live project</span><span>Meta Ads</span><span>Facebook Ads</span><span>SEO</span><span>WhatsApp Automation</span></div>
         </div>
         <a class="case-visual" href="https://www.qubainternationaltravelshubli.com/" target="_blank" rel="noopener noreferrer">
-          <div class="fill fill-a"></div>
-          <div class="fill-mark">01</div>
+          <img class="fill-img" src="assets/work-previews/quba.jpg" alt="Quba International website preview" loading="lazy">
           <div class="case-badge"><svg viewBox="0 0 120 120"><defs><path id="cp1" d="M60,60 m-46,0 a46,46 0 1,1 92,0 a46,46 0 1,1 -92,0"/></defs><circle cx="60" cy="60" r="58" fill="none" stroke="var(--cream)" stroke-width="1" opacity="0.3"/><text font-size="10" font-weight="700" letter-spacing="1.4" fill="var(--cream)"><textPath href="#cp1">VISIT SITE • VISIT SITE • </textPath></text></svg><div class="arrow"><svg viewBox="0 0 24 24" fill="none" stroke="var(--cream)" stroke-width="1.8"><path d="M7 17L17 7M17 7H8M17 7V16"/></svg></div></div>
         </a>
       </div>
@@ -1259,8 +1243,7 @@
           <div class="case-tags"><span>Web development</span><span>Live project</span><span>Full-stack build</span></div>
         </div>
         <a class="case-visual" href="https://kaksha-attendance-manager.onrender.com" target="_blank" rel="noopener noreferrer">
-          <div class="fill fill-b"></div>
-          <div class="fill-mark">02</div>
+          <img class="fill-img" src="assets/work-previews/kaksha.jpg" alt="Kaksha attendance platform preview" loading="lazy">
           <div class="case-badge"><svg viewBox="0 0 120 120"><defs><path id="cp2" d="M60,60 m-46,0 a46,46 0 1,1 92,0 a46,46 0 1,1 -92,0"/></defs><circle cx="60" cy="60" r="58" fill="none" stroke="var(--cream)" stroke-width="1" opacity="0.3"/><text font-size="10" font-weight="700" letter-spacing="1.4" fill="var(--cream)"><textPath href="#cp2">VISIT SITE • VISIT SITE • </textPath></text></svg><div class="arrow"><svg viewBox="0 0 24 24" fill="none" stroke="var(--cream)" stroke-width="1.8"><path d="M7 17L17 7M17 7H8M17 7V16"/></svg></div></div>
         </a>
       </div>
@@ -1273,8 +1256,7 @@
           <div class="case-tags"><span>Web development</span><span>Live project</span><span>Full-stack build</span></div>
         </div>
         <a class="case-visual" href="https://hershield-web.web.app" target="_blank" rel="noopener noreferrer">
-          <div class="fill fill-c"></div>
-          <div class="fill-mark">03</div>
+          <img class="fill-img" src="assets/work-previews/hershield.jpg" alt="Her Shield safety platform preview" loading="lazy">
           <div class="case-badge"><svg viewBox="0 0 120 120"><defs><path id="cp3" d="M60,60 m-46,0 a46,46 0 1,1 92,0 a46,46 0 1,1 -92,0"/></defs><circle cx="60" cy="60" r="58" fill="none" stroke="var(--cream)" stroke-width="1" opacity="0.3"/><text font-size="10" font-weight="700" letter-spacing="1.4" fill="var(--cream)"><textPath href="#cp3">VISIT SITE • VISIT SITE • </textPath></text></svg><div class="arrow"><svg viewBox="0 0 24 24" fill="none" stroke="var(--cream)" stroke-width="1.8"><path d="M7 17L17 7M17 7H8M17 7V16"/></svg></div></div>
         </a>
       </div>
@@ -1287,8 +1269,7 @@
           <div class="case-tags"><span>Web development</span><span>Live project</span></div>
         </div>
         <a class="case-visual" href="https://mi-auto-link.vercel.app" target="_blank" rel="noopener noreferrer">
-          <div class="fill fill-d"></div>
-          <div class="fill-mark">04</div>
+          <img class="fill-img" src="assets/work-previews/mi-auto-link.jpg" alt="MI Auto Link dealership website preview" loading="lazy">
           <div class="case-badge"><svg viewBox="0 0 120 120"><defs><path id="cp4" d="M60,60 m-46,0 a46,46 0 1,1 92,0 a46,46 0 1,1 -92,0"/></defs><circle cx="60" cy="60" r="58" fill="none" stroke="var(--cream)" stroke-width="1" opacity="0.3"/><text font-size="10" font-weight="700" letter-spacing="1.4" fill="var(--cream)"><textPath href="#cp4">VISIT SITE • VISIT SITE • </textPath></text></svg><div class="arrow"><svg viewBox="0 0 24 24" fill="none" stroke="var(--cream)" stroke-width="1.8"><path d="M7 17L17 7M17 7H8M17 7V16"/></svg></div></div>
         </a>
       </div>
@@ -1301,8 +1282,7 @@
           <div class="case-tags"><span>Branding</span><span>Creative design</span><span>Live project</span></div>
         </div>
         <a class="case-visual" href="https://gabriella-zachary.vercel.app" target="_blank" rel="noopener noreferrer">
-          <div class="fill fill-e"></div>
-          <div class="fill-mark">05</div>
+          <img class="fill-img" src="assets/work-previews/sumera-hayat.jpg" alt="Sumera and Hayat wedding invitation preview" loading="lazy">
           <div class="case-badge"><svg viewBox="0 0 120 120"><defs><path id="cp5" d="M60,60 m-46,0 a46,46 0 1,1 92,0 a46,46 0 1,1 -92,0"/></defs><circle cx="60" cy="60" r="58" fill="none" stroke="var(--cream)" stroke-width="1" opacity="0.3"/><text font-size="10" font-weight="700" letter-spacing="1.4" fill="var(--cream)"><textPath href="#cp5">VISIT SITE • VISIT SITE • </textPath></text></svg><div class="arrow"><svg viewBox="0 0 24 24" fill="none" stroke="var(--cream)" stroke-width="1.8"><path d="M7 17L17 7M17 7H8M17 7V16"/></svg></div></div>
         </a>
       </div>
@@ -1315,8 +1295,7 @@
           <div class="case-tags"><span>Branding</span><span>Creative design</span><span>Live project</span></div>
         </div>
         <a class="case-visual" href="https://chilla-mohammed-yusuf.vercel.app" target="_blank" rel="noopener noreferrer">
-          <div class="fill fill-a"></div>
-          <div class="fill-mark">06</div>
+          <img class="fill-img" src="assets/work-previews/mohammed-yusuf.jpg" alt="Mohammed Yusuf Chilla ceremony invitation preview" loading="lazy">
           <div class="case-badge"><svg viewBox="0 0 120 120"><defs><path id="cp6" d="M60,60 m-46,0 a46,46 0 1,1 92,0 a46,46 0 1,1 -92,0"/></defs><circle cx="60" cy="60" r="58" fill="none" stroke="var(--cream)" stroke-width="1" opacity="0.3"/><text font-size="10" font-weight="700" letter-spacing="1.4" fill="var(--cream)"><textPath href="#cp6">VISIT SITE • VISIT SITE • </textPath></text></svg><div class="arrow"><svg viewBox="0 0 24 24" fill="none" stroke="var(--cream)" stroke-width="1.8"><path d="M7 17L17 7M17 7H8M17 7V16"/></svg></div></div>
         </a>
       </div>
