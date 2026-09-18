@@ -2018,9 +2018,8 @@
 
   // Expertise rows: desktop reveals description/tags/badge on :hover, but touch
   // devices have no hover, so the content was previously unreachable there.
-  // On no-hover devices, rows open automatically one at a time as the user
-  // scrolls — whichever row sits nearest a trigger line gets .exp-row-open —
-  // plus a tap still toggles a row directly for accessibility.
+  // On no-hover devices, tapping a row toggles .exp-row-open instead —
+  // accordion-style, one row open at a time.
   if (window.matchMedia('(hover: none)').matches) {
     const expRows = Array.from(document.querySelectorAll('.exp-row'));
     expRows.forEach(row => {
@@ -2033,29 +2032,6 @@
         if (!wasOpen) { row.classList.add('exp-row-open'); row.setAttribute('aria-expanded', 'true'); }
       });
     });
-
-    let expTicking = false;
-    function autoOpenExpRow(){
-      const vh = window.innerHeight || document.documentElement.clientHeight;
-      const triggerY = vh * 0.4;
-      let closest = null, closestDist = Infinity;
-      expRows.forEach(row => {
-        const r = row.getBoundingClientRect();
-        if (r.bottom < 0 || r.top > vh) return;
-        const dist = Math.abs((r.top + r.height / 2) - triggerY);
-        if (dist < closestDist) { closestDist = dist; closest = row; }
-      });
-      if (closest && !closest.classList.contains('exp-row-open')) {
-        expRows.forEach(r => { r.classList.remove('exp-row-open'); r.setAttribute('aria-expanded', 'false'); });
-        closest.classList.add('exp-row-open');
-        closest.setAttribute('aria-expanded', 'true');
-      }
-      expTicking = false;
-    }
-    window.addEventListener('scroll', () => {
-      if (!expTicking) { expTicking = true; requestAnimationFrame(autoOpenExpRow); }
-    }, { passive:true });
-    requestAnimationFrame(() => requestAnimationFrame(autoOpenExpRow));
   }
 
   // glass-hero melt distortion — still, except for a brief settle-in wobble the
