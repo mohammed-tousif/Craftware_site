@@ -6,7 +6,8 @@
 <title>CraftWare — Web Design, SEO &amp; Digital Marketing Agency in Hubli, Karnataka</title>
 <meta name="description" content="CraftWare is a founder-led digital growth studio in Hubli, Karnataka building websites, running Meta &amp; Google Ads, and driving SEO, branding and WhatsApp automation for ambitious brands.">
 <link rel="canonical" href="https://craftware.co.in/">
-<link rel="preload" as="video" href="assets/hero-showreel.mp4" fetchpriority="high">
+<link rel="preload" as="video" href="assets/hero-showreel-mobile.mp4" fetchpriority="high" media="(max-width:700px)">
+<link rel="preload" as="video" href="assets/hero-showreel.mp4" fetchpriority="high" media="(min-width:701px)">
 <meta name="robots" content="index, follow">
 <meta name="theme-color" content="#05080f">
 <link rel="icon" type="image/png" sizes="32x32" href="/assets/brand/favicon-32.png">
@@ -913,8 +914,10 @@
   <section class="hero">
     <div class="hero-media" id="heroMedia">
       <video class="hero-video-el" autoplay muted loop playsinline poster="assets/hero-poster.jpg" preload="auto">
+        <source src="assets/hero-showreel-mobile.mp4" type="video/mp4" media="(max-width:700px)">
         <source src="assets/hero-showreel.mp4" type="video/mp4">
       </video>
+      <script>if (window.matchMedia('(max-width:700px)').matches) { document.querySelector('.hero-video-el').poster = 'assets/hero-poster-mobile.jpg'; }</script>
     </div>
 
     <div class="hero-overlay" aria-hidden="true"></div>

@@ -22,11 +22,27 @@ links, not rebuilding a custom backend.
 
 - `craftware-design-v2.html` — the entire site (HTML + inline `<style>` +
   inline `<script>`). This is the only file to edit for on-page changes.
-- `assets/hero-showreel.mp4` — hero background video. Must stay in an
-  `assets/` folder **sitting next to** the HTML file — referenced by a
-  relative path, not embedded.
-- `assets/hero-poster.jpg` — poster frame for the hero video; also reused
-  as the Open Graph / Twitter share image (see `<head>`).
+- `assets/hero-showreel.mp4` — desktop hero background video, 1600×900
+  (16:9). Must stay in an `assets/` folder **sitting next to** the HTML
+  file — referenced by a relative path, not embedded.
+- `assets/hero-showreel-mobile.mp4` — separate hero video for narrow
+  screens, 1080×1920 (9:16, portrait) — composed for a tall mobile frame
+  instead of being a cropped desktop video. Selected automatically via a
+  `<source media="(max-width:700px)">` on the hero `<video>` (first
+  matching `<source>` wins, evaluated once at load — doesn't re-select on
+  resize) and a matching conditional `<link rel="preload" media="...">`
+  in `<head>` so only one of the two videos is ever fetched. Re-encoded
+  with `ffmpeg -an -c:v libx264 -crf 26 -movflags +faststart` (audio
+  stripped — it's a muted background video) to ~2Mbps/~5MB for an ~18s
+  clip; keep new mobile hero videos in that ballpark rather than shipping
+  a raw phone-camera export.
+- `assets/hero-poster.jpg` / `assets/hero-poster-mobile.jpg` — poster
+  frames for the desktop/mobile hero videos respectively. `hero-poster.jpg`
+  is also reused as the Open Graph / Twitter share image (see `<head>`).
+  The `<video poster>` attribute can't media-query itself the way
+  `<source>` can, so a small inline `<script>` right after the hero
+  `<video>` swaps it to the mobile poster via `matchMedia` before the
+  video loads.
 - `assets/blackhole-bg.mp4` — Integrations section background video.
   Deliberately **lazy-loaded** (see "Known gotchas" #6) — don't add
   `autoplay` back to its `<video>` tag or give the `<source>` a real `src`
