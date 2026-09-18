@@ -510,6 +510,16 @@
     .exp-row-open .exp-thumb.tilt-a{ opacity:1; transform:translateX(0) rotate(-6deg) scale(1); }
     .exp-row-open .exp-thumb.tilt-b{ opacity:1; transform:translateX(0) rotate(6deg) scale(1); }
     .exp-row-open .exp-thumb{ box-shadow:0 22px 36px -10px color-mix(in srgb, var(--tc) 80%, transparent), inset 0 1px 0 rgba(255,255,255,0.5), inset 0 -6px 10px -4px rgba(0,0,0,0.35); }
+    /* the desktop reveal transition (.55s, staggered) is tuned for a single
+       hover at a time. The scroll-driven accordion can switch which row is
+       open several times in one continuous scroll gesture, and at that
+       speed a .55s transition never finishes before the next row takes
+       over — so two rows are constantly mid-animation at once, each
+       showing a different partial height. Touch devices get a much
+       snappier, unstaggered transition so a row settles into its final
+       state before the next switch happens. */
+    .exp-row{ transition-duration:.2s; }
+    .exp-desc, .exp-tags{ transition-duration:.2s; transition-delay:0s; }
   }
 
   /* ---- MARQUEE ---- */
