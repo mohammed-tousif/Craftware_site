@@ -432,33 +432,27 @@
                padding-left .5s cubic-bezier(.16,.84,.32,1), opacity 1s cubic-bezier(.4,0,.2,1),
                transform 1s cubic-bezier(.4,0,.2,1), filter 1s cubic-bezier(.4,0,.2,1);
   }
-  .exp-row:hover{ border-left-color:var(--tc, var(--sky)); background:rgba(255,255,255,0.03); padding-left:18px; }
-  .exp-row:focus-within{ border-left-color:var(--tc, var(--sky)); background:rgba(255,255,255,0.03); padding-left:18px; }
   .exp-text{ display:flex; flex-direction:column; gap:6px; min-width:0; }
   .exp-list .exp-row:last-child{ border-bottom:1px solid var(--line-dark); }
   .exp-num{ font-family:var(--display); font-weight:700; font-size:14px; color:var(--sky); text-transform:none; }
   .exp-name{ font-family:var(--display); font-weight:700; font-size:clamp(20px,2.6vw,30px); text-transform:none; transition:color .5s cubic-bezier(.16,.84,.32,1); }
-  .exp-row:hover .exp-name{ color:var(--tc, var(--sky)); }
   .exp-desc{
     font-size:13px; color:rgba(242,237,226,0.55); max-width:340px; text-transform:none; font-weight:400;
     opacity:0; max-height:0; transform:translateY(-6px); overflow:hidden;
     transition:opacity .55s cubic-bezier(.16,.84,.32,1), max-height .55s cubic-bezier(.16,.84,.32,1),
                transform .55s cubic-bezier(.16,.84,.32,1), margin-top .55s cubic-bezier(.16,.84,.32,1);
   }
-  .exp-row:hover .exp-desc, .exp-row:focus-within .exp-desc{ opacity:1; max-height:40px; transform:translateY(0); margin-top:3px; }
   .exp-tags{
     display:flex; flex-wrap:wrap; gap:8px; opacity:0; max-height:0; transform:translateY(-6px); overflow:hidden;
     transition:opacity .55s cubic-bezier(.16,.84,.32,1) .08s, max-height .55s cubic-bezier(.16,.84,.32,1) .08s,
                transform .55s cubic-bezier(.16,.84,.32,1) .08s, margin-top .55s cubic-bezier(.16,.84,.32,1) .08s;
   }
-  .exp-row:hover .exp-tags, .exp-row:focus-within .exp-tags{ opacity:1; max-height:44px; transform:translateY(0); margin-top:6px; }
   .exp-tag{
     font-family:var(--body); font-size:10.5px; font-weight:700; letter-spacing:.05em; text-transform:uppercase;
     padding:6px 13px; border-radius:20px; border:1px solid var(--line-dark); color:rgba(242,237,226,0.8);
     background:rgba(255,255,255,0.02); white-space:nowrap;
     transition:border-color .4s var(--ease), background-color .4s var(--ease), transform .3s var(--ease);
   }
-  .exp-row:hover .exp-tag:hover{ border-color:var(--tc, var(--sky)); background:rgba(255,255,255,0.06); transform:translateY(-1px); }
   .exp-thumb{
     width:60px; height:60px; border-radius:18px; flex-shrink:0; position:relative;
     display:flex; align-items:center; justify-content:center;
@@ -474,11 +468,27 @@
     background:linear-gradient(135deg, rgba(255,255,255,0.55) 0%, rgba(255,255,255,0.12) 30%, transparent 55%);
     pointer-events:none;
   }
-  .exp-row:hover .exp-thumb.tilt-a{ opacity:1; transform:translateX(0) rotate(-6deg) scale(1); }
-  .exp-row:hover .exp-thumb.tilt-b{ opacity:1; transform:translateX(0) rotate(6deg) scale(1); }
-  .exp-row:hover .exp-thumb{ box-shadow:0 22px 36px -10px color-mix(in srgb, var(--tc) 80%, transparent), inset 0 1px 0 rgba(255,255,255,0.5), inset 0 -6px 10px -4px rgba(0,0,0,0.35); }
   .exp-thumb svg{ width:60%; height:60%; filter:drop-shadow(0 2px 3px rgba(0,0,0,0.35)); }
   .exp-thumb svg{ width:26px; height:26px; filter:drop-shadow(0 4px 8px rgba(0,0,0,.45)); }
+  /* the reveal-on-interaction styling below is desktop-only (real :hover
+     and keyboard :focus-within). It used to also match on touch devices —
+     tapping a row focuses it via tabindex, and that focus sticks around
+     after the user scrolls away, so a previously-tapped row kept showing
+     its old 40/44px-clipped desktop reveal permanently, stacked on top of
+     whatever row the auto-scroll accordion below had opened. Touch/no-hover
+     devices are driven entirely by the JS-controlled .exp-row-open class
+     instead (see the max-width:860px block further down + the auto-open
+     scroll logic in the script). */
+  @media (hover:hover){
+    .exp-row:hover, .exp-row:focus-within{ border-left-color:var(--tc, var(--sky)); background:rgba(255,255,255,0.03); padding-left:18px; }
+    .exp-row:hover .exp-name{ color:var(--tc, var(--sky)); }
+    .exp-row:hover .exp-desc, .exp-row:focus-within .exp-desc{ opacity:1; max-height:40px; transform:translateY(0); margin-top:3px; }
+    .exp-row:hover .exp-tags, .exp-row:focus-within .exp-tags{ opacity:1; max-height:44px; transform:translateY(0); margin-top:6px; }
+    .exp-row:hover .exp-tag:hover{ border-color:var(--tc, var(--sky)); background:rgba(255,255,255,0.06); transform:translateY(-1px); }
+    .exp-row:hover .exp-thumb.tilt-a{ opacity:1; transform:translateX(0) rotate(-6deg) scale(1); }
+    .exp-row:hover .exp-thumb.tilt-b{ opacity:1; transform:translateX(0) rotate(6deg) scale(1); }
+    .exp-row:hover .exp-thumb{ box-shadow:0 22px 36px -10px color-mix(in srgb, var(--tc) 80%, transparent), inset 0 1px 0 rgba(255,255,255,0.5), inset 0 -6px 10px -4px rgba(0,0,0,0.35); }
+  }
   @media (max-width:860px){
     .exp-grid{ grid-template-columns:1fr; }
     .exp-row{ grid-template-columns:30px 1fr 44px; }
