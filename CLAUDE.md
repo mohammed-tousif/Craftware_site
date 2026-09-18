@@ -31,8 +31,31 @@ links, not rebuilding a custom backend.
   Deliberately **lazy-loaded** (see "Known gotchas" #6) — don't add
   `autoplay` back to its `<video>` tag or give the `<source>` a real `src`
   in the markup, that undoes the page-speed fix.
-- `favicon.svg` — brand mark (navy square, yellow diamond, matches
-  `.logo-mark` in the nav).
+- `favicon.svg` — **stale, no longer referenced.** Was a hand-drawn
+  placeholder (navy square + yellow diamond) used before the agency had a
+  finalized logo. Left on disk but unlinked from `<head>`; real favicons now
+  come from `assets/brand/` (see below).
+- `assets/brand/` — the real, finalized CraftWare logo (a 3D yellow/black/
+  cream folded "C" mark) and everything derived from it:
+  - `craftware-logo-master.png` — cleaned, upscaled (3x), transparent-bg
+    high-res master. Source of truth for any future derivative; don't
+    regenerate icons from a re-screenshotted or re-compressed copy.
+  - `logo-nav.png` — the image used for `.logo-mark` in the nav (next to
+    the "CraftWare" wordmark), transparent background, 207×240.
+  - `favicon-32.png` / `favicon-192.png` / `favicon-512.png` — transparent
+    PNG favicons, linked via `<link rel="icon" sizes="...">` in `<head>`.
+  - `apple-touch-icon.png` — 180×180 with an **opaque navy (`#05080f`)
+    background**, not transparent — iOS composites its own background
+    behind a transparent touch icon and it looks wrong, so this one is
+    flattened on purpose.
+  - The original file the logo was sourced from was a background-removed
+    export with dithered/noisy alpha and light edge-color bleed from the
+    old dark background; it was cleaned up (alpha smoothed, edge colors
+    decontaminated by pushing trusted opaque-pixel color into the fringe)
+    before being trimmed/upscaled into the master. If a new logo file
+    ever needs the same treatment, don't skip that step — the raw
+    background-removal output has visible speckle/halo at any size above
+    the small icon sizes it was probably tested at.
 - `assets/work-previews/*.jpg` — real screenshots of each live Work-section
   project (1200×750, 16:10, JPEG ~15-105KB each). See Work section below
   for how these are captured and kept small.
