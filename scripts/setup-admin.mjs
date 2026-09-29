@@ -22,8 +22,9 @@ function askHidden(prompt) {
 }
 
 function setEnv(name, value, target) {
-  spawnSync('vercel', ['env', 'rm', name, target, '--yes'], { stdio: 'ignore', shell: true });
-  const r = spawnSync('vercel', ['env', 'add', name, target], { input: value, stdio: ['pipe', 'inherit', 'inherit'], shell: true });
+  // --yes/--force: non-interactive, overwrite; value via stdin so it never
+  // appears in a command line or shell history
+  const r = spawnSync('vercel', ['env', 'add', name, target, '--yes', '--force'], { input: value, stdio: ['pipe', 'inherit', 'inherit'], shell: true });
   if (r.status !== 0) throw new Error(`vercel env add ${name} ${target} failed`);
 }
 
