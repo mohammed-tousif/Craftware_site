@@ -266,7 +266,7 @@ the end of `<body>`. Section order top to bottom:
    with real, verifiable detail (what it is, why it was built, a live
    URL if one exists) — never a placeholder entry.
    Desktop extras (fine pointers only): 3D tilt + pointer-following glare
-   (`.cv-glare`), a "View live" cursor (`data-cursor="view"`), and on the
+   (`.cv-glare`), and on the
    three cards with a tall capture (`.case-visual--scroll`, `--pan-dur`)
    the preview scrolls through the live site on hover. The old full-width
    dark gradient over every preview (for badge legibility) made light
@@ -353,7 +353,10 @@ the end of `<body>`. Section order top to bottom:
   links are handled in one delegated listener. Sections carry
   `scroll-margin-top:84px` for the fixed nav and **Lenis honours it** —
   don't also pass an `offset`, it doubles (links landed at 168px).
-- **Cursor, magnetic buttons, tilt, floating previews** are all
+- **No custom cursor.** The site uses the normal system pointer. A dot +
+  trailing-ring cursor existed briefly and was removed at the owners'
+  request — don't add one back.
+- **Magnetic buttons, tilt, floating previews** are all
   fine-pointer-only and off under reduced motion. Magnetic elements
   (`[data-magnetic]`) and the floating preview move via the individual
   `translate` property from a rAF lerp — not `transform`, and no CSS
