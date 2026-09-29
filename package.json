@@ -2,8 +2,10 @@
   "name": "craftware-site",
   "private": true,
   "type": "module",
-  "description": "craftware.co.in — static site + admin API (Vercel functions)",
-  "engines": { "node": ">=20" },
+  "description": "craftware.co.in \u00e2\u20ac\u201d static site + admin API (Vercel functions)",
+  "engines": {
+    "node": "22.x"
+  },
   "scripts": {
     "build": "node scripts/build.mjs",
     "render-source": "node scripts/build.mjs --source",
