@@ -28,13 +28,19 @@ links, not rebuilding a custom backend.
   path, not embedded.
 - `assets/hero-showreel-mobile.mp4` — separate hero video for narrow
   screens, 1080×1920 (9:16), 60fps, 20s loop, ~3.2MB — composed for a
-  tall mobile frame instead of being a cropped desktop video. Picked by a
-  small inline `<script>` right after the hero `<video>` that swaps the
-  `<source>` src (and the poster) via `matchMedia('(max-width:700px)')`
-  before the video starts fetching — deliberately NOT `<source media>`,
-  which has autoplay quirks on mobile browsers (see the comment in that
-  script). A matching conditional `<link rel="preload" media="...">` in
-  `<head>` means only one of the two videos is ever fetched.
+  tall mobile frame instead of being a cropped desktop video. Used on
+  **every portrait screen** — phones and upright tablets — via
+  `(max-width:700px), (orientation: portrait) and (max-width:1100px)`;
+  the 16:9 cut cropped its animation off the sides on an upright iPad.
+  The `<source>` carries only `data-src` / `data-src-mobile` (no real
+  `src`): a small inline `<script>` right after the `<video>` sets the
+  right src and poster before anything is fetched — deliberately NOT
+  `<source media>`, which has autoplay quirks on mobile browsers. Putting
+  a real `src` back in the markup makes phones start (then abort) the
+  desktop file. Matching conditional `<link rel="preload" media="...">`
+  tags in `<head>` use the same two complementary queries, so only one
+  video is ever fetched. Upright tablets also get `object-position:50% 0%`
+  so the crop comes off the calm bottom band, not the scene titles.
 - Both hero videos are motion graphics rendered frame-by-frame (not stock
   footage, not a screen recording) by a separate local project that is
   **not in this repo**: `C:\Users\mdtou\project\craftware-hero\` on
@@ -65,10 +71,14 @@ links, not rebuilding a custom backend.
   logo + wordmark end card of the hero video). Separate from the posters
   on purpose: frame 0 is an empty background, which makes a blank share
   card.
-- `assets/blackhole-bg.mp4` — Integrations section background video.
+- `assets/blackhole-bg.mp4` (1080p, ~3.5MB) / `assets/blackhole-bg-mobile.mp4`
+  (540×960 portrait centre crop, ~0.55MB) — Integrations section background
+  video; the lazy loader picks the mobile cut at ≤700px (`data-src-mobile`).
   Deliberately **lazy-loaded** (see "Known gotchas" #6) — don't add
   `autoplay` back to its `<video>` tag or give the `<source>` a real `src`
   in the markup, that undoes the page-speed fix.
+- `assets/team/founders.webp` (+ `.jpg` fallback) — the About photo, served
+  through `<picture>`. It used to be a 261KB base64 blob inside the HTML.
 - `favicon.svg` — **stale, no longer referenced.** Was a hand-drawn
   placeholder (navy square + yellow diamond) used before the agency had a
   finalized logo. Left on disk but unlinked from `<head>`; real favicons now
@@ -96,7 +106,14 @@ links, not rebuilding a custom backend.
     the small icon sizes it was probably tested at.
 - `assets/work-previews/*.jpg` — real screenshots of each live Work-section
   project (1200×750, 16:10, JPEG ~15-105KB each). See Work section below
-  for how these are captured and kept small.
+  for how these are captured and kept small. `quba-full.jpg`,
+  `hershield-full.jpg`, `mi-auto-link-full.jpg` are tall (1200×1300–3000)
+  stitched captures used for the desktop hover-scroll preview — served
+  only to `(min-width:861px) and (hover:hover)` via `<picture>`, phones
+  keep the short ones. Captured as 1440×900 viewport tiles with fixed/
+  sticky elements hidden after the first tile (a single `fullPage`
+  screenshot breaks on `100vh` layouts). Sites that are tap-to-open
+  invitations or sticky-scroll layouts don't get one.
 - `sitemap.xml`, `robots.txt` — at the repo root, referenced from `<head>`
   via `<link rel="canonical">` and pointed at `https://craftware.co.in/`.
   Single-page site, so the sitemap is deliberately one URL — add more only
@@ -118,9 +135,18 @@ JavaScript), or serve the folder with any static file server
 Single `<style>` block, then body markup, then single `<script>` block at
 the end of `<body>`. Section order top to bottom:
 
+0. **Intro** (`#intro`) — branded curtain (logo, letter-by-letter
+   CRAFTWARE, progress bar) shown **once per browser session**, never under
+   reduced motion. Decided by a tiny inline script in `<head>` that adds
+   `html.intro-on` before first paint, with a 6s failsafe that removes it
+   even if the main script dies. Lifts after 1.3–2.0s (timed from
+   navigation start, not from when the main script runs), then the hero
+   reveals. See gotcha #9 before making it longer.
 1. **Hero** (`section.hero`) — full-bleed video background, left-aligned
-   headline, reveals 1.5s after load. See "Known gotchas" #5 for the
-   mobile-specific overlay/brightness treatment.
+   headline + two CTAs ("Start a project" → #contact, "WhatsApp us" →
+   wa.me), revealed as the intro lifts (≈350ms after load when there's no
+   intro). See "Known gotchas" #5 for the mobile-specific overlay/brightness
+   treatment.
 2. **Brand statement / "glass card"** (`section.brand-glass`) — the
    CraftWare logo stamp card. Circular reveal-mask wipe on scroll-in, curtain
    wipe + stamp-in animation on the card itself. Repeats every time scrolled
@@ -169,12 +195,44 @@ the end of `<body>`. Section order top to bottom:
    — space-separated if more than one applies). Only add a project here
    with real, verifiable detail (what it is, why it was built, a live
    URL if one exists) — never a placeholder entry.
-6. Marquee, About, Process, Contact, Footer. The old Testimonials section
+   Desktop extras (fine pointers only): 3D tilt + pointer-following glare
+   (`.cv-glare`), a "View live" cursor (`data-cursor="view"`), and on the
+   three cards with a tall capture (`.case-visual--scroll`, `--pan-dur`)
+   the preview scrolls through the live site on hover. The old full-width
+   dark gradient over every preview (for badge legibility) made light
+   sites look muddy — the badge sits on its own dark disc instead.
+6. **Numbers band** (`section.stats`) — 6 live projects, 8 services, 3
+   founders, 100% in-house, counted up on first view. The markup holds the
+   final numbers (no-JS/crawlers); JS resets to 0 then counts. **Every
+   number must stay literally true** — update it when the work list or
+   services change, never round up.
+7. **About**, then **Process** (`#process`) — a scroll-driven timeline: the
+   rail fills as the section scrolls and each step (`.proc-step.is-on`)
+   lights when the rail reaches its dot; horizontal on desktop, vertical
+   ≤860px. (The old per-section "texture switcher" CSS and the rotating
+   conic borders on the cards were removed.)
+8. **Built with CraftWare** (`#clients`) — big-type list of real, live
+   projects with what we did for each; on desktop a live-site preview
+   (`#clientFloat`) trails the pointer. Last row is a "Your brand, next."
+   CTA. Only real projects belong here. When real client quotes arrive
+   (name, business, one line, with their OK), add them to this section.
+9. The yellow marquee sits between Integrations and Work. The old Testimonials section
    was **removed on purpose**: its four quotes (Emma R., Daniel K., Priya
    M., Rohan S.) were invented, not real clients — a credibility and
    consumer-protection risk. Only ever add testimonials that are real,
    attributable quotes from real clients who agreed to be quoted.
-7. **Contact form** (`#contactForm`) actually delivers. With
+10. **Contact** — WhatsApp CTA pill, email card, and one row per phone
+   number with separate Call (`tel:`) and WhatsApp (`wa.me`) actions (a
+   whole-card `tel:` link can't also offer WhatsApp). The form panel is
+   sticky beside the longer info column on desktop.
+11. **Footer** (`footer.site-footer`) — big "Let's talk" CTA, four link
+   columns, and a giant outlined CRAFTWARE wordmark whose font-size is
+   fitted to the container width by script (`fitFooterWord`) — pure CSS
+   `vw` sizing clipped the last letter at some widths.
+12. **Floating WhatsApp button** (`#waFloat`) — appears after the hero,
+   hides while the contact section or footer (which have their own
+   WhatsApp links) are on screen, or while the mobile menu is open.
+13. **Contact form** (`#contactForm`) actually delivers. With
    `WEB3FORMS_KEY` set in the script, it POSTs to Web3Forms, which emails
    craftwaretech@gmail.com (the access key is public by design — it can
    only send to that inbox). With the key empty, or if the email API
@@ -216,6 +274,31 @@ the end of `<body>`. Section order top to bottom:
 - No-hover (touch) detection uses `window.matchMedia('(hover: none)')`,
   not user-agent sniffing or a screen-width check — follow that same
   pattern for any future touch-specific behavior.
+
+## Signature interaction layer (desktop polish — read before adding effects)
+
+- **Smooth scroll is Lenis v1.3.26, inlined** (pinned, MIT header kept, no
+  CDN at runtime) and only enabled for `(hover:hover) and (pointer:fine)`
+  and not under reduced motion — touch devices keep native momentum
+  scrolling. Never call `window.scrollTo` for navigation; use
+  `scrollToTarget(target, immediate)` so Lenis stays in sync. In-page `#`
+  links are handled in one delegated listener. Sections carry
+  `scroll-margin-top:84px` for the fixed nav and **Lenis honours it** —
+  don't also pass an `offset`, it doubles (links landed at 168px).
+- **Cursor, magnetic buttons, tilt, floating previews** are all
+  fine-pointer-only and off under reduced motion. Magnetic elements
+  (`[data-magnetic]`) and the floating preview move via the individual
+  `translate` property from a rAF lerp — not `transform`, and no CSS
+  transition — so they compose with each element's own hover transforms
+  and don't collide with gotcha #1.
+- **Kinetic headings**: add `data-split` to a heading (or
+  `data-split="chars"` for letters) and it's split into masked words that
+  rise on first view; nested spans like `.hl` keep their styling. Chars
+  mode sets `aria-label` and hides the letter spans from assistive tech.
+- **One scroll pass**: everything scroll-linked in this layer (progress
+  bar, split reveals, counters, process rail, WhatsApp button, footer word,
+  nav scroll-spy) runs in the single rAF-throttled `sigFrame()` — add new
+  scroll-linked behaviour there instead of another listener.
 
 ## Known gotchas (hard-won — read before touching animations, the hero, or the Work section)
 
@@ -278,6 +361,15 @@ the end of `<body>`. Section order top to bottom:
    visitor paid for it and nothing used it. Both the library and the
    ~220-line parked shader were removed. If an effect is parked, remove its
    code and dependency too; git history has it if it's ever wanted back.
+9. **The intro is on the LCP critical path.** Google's Largest Contentful
+   Paint is the hero text, which can't appear until the intro lifts. On a
+   throttled mid-range phone the main script only runs at ~1.2s, so the
+   intro is timed from navigation start (`performance.now()`), capped at
+   2.0s regardless of the video (the video opens on the same empty frame
+   as its poster — there's nothing worth waiting for), and the hero text
+   fades in over .45s (the rise keeps .9s). Measured on a 4G/4×CPU
+   profile: LCP 6.4s before this upgrade → ~3.5s. Don't lengthen the
+   intro or re-add opacity-heavy delays without re-measuring.
 
 ## SEO
 
@@ -314,3 +406,14 @@ the team notes (`MEMORY.md`, `CLAUDE.md`, `SESSION-HANDOFF.md`, `KB.md`),
 a 5MB source zip and the untracked `legacy-red-white/` Next.js app were all
 publicly downloadable at `craftware.co.in/<file>`. If the site ever needs
 a new top-level file, add it to the whitelist explicitly.
+
+`vercel.json` also sets security headers on every response
+(`X-Content-Type-Options`, `Referrer-Policy`, `X-Frame-Options`,
+`Permissions-Policy`) and a 1-day cache (+7-day stale-while-revalidate) on
+`/assets/*`. Asset names aren't content-hashed, so after replacing an
+asset in place expect up to a day of stale copies for returning visitors;
+rename the file if a change must be instant.
+
+Big changes go through a branch first: pushing a non-`main` branch gets a
+Vercel **preview** deployment (the team can review it logged in to
+Vercel) before anything reaches craftware.co.in.
