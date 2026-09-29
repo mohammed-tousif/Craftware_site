@@ -1,0 +1,178 @@
+{
+  "projects": [
+    {
+      "title": "Quba International",
+      "description": "A full booking website for a Hajj, Umrah and Ziyarat travel agency in Hubli — package browsing, a community and blog section, an FAQ, and a callback-request form connected straight to WhatsApp. We also run their ongoing marketing: Meta and Facebook ads, SEO, and WhatsApp automation for booking enquiries.",
+      "tags": [
+        "Web development",
+        "Live project",
+        "Meta Ads",
+        "Facebook Ads",
+        "SEO",
+        "WhatsApp Automation"
+      ],
+      "categories": [
+        "web",
+        "marketing"
+      ],
+      "live_url": "https://www.qubainternationaltravelshubli.com/",
+      "image_url": "assets/work-previews/quba.jpg",
+      "image_alt": "Quba International website preview",
+      "image_full_url": "assets/work-previews/quba-full.jpg",
+      "pan_seconds": 2.6,
+      "featured": true,
+      "visible": true,
+      "in_clients": true,
+      "client_name": "",
+      "client_tagline": "Hajj, Umrah & Ziyarat travel · Hubli",
+      "client_deliverables": "Website · Meta ads · SEO · WhatsApp automation"
+    },
+    {
+      "title": "Kaksha",
+      "description": "A multi-tenant attendance and leave management platform for schools and colleges — five levels of role-based access from Super Admin down to Student, per-subject attendance tracking, CSV bulk roster upload, and a self-service leave workflow. Built to replace paper registers and disconnected spreadsheets with one auditable system.",
+      "tags": [
+        "Web development",
+        "Live project",
+        "Full-stack build"
+      ],
+      "categories": [
+        "web"
+      ],
+      "live_url": "https://kaksha-attendance-manager.onrender.com",
+      "image_url": "assets/work-previews/kaksha.jpg",
+      "image_alt": "Kaksha attendance platform preview",
+      "image_full_url": null,
+      "pan_seconds": null,
+      "featured": true,
+      "visible": true,
+      "in_clients": true,
+      "client_name": "",
+      "client_tagline": "Attendance platform for schools & colleges",
+      "client_deliverables": "Full-stack, multi-tenant build"
+    },
+    {
+      "title": "Her Shield",
+      "description": "A women's safety platform built around real-time protection — live location tracking with trusted contacts, one-tap SOS alerts over SMS, WhatsApp and email, a safety map, and a community space. Firebase Auth on the front end, an Express and Firestore backend, Socket.IO powering the live tracking rooms.",
+      "tags": [
+        "Web development",
+        "Live project",
+        "Full-stack build"
+      ],
+      "categories": [
+        "web"
+      ],
+      "live_url": "https://hershield-web.web.app",
+      "image_url": "assets/work-previews/hershield.jpg",
+      "image_alt": "Her Shield safety platform preview",
+      "image_full_url": "assets/work-previews/hershield-full.jpg",
+      "pan_seconds": 6.0,
+      "featured": true,
+      "visible": true,
+      "in_clients": true,
+      "client_name": "",
+      "client_tagline": "Women's safety platform",
+      "client_deliverables": "Full-stack build · Real-time tracking"
+    },
+    {
+      "title": "MI Auto Link",
+      "description": "A dealership site for a real Hubli vehicle dealer, built to present 4, 6 and 10-wheeler listings alongside financing, insurance and RTO transfer support — with direct call and WhatsApp enquiry built into every section.",
+      "tags": [
+        "Web development",
+        "Live project"
+      ],
+      "categories": [
+        "web"
+      ],
+      "live_url": "https://mi-auto-link.vercel.app",
+      "image_url": "assets/work-previews/mi-auto-link.jpg",
+      "image_alt": "MI Auto Link dealership website preview",
+      "image_full_url": "assets/work-previews/mi-auto-link-full.jpg",
+      "pan_seconds": 6.0,
+      "featured": true,
+      "visible": true,
+      "in_clients": true,
+      "client_name": "",
+      "client_tagline": "Vehicle dealership · Hubli",
+      "client_deliverables": "Dealership website · Call & WhatsApp enquiries"
+    },
+    {
+      "title": "Sumera & Hayat",
+      "description": "A vintage-luxury digital Nikah invitation — one of the custom event and celebration pieces we design and build for clients who want their invite to feel as considered as the day itself.",
+      "tags": [
+        "Branding",
+        "Creative design",
+        "Live project"
+      ],
+      "categories": [
+        "branding",
+        "web"
+      ],
+      "live_url": "https://gabriella-zachary.vercel.app",
+      "image_url": "assets/work-previews/sumera-hayat.jpg",
+      "image_alt": "Sumera and Hayat wedding invitation preview",
+      "image_full_url": null,
+      "pan_seconds": null,
+      "featured": false,
+      "visible": true,
+      "in_clients": true,
+      "client_name": "Celebrations",
+      "client_tagline": "Nikah & Chilla ceremony invitations",
+      "client_deliverables": "Custom animated digital invites"
+    },
+    {
+      "title": "Mohammed Yusuf",
+      "description": "A digital invitation for a Chilla ceremony, built the same way as our other event pieces — animated, self-contained, and ready to share in one link.",
+      "tags": [
+        "Branding",
+        "Creative design",
+        "Live project"
+      ],
+      "categories": [
+        "branding",
+        "web"
+      ],
+      "live_url": "https://chilla-mohammed-yusuf.vercel.app",
+      "image_url": "assets/work-previews/mohammed-yusuf.jpg",
+      "image_alt": "Mohammed Yusuf Chilla ceremony invitation preview",
+      "image_full_url": null,
+      "pan_seconds": null,
+      "featured": false,
+      "visible": true,
+      "in_clients": false,
+      "client_name": "",
+      "client_tagline": "",
+      "client_deliverables": ""
+    }
+  ],
+  "stats": [
+    {
+      "key": "projects",
+      "value": 6,
+      "suffix": "",
+      "label": "Live projects\nshipped",
+      "auto": "projects"
+    },
+    {
+      "key": "services",
+      "value": 8,
+      "suffix": "",
+      "label": "Services under\none roof",
+      "auto": null
+    },
+    {
+      "key": "founders",
+      "value": 3,
+      "suffix": "",
+      "label": "Founders,\nhands-on",
+      "auto": null
+    },
+    {
+      "key": "inhouse",
+      "value": 100,
+      "suffix": "%",
+      "label": "Designed, built\n& marketed in-house",
+      "auto": null
+    }
+  ],
+  "testimonials": []
+}

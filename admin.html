@@ -1,0 +1,571 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="robots" content="noindex, nofollow">
+<meta name="theme-color" content="#05080f">
+<title>CraftWare Admin</title>
+<link rel="icon" type="image/png" sizes="32x32" href="/assets/brand/favicon-32.png">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Big+Shoulders+Display:wght@700;900&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --navy:#05080f; --navy-2:#0b1120; --navy-3:#111a2e; --cream:#f2ede2; --muted:rgba(242,237,226,.55); --faint:rgba(242,237,226,.12);
+    --line:rgba(242,237,226,.12); --yellow:#ffcd3c; --sky:#57c2ef; --green:#3ddc84; --red:#ff7a7a;
+    --display:"Big Shoulders Display","Inter",sans-serif; --body:"Inter",sans-serif; --ease:cubic-bezier(.16,.84,.32,1);
+  }
+  *{ margin:0; padding:0; box-sizing:border-box; }
+  body{ font-family:var(--body); background:var(--navy); color:var(--cream); -webkit-font-smoothing:antialiased; min-height:100vh; }
+  a{ color:inherit; }
+  button, input, textarea, select{ font:inherit; color:inherit; }
+  button{ cursor:pointer; }
+  [hidden]{ display:none !important; }
+  :focus-visible{ outline:2px solid var(--sky); outline-offset:3px; }
+  h1,h2,h3{ font-family:var(--display); font-weight:900; text-transform:uppercase; line-height:.95; letter-spacing:-.005em; }
+
+  /* ---- login ---- */
+  .login{ min-height:100vh; display:grid; place-items:center; padding:24px;
+    background-image:linear-gradient(var(--faint) 1px, transparent 1px), linear-gradient(90deg, var(--faint) 1px, transparent 1px); background-size:56px 56px; }
+  .login-card{ width:min(400px,100%); background:rgba(11,17,32,.92); border:1px solid var(--line); border-radius:22px; padding:34px 30px; box-shadow:0 30px 70px -30px rgba(0,0,0,.8); }
+  .brand{ display:flex; align-items:center; gap:10px; font-family:var(--display); font-weight:900; font-size:22px; text-transform:uppercase; }
+  .brand img{ height:34px; }
+  .brand small{ font-family:var(--body); font-weight:600; font-size:11px; letter-spacing:.14em; color:var(--yellow); margin-left:4px; }
+  .login-card h1{ font-size:40px; margin:26px 0 8px; }
+  .login-card p{ color:var(--muted); font-size:14px; margin-bottom:22px; }
+
+  /* ---- form controls ---- */
+  label.f{ display:block; font-size:11.5px; font-weight:700; letter-spacing:.08em; text-transform:uppercase; color:var(--muted); margin:16px 0 7px; }
+  .in, textarea.in, select.in{ width:100%; background:var(--navy); border:1px solid var(--line); border-radius:12px; padding:12px 14px; font-size:14.5px; color:var(--cream); transition:border-color .2s; }
+  .in:focus{ outline:none; border-color:var(--sky); }
+  textarea.in{ resize:vertical; min-height:96px; line-height:1.55; }
+  .hint{ font-size:12px; color:var(--muted); margin-top:6px; line-height:1.5; }
+  .btn{ display:inline-flex; align-items:center; justify-content:center; gap:8px; height:44px; padding:0 20px; border-radius:999px; border:1px solid var(--line); background:transparent; font-weight:700; font-size:14px; white-space:nowrap; transition:background-color .2s, border-color .2s, color .2s, opacity .2s; }
+  .btn:hover{ border-color:rgba(242,237,226,.4); background:rgba(242,237,226,.06); }
+  .btn.primary{ background:var(--yellow); border-color:var(--yellow); color:#0a0d15; }
+  .btn.primary:hover{ background:#ffd95e; }
+  .btn.danger{ color:var(--red); border-color:rgba(255,122,122,.4); }
+  .btn.danger:hover{ background:rgba(255,122,122,.1); }
+  .btn.sm{ height:34px; padding:0 14px; font-size:13px; }
+  .btn.icon{ width:34px; padding:0; }
+  .btn[disabled]{ opacity:.45; cursor:not-allowed; }
+  .full{ width:100%; }
+  .err{ color:var(--red); font-size:13px; margin-top:12px; min-height:18px; }
+  .check{ display:flex; align-items:flex-start; gap:10px; margin-top:14px; font-size:14px; cursor:pointer; }
+  .check input{ width:18px; height:18px; accent-color:var(--yellow); margin-top:1px; flex-shrink:0; }
+  .check small{ display:block; color:var(--muted); font-size:12px; margin-top:2px; }
+
+  /* ---- shell ---- */
+  .top{ position:sticky; top:0; z-index:20; display:flex; align-items:center; gap:18px; padding:14px clamp(16px,3vw,32px); background:rgba(5,8,15,.92); backdrop-filter:blur(12px); border-bottom:1px solid var(--line); flex-wrap:wrap; }
+  .tabs{ display:flex; gap:6px; overflow-x:auto; scrollbar-width:none; flex:1; min-width:0; }
+  .tab{ height:38px; padding:0 16px; border-radius:999px; border:1px solid transparent; background:none; font-weight:600; font-size:14px; color:var(--muted); display:inline-flex; align-items:center; gap:8px; white-space:nowrap; }
+  .tab:hover{ color:var(--cream); }
+  .tab.on{ color:#0a0d15; background:var(--cream); }
+  .badge{ min-width:20px; height:20px; padding:0 6px; border-radius:999px; background:var(--yellow); color:#0a0d15; font-size:11.5px; font-weight:800; display:inline-grid; place-items:center; }
+  .pub{ display:flex; align-items:center; gap:10px; }
+  .pub-state{ font-size:12.5px; color:var(--muted); display:flex; align-items:center; gap:7px; }
+  .dot{ width:8px; height:8px; border-radius:50%; background:var(--green); }
+  .dot.pending{ background:var(--yellow); box-shadow:0 0 0 4px rgba(255,205,60,.18); }
+  main{ padding:clamp(20px,3vw,36px) clamp(16px,3vw,32px) 80px; max-width:1200px; margin:0 auto; }
+  .head{ display:flex; justify-content:space-between; align-items:flex-end; gap:16px; flex-wrap:wrap; margin-bottom:22px; }
+  .head h2{ font-size:clamp(34px,5vw,54px); }
+  .head p{ color:var(--muted); font-size:14px; margin-top:8px; max-width:560px; line-height:1.55; }
+  .row{ display:flex; gap:10px; align-items:center; flex-wrap:wrap; }
+  .empty{ border:1px dashed var(--line); border-radius:18px; padding:40px 24px; text-align:center; color:var(--muted); font-size:14.5px; line-height:1.6; }
+
+  /* ---- leads ---- */
+  .chips{ display:flex; gap:8px; flex-wrap:wrap; margin-bottom:14px; }
+  .chip{ height:34px; padding:0 14px; border-radius:999px; border:1px solid var(--line); background:none; font-size:13px; font-weight:600; color:var(--muted); display:inline-flex; align-items:center; gap:8px; }
+  .chip.on{ border-color:var(--cream); color:var(--cream); background:rgba(242,237,226,.06); }
+  .chip .n{ font-size:11.5px; opacity:.75; }
+  .search{ flex:1; min-width:200px; max-width:360px; }
+  .leads{ display:flex; flex-direction:column; gap:8px; margin-top:12px; }
+  .lead{ display:grid; grid-template-columns:minmax(0,1.1fr) minmax(0,2fr) auto; gap:16px; align-items:center; padding:16px 18px; border:1px solid var(--line); border-radius:16px; background:var(--navy-2); text-align:left; width:100%; transition:border-color .2s, background-color .2s; }
+  .lead:hover{ border-color:rgba(242,237,226,.3); background:var(--navy-3); }
+  .lead.is-new{ border-left:3px solid var(--yellow); }
+  .lead-who b{ display:block; font-size:15px; }
+  .lead-who span{ font-size:12.5px; color:var(--muted); word-break:break-all; }
+  .lead-msg{ font-size:13.5px; color:rgba(242,237,226,.75); line-height:1.5; display:-webkit-box; -webkit-line-clamp:2; -webkit-box-orient:vertical; overflow:hidden; }
+  .lead-meta{ display:flex; flex-direction:column; align-items:flex-end; gap:6px; font-size:12px; color:var(--muted); white-space:nowrap; }
+  .status{ height:24px; padding:0 10px; border-radius:999px; font-size:11px; font-weight:800; letter-spacing:.06em; text-transform:uppercase; display:inline-flex; align-items:center; }
+  .s-new{ background:rgba(255,205,60,.16); color:var(--yellow); }
+  .s-contacted{ background:rgba(87,194,239,.16); color:var(--sky); }
+  .s-won{ background:rgba(61,220,132,.16); color:var(--green); }
+  .s-lost{ background:rgba(242,237,226,.1); color:var(--muted); }
+  .s-spam{ background:rgba(255,122,122,.14); color:var(--red); }
+  @media (max-width:760px){
+    .lead{ grid-template-columns:1fr auto; }
+    .lead-msg{ grid-column:1 / -1; grid-row:2; }
+  }
+
+  /* ---- work ---- */
+  .cards{ display:grid; grid-template-columns:repeat(auto-fill, minmax(260px,1fr)); gap:16px; }
+  .card{ border:1px solid var(--line); border-radius:18px; overflow:hidden; background:var(--navy-2); display:flex; flex-direction:column; }
+  .card.off{ opacity:.55; }
+  .card-img{ aspect-ratio:16/10; background:#0c1a2c center/cover no-repeat; border-bottom:1px solid var(--line); }
+  .card-body{ padding:16px; display:flex; flex-direction:column; gap:10px; flex:1; }
+  .card-body h3{ font-size:24px; }
+  .tags{ display:flex; gap:6px; flex-wrap:wrap; }
+  .tag{ font-size:10.5px; font-weight:800; letter-spacing:.06em; text-transform:uppercase; padding:4px 9px; border-radius:999px; background:rgba(242,237,226,.08); color:var(--muted); }
+  .tag.y{ background:rgba(255,205,60,.16); color:var(--yellow); }
+  .tag.b{ background:rgba(87,194,239,.16); color:var(--sky); }
+  .card-actions{ display:flex; gap:8px; margin-top:auto; }
+
+  /* ---- numbers ---- */
+  .nums{ display:flex; flex-direction:column; gap:12px; }
+  .num{ display:grid; grid-template-columns:140px 90px minmax(0,1fr); gap:12px; align-items:start; padding:16px; border:1px solid var(--line); border-radius:16px; background:var(--navy-2); }
+  .num .big{ font-family:var(--display); font-weight:900; font-size:44px; line-height:1; }
+  @media (max-width:640px){ .num{ grid-template-columns:1fr 1fr; } .num .lab{ grid-column:1 / -1; } }
+
+  /* ---- quotes ---- */
+  .notice{ border:1px solid rgba(255,205,60,.35); background:rgba(255,205,60,.07); border-radius:14px; padding:14px 16px; font-size:13.5px; line-height:1.55; margin-bottom:18px; }
+  .qlist{ display:flex; flex-direction:column; gap:10px; }
+  .qitem{ display:flex; gap:14px; align-items:flex-start; padding:16px 18px; border:1px solid var(--line); border-radius:16px; background:var(--navy-2); }
+  .qitem.off{ opacity:.55; }
+  .qitem blockquote{ font-size:14.5px; line-height:1.55; flex:1; }
+  .qitem cite{ display:block; font-style:normal; font-size:12.5px; color:var(--muted); margin-top:8px; }
+
+  /* ---- drawer ---- */
+  .scrim{ position:fixed; inset:0; background:rgba(0,0,0,.55); z-index:40; opacity:0; pointer-events:none; transition:opacity .25s; }
+  .scrim.on{ opacity:1; pointer-events:auto; }
+  .drawer{ position:fixed; top:0; right:0; bottom:0; width:min(560px,100%); z-index:41; background:var(--navy-2); border-left:1px solid var(--line); transform:translateX(102%); transition:transform .35s var(--ease); display:flex; flex-direction:column; }
+  .drawer.on{ transform:none; }
+  .drawer-head{ display:flex; justify-content:space-between; align-items:center; gap:12px; padding:18px 22px; border-bottom:1px solid var(--line); }
+  .drawer-head h3{ font-size:28px; }
+  .drawer-body{ padding:6px 22px 22px; overflow-y:auto; flex:1; }
+  .drawer-foot{ display:flex; gap:10px; justify-content:space-between; padding:14px 22px; border-top:1px solid var(--line); background:var(--navy-2); }
+  .msg-box{ white-space:pre-wrap; line-height:1.6; font-size:14.5px; background:var(--navy); border:1px solid var(--line); border-radius:14px; padding:16px; margin-top:8px; word-break:break-word; }
+  .kv{ font-size:13.5px; color:var(--muted); margin-top:12px; line-height:1.7; }
+  .kv b{ color:var(--cream); font-weight:600; }
+  .img-field{ display:flex; gap:12px; align-items:center; }
+  .img-prev{ width:120px; aspect-ratio:16/10; border-radius:10px; background:#0c1a2c center/cover no-repeat; border:1px solid var(--line); flex-shrink:0; }
+  .grid2{ display:grid; grid-template-columns:1fr 1fr; gap:0 12px; }
+  .cats{ display:flex; gap:16px; flex-wrap:wrap; }
+  .cats .check{ margin-top:4px; }
+  fieldset{ border:1px solid var(--line); border-radius:14px; padding:4px 16px 16px; margin-top:18px; }
+  legend{ font-size:11.5px; font-weight:700; letter-spacing:.08em; text-transform:uppercase; color:var(--yellow); padding:0 6px; }
+
+  /* ---- toast ---- */
+  .toast{ position:fixed; left:50%; bottom:24px; z-index:60; transform:translate(-50%,20px); opacity:0; pointer-events:none; background:var(--cream); color:#0a0d15; font-weight:700; font-size:14px; padding:12px 18px; border-radius:999px; box-shadow:0 18px 40px -12px rgba(0,0,0,.6); transition:opacity .25s, transform .25s; max-width:calc(100% - 32px); text-align:center; }
+  .toast.on{ opacity:1; transform:translate(-50%,0); }
+  .toast.bad{ background:var(--red); }
+  @media (max-width:640px){ .pub-state span{ display:none; } .grid2{ grid-template-columns:1fr; } }
+  /* phones: brand, then a full-width swipeable tab row, then the actions — and
+     the header scrolls away instead of eating a third of the screen */
+  @media (max-width:760px){
+    .top{ position:static; gap:12px; }
+    .tabs{ order:3; flex:1 0 100%; }
+    .pub{ order:4; flex:1 0 100%; }
+    .pub .btn.sm{ flex:1; }
+  }
+</style>
+</head>
+<body>
+
+<section class="login" id="loginView" hidden>
+  <form class="login-card" id="loginForm" autocomplete="on">
+    <div class="brand"><img src="/assets/brand/logo-nav.png" alt="">CraftWare<small>ADMIN</small></div>
+    <h1>Sign in</h1>
+    <p>Leads, work, numbers and testimonials for craftware.co.in.</p>
+    <label class="f" for="pw">Password</label>
+    <input class="in" id="pw" name="password" type="password" autocomplete="current-password" required>
+    <button class="btn primary full" type="submit" style="margin-top:18px">Sign in</button>
+    <p class="err" id="loginErr" role="alert"></p>
+  </form>
+</section>
+
+<div id="appView" hidden>
+  <header class="top">
+    <div class="brand"><img src="/assets/brand/logo-nav.png" alt="">CraftWare<small>ADMIN</small></div>
+    <nav class="tabs" aria-label="Sections">
+      <button class="tab on" data-tab="leads">Leads <span class="badge" id="newBadge" hidden></span></button>
+      <button class="tab" data-tab="work">Work</button>
+      <button class="tab" data-tab="numbers">Numbers</button>
+      <button class="tab" data-tab="quotes">Testimonials</button>
+    </nav>
+    <div class="pub">
+      <span class="pub-state" id="pubState"><i class="dot" id="pubDot"></i><span id="pubText">Checking…</span></span>
+      <button class="btn primary sm" id="publishBtn" disabled>Publish</button>
+      <a class="btn sm" href="/" target="_blank" rel="noopener">View site</a>
+      <button class="btn sm" id="logoutBtn">Sign out</button>
+    </div>
+  </header>
+
+  <main>
+    <section data-view="leads">
+      <div class="head">
+        <div><h2>Leads</h2><p>Every enquiry from the website contact form. New ones are also emailed to craftwaretech@gmail.com.</p></div>
+        <div class="row"><input class="in search" id="leadSearch" type="search" placeholder="Search name, email or message"><a class="btn" href="/api/admin/leads-export" download>Export CSV</a></div>
+      </div>
+      <div class="chips" id="leadChips"></div>
+      <div class="leads" id="leadList"></div>
+    </section>
+
+    <section data-view="work" hidden>
+      <div class="head">
+        <div><h2>Work</h2><p>Projects in the Work section and the “Built with CraftWare” list. Order here is the order on the site. Changes go live when you press Publish.</p></div>
+        <button class="btn primary" id="addProject">Add project</button>
+      </div>
+      <div class="cards" id="projectCards"></div>
+    </section>
+
+    <section data-view="numbers" hidden>
+      <div class="head">
+        <div><h2>Numbers</h2><p>The numbers band. Keep every number literally true — visitors (and clients) can check.</p></div>
+        <button class="btn primary" id="saveNumbers">Save numbers</button>
+      </div>
+      <div class="nums" id="numList"></div>
+    </section>
+
+    <section data-view="quotes" hidden>
+      <div class="head">
+        <div><h2>Testimonials</h2><p>Shown under “Built with CraftWare” when at least one is visible.</p></div>
+        <button class="btn primary" id="addQuote">Add testimonial</button>
+      </div>
+      <p class="notice">Only add real words from real clients, with their permission to publish them. Invented or edited reviews damage trust and break consumer-protection rules.</p>
+      <div class="qlist" id="quoteList"></div>
+    </section>
+  </main>
+</div>
+
+<div class="scrim" id="scrim"></div>
+<aside class="drawer" id="drawer" role="dialog" aria-modal="true" aria-labelledby="drawerTitle">
+  <div class="drawer-head"><h3 id="drawerTitle"></h3><button class="btn sm" id="drawerClose">Close</button></div>
+  <div class="drawer-body" id="drawerBody"></div>
+  <div class="drawer-foot" id="drawerFoot"></div>
+</aside>
+<div class="toast" id="toast" role="status" aria-live="polite"></div>
+
+<script>
+(() => {
+  'use strict';
+  const $ = (s, r = document) => r.querySelector(s);
+  // DOM builder — all text goes through textContent, never innerHTML
+  function h(tag, attrs, ...kids) {
+    const el = document.createElement(tag);
+    for (const [k, v] of Object.entries(attrs || {})) {
+      if (v == null || v === false) continue;
+      if (k === 'class') el.className = v;
+      else if (k === 'text') el.textContent = v;
+      else if (k.startsWith('on')) el.addEventListener(k.slice(2), v);
+      else if (k === 'style' && typeof v === 'object') Object.assign(el.style, v);
+      else el.setAttribute(k, v === true ? '' : v);
+    }
+    for (const c of kids.flat()) if (c != null && c !== false) el.append(c.nodeType ? c : document.createTextNode(String(c)));
+    return el;
+  }
+
+  const state = { tab: 'leads', leads: [], counts: {}, leadFilter: '', leadQuery: '', projects: [], stats: [], quotes: [] };
+
+  let toastT;
+  function toast(msg, bad) {
+    const t = $('#toast'); t.textContent = msg; t.className = 'toast on' + (bad ? ' bad' : '');
+    clearTimeout(toastT); toastT = setTimeout(() => { t.className = 'toast' + (bad ? ' bad' : ''); }, bad ? 5000 : 2600);
+  }
+
+  async function api(action, opts = {}) {
+    const url = '/api/admin/' + action + (opts.query ? '?' + new URLSearchParams(opts.query) : '');
+    const res = await fetch(url, {
+      method: opts.method || 'GET', credentials: 'same-origin',
+      headers: opts.body ? { 'Content-Type': 'application/json' } : {},
+      body: opts.body ? JSON.stringify(opts.body) : undefined,
+    });
+    const data = await res.json().catch(() => ({}));
+    if (res.status === 401 && action !== 'login') { showLogin('Your session ended — please sign in again.'); throw new Error('signed out'); }
+    if (!res.ok || data.ok === false) throw new Error(data.error || 'Request failed (' + res.status + ')');
+    return data;
+  }
+  const guard = (fn) => async (...a) => { try { return await fn(...a); } catch (e) { if (e.message !== 'signed out') toast(e.message, true); } };
+
+  // ---------------- auth ----------------
+  function showLogin(msg) {
+    $('#appView').hidden = true; $('#loginView').hidden = false; closeDrawer();
+    $('#loginErr').textContent = msg || ''; setTimeout(() => $('#pw').focus(), 50);
+  }
+  $('#loginForm').addEventListener('submit', async (e) => {
+    e.preventDefault();
+    const btn = e.submitter || $('#loginForm button'); btn.disabled = true; $('#loginErr').textContent = '';
+    try { await api('login', { method: 'POST', body: { password: $('#pw').value } }); $('#pw').value = ''; await enterApp(); }
+    catch (err) { $('#loginErr').textContent = err.message; }
+    finally { btn.disabled = false; }
+  });
+  $('#logoutBtn').addEventListener('click', guard(async () => { await api('logout', { method: 'POST' }); showLogin('Signed out.'); }));
+
+  async function enterApp() {
+    $('#loginView').hidden = true; $('#appView').hidden = false;
+    await loadProjects(); // the Numbers tab counts visible projects
+    await Promise.all([loadLeads(), loadStats(), loadQuotes(), loadPublish()]);
+  }
+
+  // ---------------- tabs ----------------
+  document.querySelectorAll('.tab').forEach((t) => t.addEventListener('click', () => {
+    state.tab = t.dataset.tab;
+    document.querySelectorAll('.tab').forEach((x) => x.classList.toggle('on', x === t));
+    document.querySelectorAll('[data-view]').forEach((v) => { v.hidden = v.dataset.view !== state.tab; });
+  }));
+
+  // ---------------- publish ----------------
+  function renderPublish(p) {
+    const pending = !!p.pending;
+    $('#pubDot').className = 'dot' + (pending ? ' pending' : '');
+    $('#pubText').textContent = !p.configured ? 'Publishing not set up' : pending ? 'Unpublished changes' : 'All changes live';
+    $('#publishBtn').disabled = !p.configured || !pending;
+  }
+  const loadPublish = guard(async () => renderPublish(await api('publish')));
+  $('#publishBtn').addEventListener('click', guard(async () => {
+    $('#publishBtn').disabled = true;
+    const p = await api('publish', { method: 'POST' });
+    renderPublish(p);
+    toast('Publishing — the site updates in about a minute.');
+  }));
+  const changed = () => loadPublish();
+
+  // ---------------- leads ----------------
+  const STATUSES = [['new', 'New'], ['contacted', 'Contacted'], ['won', 'Won'], ['lost', 'Lost'], ['spam', 'Spam']];
+  const fmtDate = (d) => new Date(d).toLocaleString('en-IN', { day: 'numeric', month: 'short', hour: 'numeric', minute: '2-digit' });
+  const loadLeads = guard(async () => {
+    const d = await api('leads', { query: { status: state.leadFilter, q: state.leadQuery } });
+    state.leads = d.leads; state.counts = d.counts; renderLeads();
+  });
+  function renderLeads() {
+    const total = Object.values(state.counts).reduce((a, b) => a + b, 0);
+    const nNew = state.counts.new || 0;
+    $('#newBadge').hidden = !nNew; $('#newBadge').textContent = nNew;
+    const chips = $('#leadChips'); chips.replaceChildren();
+    [['', 'All', total], ...STATUSES.map(([k, l]) => [k, l, state.counts[k] || 0])].forEach(([k, l, n]) => {
+      chips.append(h('button', { class: 'chip' + (state.leadFilter === k ? ' on' : ''), onclick: () => { state.leadFilter = k; loadLeads(); } }, l, h('span', { class: 'n', text: n })));
+    });
+    const list = $('#leadList'); list.replaceChildren();
+    if (!state.leads.length) {
+      list.append(h('div', { class: 'empty', text: total ? 'No leads match this filter.' : 'No enquiries yet. When someone sends the contact form, it shows up here — and in your inbox.' }));
+      return;
+    }
+    state.leads.forEach((l) => list.append(h('button', { class: 'lead' + (l.status === 'new' ? ' is-new' : ''), onclick: () => openLead(l) },
+      h('div', { class: 'lead-who' }, h('b', { text: l.name }), h('span', { text: l.email })),
+      h('div', { class: 'lead-msg', text: l.message }),
+      h('div', { class: 'lead-meta' }, h('span', { class: 'status s-' + l.status, text: l.status }), h('span', { text: fmtDate(l.created_at) })),
+    )));
+  }
+  let searchT;
+  $('#leadSearch').addEventListener('input', (e) => { clearTimeout(searchT); searchT = setTimeout(() => { state.leadQuery = e.target.value.trim(); loadLeads(); }, 300); });
+
+  function openLead(l) {
+    const statusSel = h('select', { class: 'in', id: 'leadStatus' }, STATUSES.map(([k, lab]) => h('option', { value: k, selected: l.status === k }, lab)));
+    const notes = h('textarea', { class: 'in', id: 'leadNotes', placeholder: 'Call notes, quote sent, follow-up date…' }); notes.value = l.notes || '';
+    const reply = 'mailto:' + encodeURIComponent(l.email) + '?subject=' + encodeURIComponent('Re: your enquiry to CraftWare');
+    openDrawer('Lead', [
+      h('p', { class: 'kv' }, h('b', { text: l.name }), h('br'), h('a', { href: reply, text: l.email }), h('br'), 'Received ', fmtDate(l.created_at)),
+      h('label', { class: 'f', text: 'Message' }), h('div', { class: 'msg-box', text: l.message }),
+      h('label', { class: 'f', for: 'leadStatus', text: 'Status' }), statusSel,
+      h('label', { class: 'f', for: 'leadNotes', text: 'Notes (only you three see these)' }), notes,
+    ], [
+      h('button', { class: 'btn danger', onclick: guard(async () => {
+        if (!confirm('Delete this lead permanently?')) return;
+        await api('leads', { method: 'DELETE', body: { id: l.id } }); closeDrawer(); toast('Lead deleted'); loadLeads();
+      }) }, 'Delete'),
+      h('div', { class: 'row' },
+        h('a', { class: 'btn', href: reply }, 'Reply by email'),
+        h('button', { class: 'btn primary', onclick: guard(async () => {
+          await api('leads', { method: 'PATCH', body: { id: l.id, status: statusSel.value, notes: notes.value } });
+          closeDrawer(); toast('Lead updated'); loadLeads();
+        }) }, 'Save')),
+    ]);
+  }
+
+  // ---------------- work ----------------
+  const loadProjects = guard(async () => { state.projects = (await api('projects')).projects; renderProjects(); if (state.stats.length) renderStats(); });
+  function renderProjects() {
+    const wrap = $('#projectCards'); wrap.replaceChildren();
+    if (!state.projects.length) { wrap.append(h('div', { class: 'empty', text: 'No projects yet — add your first one.' })); return; }
+    state.projects.forEach((p, i) => {
+      const img = h('div', { class: 'card-img' }); img.style.backgroundImage = p.image_url ? 'url("' + p.image_url.replace(/"/g, '') + '")' : 'none';
+      wrap.append(h('article', { class: 'card' + (p.visible ? '' : ' off') }, img,
+        h('div', { class: 'card-body' },
+          h('h3', { text: p.title }),
+          h('div', { class: 'tags' },
+            !p.visible && h('span', { class: 'tag', text: 'Hidden' }),
+            p.visible && (p.featured ? h('span', { class: 'tag y', text: 'Featured' }) : h('span', { class: 'tag', text: 'Under “More work”' })),
+            p.in_clients && h('span', { class: 'tag b', text: 'Built with' }),
+            ...(p.categories || []).map((c) => h('span', { class: 'tag', text: c }))),
+          h('div', { class: 'card-actions' },
+            h('button', { class: 'btn sm icon', title: 'Move earlier', 'aria-label': 'Move earlier', disabled: i === 0, onclick: () => moveProject(i, -1) }, '↑'),
+            h('button', { class: 'btn sm icon', title: 'Move later', 'aria-label': 'Move later', disabled: i === state.projects.length - 1, onclick: () => moveProject(i, 1) }, '↓'),
+            h('button', { class: 'btn sm', style: { marginLeft: 'auto' }, onclick: () => editProject(p) }, 'Edit')))));
+    });
+  }
+  const moveProject = guard(async (i, d) => {
+    const arr = state.projects.slice(); const [x] = arr.splice(i, 1); arr.splice(i + d, 0, x);
+    state.projects = arr; renderProjects();
+    await api('projects-order', { method: 'POST', body: { ids: arr.map((p) => p.id) } }); changed();
+  });
+  $('#addProject').addEventListener('click', () => editProject(null));
+
+  async function resizeImage(file, maxW, maxH) {
+    const bmp = await createImageBitmap(file);
+    const k = Math.min(1, maxW / bmp.width, maxH / bmp.height);
+    const c = document.createElement('canvas'); c.width = Math.round(bmp.width * k); c.height = Math.round(bmp.height * k);
+    c.getContext('2d').drawImage(bmp, 0, 0, c.width, c.height);
+    return c.toDataURL('image/jpeg', 0.84);
+  }
+  function imageField(label, value, hint, maxW, maxH, nameFn) {
+    const prev = h('div', { class: 'img-prev' });
+    const setPrev = (u) => { prev.style.backgroundImage = u ? 'url("' + u.replace(/"/g, '') + '")' : 'none'; };
+    const input = h('input', { class: 'in', value: value || '', placeholder: 'https://… or upload' });
+    input.addEventListener('input', () => setPrev(input.value));
+    const file = h('input', { type: 'file', accept: 'image/jpeg,image/png,image/webp', hidden: true });
+    const btn = h('button', { class: 'btn sm', type: 'button', onclick: () => file.click() }, 'Upload');
+    file.addEventListener('change', guard(async () => {
+      const f = file.files[0]; if (!f) return;
+      btn.disabled = true; btn.textContent = 'Uploading…';
+      try {
+        const dataUrl = await resizeImage(f, maxW, maxH);
+        const { url } = await api('upload', { method: 'POST', body: { dataUrl, name: nameFn() } });
+        input.value = url; setPrev(url); toast('Image uploaded');
+      } finally { btn.disabled = false; btn.textContent = 'Upload'; file.value = ''; }
+    }));
+    setPrev(value);
+    return { input, el: h('div', {}, h('label', { class: 'f', text: label }), h('div', { class: 'img-field' }, prev, h('div', { style: { flex: '1' } }, input, h('div', { class: 'row', style: { marginTop: '8px' } }, btn, file)), ), hint && h('p', { class: 'hint', text: hint })) };
+  }
+
+  function editProject(p) {
+    const isNew = !p; p = p || { title: '', description: '', tags: [], categories: ['web'], live_url: '', image_url: '', image_alt: '', image_full_url: '', pan_seconds: '', featured: true, visible: true, in_clients: false, client_name: '', client_tagline: '', client_deliverables: '' };
+    const inp = (id, v, ph) => { const el = h('input', { class: 'in', id, placeholder: ph || '' }); el.value = v ?? ''; return el; };
+    const title = inp('pTitle', p.title), live = inp('pLive', p.live_url, 'https://…');
+    const desc = h('textarea', { class: 'in', id: 'pDesc' }); desc.value = p.description || '';
+    const tags = inp('pTags', (p.tags || []).join(', '), 'Web development, Live project, SEO');
+    const cat = (k, lab) => { const c = h('input', { type: 'checkbox', value: k, checked: (p.categories || []).includes(k) }); return { c, el: h('label', { class: 'check' }, c, lab) }; };
+    const cats = [cat('web', 'Web Development'), cat('branding', 'Branding'), cat('marketing', 'Marketing')];
+    const img = imageField('Preview image (16:10 works best)', p.image_url, 'Shown on the card and in the “Built with” hover preview. Resized automatically before upload.', 1600, 1600, () => title.value || 'project');
+    const alt = inp('pAlt', p.image_alt, 'e.g. Quba International website preview');
+    const full = imageField('Tall scroll image (optional)', p.image_full_url, 'A full-length screenshot of the site. On desktop, hovering the card scrolls through it.', 1200, 3600, () => (title.value || 'project') + '-full');
+    const pan = inp('pPan', p.pan_seconds ?? '', '4'); pan.type = 'number'; pan.min = 1; pan.max = 12; pan.step = 0.5;
+    const tog = (id, v, lab, sub) => { const c = h('input', { type: 'checkbox', id, checked: !!v }); return { c, el: h('label', { class: 'check' }, c, h('span', {}, lab, sub && h('small', { text: sub }))) }; };
+    const vis = tog('pVis', p.visible, 'Visible on the site'), feat = tog('pFeat', p.featured, 'Featured', 'Shown before the “More work” button'), inCl = tog('pCl', p.in_clients, 'List in “Built with CraftWare”');
+    const cName = inp('pCName', p.client_name, 'Leave empty to use the project title'), cTag = inp('pCTag', p.client_tagline, 'e.g. Vehicle dealership · Hubli'), cDel = inp('pCDel', p.client_deliverables, 'e.g. Website · Meta ads · SEO');
+    const clientBox = h('fieldset', {}, h('legend', { text: 'Built with CraftWare' }), h('label', { class: 'f', for: 'pCName', text: 'Name in the list' }), cName, h('label', { class: 'f', for: 'pCTag', text: 'What they are' }), cTag, h('label', { class: 'f', for: 'pCDel', text: 'What we did' }), cDel);
+    const syncClient = () => { clientBox.hidden = !inCl.c.checked; };
+    inCl.c.addEventListener('change', syncClient); syncClient();
+    openDrawer(isNew ? 'New project' : 'Edit project', [
+      h('label', { class: 'f', for: 'pTitle', text: 'Title' }), title,
+      h('label', { class: 'f', for: 'pDesc', text: 'Description' }), desc,
+      h('label', { class: 'f', for: 'pTags', text: 'Tags (comma separated)' }), tags,
+      h('label', { class: 'f', text: 'Filter categories' }), h('div', { class: 'cats' }, cats.map((x) => x.el)),
+      h('label', { class: 'f', for: 'pLive', text: 'Live link' }), live, h('p', { class: 'hint', text: 'https:// only. Leave empty if the project has no public link.' }),
+      img.el, h('label', { class: 'f', for: 'pAlt', text: 'Image description (for screen readers)' }), alt,
+      full.el, h('label', { class: 'f', for: 'pPan', text: 'Scroll duration in seconds (tall image only)' }), pan,
+      vis.el, feat.el, inCl.el, clientBox,
+    ], [
+      isNew ? h('span') : h('button', { class: 'btn danger', onclick: guard(async () => {
+        if (!confirm('Delete “' + p.title + '” from the site? This cannot be undone.')) return;
+        await api('projects', { method: 'DELETE', body: { id: p.id } }); closeDrawer(); toast('Project deleted'); loadProjects(); changed();
+      }) }, 'Delete'),
+      h('button', { class: 'btn primary', onclick: guard(async () => {
+        const body = { title: title.value, description: desc.value, tags: tags.value, categories: cats.filter((x) => x.c.checked).map((x) => x.c.value),
+          live_url: live.value, image_url: img.input.value, image_alt: alt.value, image_full_url: full.input.value, pan_seconds: pan.value,
+          visible: vis.c.checked, featured: feat.c.checked, in_clients: inCl.c.checked, client_name: cName.value, client_tagline: cTag.value, client_deliverables: cDel.value };
+        if (isNew) await api('projects', { method: 'POST', body }); else await api('projects', { method: 'PATCH', body: { ...body, id: p.id } });
+        closeDrawer(); toast(isNew ? 'Project added' : 'Project saved'); loadProjects(); changed();
+      }) }, isNew ? 'Add project' : 'Save'),
+    ]);
+  }
+
+  // ---------------- numbers ----------------
+  const loadStats = guard(async () => { state.stats = (await api('stats')).stats; renderStats(); });
+  function renderStats() {
+    const wrap = $('#numList'); wrap.replaceChildren();
+    const live = state.projects.filter((p) => p.visible).length;
+    state.stats.forEach((s, i) => {
+      const val = h('input', { class: 'in', type: 'number', min: 0, value: s.auto === 'projects' ? live : s.value, disabled: s.auto === 'projects', 'aria-label': 'Number' });
+      const suf = h('input', { class: 'in', value: s.suffix || '', maxlength: 4, placeholder: '% or +', 'aria-label': 'Suffix' });
+      const lab = h('textarea', { class: 'in', rows: 2, 'aria-label': 'Label', style: { minHeight: '64px' } }); lab.value = s.label;
+      const auto = s.key === 'projects' ? h('input', { type: 'checkbox', checked: s.auto === 'projects' }) : null;
+      if (auto) auto.addEventListener('change', () => { val.disabled = auto.checked; if (auto.checked) val.value = live; });
+      s._read = () => ({ key: s.key, value: Number(val.value) || 0, suffix: suf.value, label: lab.value, auto: auto && auto.checked ? 'projects' : null });
+      wrap.append(h('div', { class: 'num' },
+        h('div', {}, h('div', { class: 'big', text: (s.auto === 'projects' ? live : s.value) + (s.suffix || '') }), auto && h('label', { class: 'check', style: { fontSize: '12.5px' } }, auto, 'Count visible projects automatically')),
+        h('div', {}, h('label', { class: 'f', text: 'Number' }), val, h('label', { class: 'f', text: 'Suffix' }), suf),
+        h('div', { class: 'lab' }, h('label', { class: 'f', text: 'Label (Enter = line break)' }), lab)));
+    });
+  }
+  $('#saveNumbers').addEventListener('click', guard(async () => {
+    const d = await api('stats', { method: 'PUT', body: { stats: state.stats.map((s) => s._read()) } });
+    state.stats = d.stats; renderStats(); toast('Numbers saved'); changed();
+  }));
+
+  // ---------------- testimonials ----------------
+  const loadQuotes = guard(async () => { state.quotes = (await api('testimonials')).testimonials; renderQuotes(); });
+  function renderQuotes() {
+    const wrap = $('#quoteList'); wrap.replaceChildren();
+    if (!state.quotes.length) { wrap.append(h('div', { class: 'empty', text: 'No testimonials yet. Add one when a client gives you a quote you can publish.' })); return; }
+    state.quotes.forEach((t, i) => wrap.append(h('div', { class: 'qitem' + (t.visible ? '' : ' off') },
+      h('blockquote', {}, '“' + t.quote + '”', h('cite', { text: [t.name, t.role, t.business].filter(Boolean).join(' · ') + (t.visible ? '' : ' — hidden') })),
+      h('div', { class: 'row' },
+        h('button', { class: 'btn sm icon', 'aria-label': 'Move up', disabled: i === 0, onclick: () => moveQuote(i, -1) }, '↑'),
+        h('button', { class: 'btn sm icon', 'aria-label': 'Move down', disabled: i === state.quotes.length - 1, onclick: () => moveQuote(i, 1) }, '↓'),
+        h('button', { class: 'btn sm', onclick: () => editQuote(t) }, 'Edit')))));
+  }
+  const moveQuote = guard(async (i, d) => {
+    const arr = state.quotes.slice(); const [x] = arr.splice(i, 1); arr.splice(i + d, 0, x);
+    state.quotes = arr; renderQuotes();
+    await api('testimonials-order', { method: 'POST', body: { ids: arr.map((t) => t.id) } }); changed();
+  });
+  $('#addQuote').addEventListener('click', () => editQuote(null));
+  function editQuote(t) {
+    const isNew = !t; t = t || { quote: '', name: '', role: '', business: '', visible: true };
+    const quote = h('textarea', { class: 'in', id: 'qQuote' }); quote.value = t.quote;
+    const mk = (id, v, ph) => { const el = h('input', { class: 'in', id, placeholder: ph }); el.value = v || ''; return el; };
+    const name = mk('qName', t.name, 'e.g. Abdul R.'), role = mk('qRole', t.role, 'e.g. Owner'), biz = mk('qBiz', t.business, 'e.g. Quba International');
+    const vis = h('input', { type: 'checkbox', checked: t.visible });
+    openDrawer(isNew ? 'New testimonial' : 'Edit testimonial', [
+      h('p', { class: 'notice', text: 'Use the client’s own words, and only with their permission.' }),
+      h('label', { class: 'f', for: 'qQuote', text: 'Quote' }), quote,
+      h('div', { class: 'grid2' }, h('div', {}, h('label', { class: 'f', for: 'qName', text: 'Name' }), name), h('div', {}, h('label', { class: 'f', for: 'qRole', text: 'Role' }), role)),
+      h('label', { class: 'f', for: 'qBiz', text: 'Business' }), biz,
+      h('label', { class: 'check' }, vis, 'Visible on the site'),
+    ], [
+      isNew ? h('span') : h('button', { class: 'btn danger', onclick: guard(async () => {
+        if (!confirm('Delete this testimonial?')) return;
+        await api('testimonials', { method: 'DELETE', body: { id: t.id } }); closeDrawer(); toast('Testimonial deleted'); loadQuotes(); changed();
+      }) }, 'Delete'),
+      h('button', { class: 'btn primary', onclick: guard(async () => {
+        const body = { quote: quote.value, name: name.value, role: role.value, business: biz.value, visible: vis.checked };
+        if (isNew) await api('testimonials', { method: 'POST', body }); else await api('testimonials', { method: 'PATCH', body: { ...body, id: t.id } });
+        closeDrawer(); toast(isNew ? 'Testimonial added' : 'Testimonial saved'); loadQuotes(); changed();
+      }) }, isNew ? 'Add' : 'Save'),
+    ]);
+  }
+
+  // ---------------- drawer ----------------
+  let lastFocus = null;
+  function openDrawer(title, body, foot) {
+    lastFocus = document.activeElement;
+    $('#drawerTitle').textContent = title;
+    $('#drawerBody').replaceChildren(...body.filter(Boolean));
+    $('#drawerFoot').replaceChildren(...foot.filter(Boolean));
+    $('#drawer').classList.add('on'); $('#scrim').classList.add('on');
+    setTimeout(() => { const f = $('#drawerBody input:not([type=checkbox]):not([type=file]), #drawerBody textarea, #drawerBody select'); if (f) f.focus(); }, 60);
+  }
+  function closeDrawer() {
+    $('#drawer').classList.remove('on'); $('#scrim').classList.remove('on');
+    if (lastFocus && lastFocus.focus) lastFocus.focus();
+  }
+  $('#drawerClose').addEventListener('click', closeDrawer);
+  $('#scrim').addEventListener('click', closeDrawer);
+  document.addEventListener('keydown', (e) => { if (e.key === 'Escape' && $('#drawer').classList.contains('on')) closeDrawer(); });
+
+  // new leads show up without a reload while the tab is open
+  setInterval(() => { if (!$('#appView').hidden && !document.hidden) { loadLeads(); } }, 60000);
+
+  // ---------------- boot ----------------
+  (async () => {
+    try {
+      const r = await fetch('/api/admin/session', { credentials: 'same-origin' });
+      const d = await r.json().catch(() => ({}));
+      if (d.ok) await enterApp(); else showLogin();
+    } catch { showLogin('Cannot reach the server right now.'); }
+  })();
+})();
+</script>
+</body>
+</html>

@@ -11,17 +11,29 @@ automation, social media, branding.
 
 ## Tech stack — read this first
 
-This is a **single static HTML file**. There is no build step, no bundler,
-no framework, no backend. A Supabase-backed reviews/admin/CMS system
-existed briefly (Vercel serverless functions under `api/`, a password-gated
-`admin.html`) and was **deliberately removed** — a portfolio site doesn't
-need one, and it added real ongoing cost/complexity for no benefit at this
-stage. If a real lead/review pipeline is wanted later, the cheaper first
-move is a hosted form service (Formspree, Web3Forms) or `mailto:`/WhatsApp
-links, not rebuilding a custom backend.
+The public site is **one static HTML file**, but it is no longer
+backend-free: there's a small admin + API (see "Admin panel & API" below).
+The design rule that keeps this safe: **visitors never depend on the
+database.** Admin-managed content is baked into the static HTML at build
+time, so the live site stays fast, crawlable and up even if the database
+is down. History: an earlier Supabase review/CMS backend (17 Sep 2026)
+loaded content client-side and was removed the same day; the current one
+was built deliberately (Sep 2026) as a leads inbox + build-time CMS.
 
-- `craftware-design-v2.html` — the entire site (HTML + inline `<style>` +
-  inline `<script>`). This is the only file to edit for on-page changes.
+- `craftware-design-v2.html` — the whole public site (HTML + inline
+  `<style>` + inline `<script>`). Regions between `<!-- cms:NAME -->` and
+  `<!-- /cms:NAME -->` (work, stats, clients, testimonials) are
+  **generated** — edit that content in `/admin` (or `content/seed.json`
+  before a database exists), never by hand inside the markers.
+- `admin.html` — the admin panel (vanilla JS, same brand), served at
+  `/admin`, `noindex`. All data comes from `/api/admin/*` behind a login.
+- `api/lead.js`, `api/admin/[action].js` — Vercel serverless functions
+  (one admin function on purpose: Hobby caps a project at 12). Shared code
+  in `lib/` (`db.js`, `auth.js`, `render.js`, `mail.js`, `storage.js`,
+  `http.js`).
+- `scripts/build.mjs` — the Vercel build (renders the cms regions into
+  `dist/`); `scripts/setup-admin.mjs` — sets the admin password;
+  `content/seed.json` — the content the database starts from on first run.
 - `assets/hero-showreel.mp4` — desktop hero background video, 1920×1080
   (16:9), 60fps, 20s seamless loop, ~3.2MB. Must stay in an `assets/`
   folder **sitting next to** the HTML file — referenced by a relative
@@ -128,7 +140,65 @@ source of truth — the static HTML is the real, current site.
 Open `craftware-design-v2.html` directly in a real desktop browser
 (Chrome/Firefox/Safari — not a mobile "file preview" pane, which doesn't run
 JavaScript), or serve the folder with any static file server
-(`python -m http.server`, `npx serve .`). No build step, ever.
+(`python -m http.server`, `npx serve .`). The committed file always holds
+fully rendered content (from `content/seed.json`), so this keeps working.
+The contact form and `/admin` need the API: run `vercel dev` after
+`vercel env pull` to exercise them locally.
+
+## Admin panel & API
+
+**What it does.** `/admin` (one shared password) has four tabs:
+- **Leads** — every contact-form enquiry (also emailed to
+  craftwaretech@gmail.com with Reply-To set to the visitor): status
+  new/contacted/won/lost/spam, private notes, search, CSV export.
+- **Work** — the Work cards and the "Built with CraftWare" list: add/edit/
+  hide/reorder, preview + optional tall hover-scroll image (uploads are
+  resized in the browser, stored in Vercel Blob), categories, flags.
+- **Numbers** — the numbers band; "live projects" counts visible
+  projects automatically.
+- **Testimonials** — rendered under "Built with CraftWare" only when at
+  least one is visible. Real, permitted quotes only.
+
+**Publishing.** Content edits are saved to the database but reach the site
+only when someone presses **Publish**, which calls a Vercel Deploy Hook:
+Vercel re-runs `scripts/build.mjs`, which reads the database and bakes the
+content into `dist/craftware-design-v2.html` (~1 min). If the database
+can't be read during a build, **the build fails on purpose** and Vercel
+keeps the previous deployment live — never ship silent fallback content.
+Without `DATABASE_URL` at all (before setup, local work) the build uses
+`content/seed.json`.
+
+**Security model.** One shared password, stored only as a scrypt hash
+(`ADMIN_PASSWORD_HASH`); login issues a signed, 12-hour
+`__Host-cw_admin` cookie (HttpOnly, Secure, SameSite=Strict, HMAC with
+`SESSION_SECRET`). Every write also checks the `Origin` header. Logins are
+rate-limited (8 failures / 15 min per IP), leads 5 per IP per 10 min, plus
+a honeypot and a minimum-fill-time trap. IPs are stored only as salted
+hashes. All SQL is parameterised (tagged templates), all rendered/emailed
+text is escaped, links must be `https://` (or our own `assets/`), CSV
+export neutralises spreadsheet formulas. The public form falls back to a
+pre-filled WhatsApp link on any API failure, so an enquiry is never lost.
+
+**Environment variables (Vercel → Settings → Environment Variables).**
+| Variable | Set by | Purpose |
+|---|---|---|
+| `DATABASE_URL` | Vercel Storage → Neon Postgres (auto) | leads + content |
+| `BLOB_READ_WRITE_TOKEN` | Vercel Storage → Blob (auto) | admin image uploads |
+| `RESEND_API_KEY` | you, from resend.com | new-lead emails |
+| `ADMIN_PASSWORD_HASH`, `SESSION_SECRET` | `npm run setup-admin` | admin login |
+| `DEPLOY_HOOK_URL` | you, Settings → Git → Deploy Hooks (branch `main`) | the Publish button |
+| `LEAD_FROM` (optional) | you, after verifying craftware.co.in in Resend | e.g. `CraftWare <hello@craftware.co.in>` |
+
+Until `craftware.co.in` is verified in Resend, emails come from
+`onboarding@resend.dev`, which Resend only delivers to the Resend
+account's own address — so sign up to Resend **with craftwaretech@gmail.com**.
+Functions run in `sin1` (Singapore, closest Vercel region to Hubli); create
+the Neon database in Singapore too. The first build/request after the
+database is connected creates the tables and imports `content/seed.json`
+(guarded by a `meta.seeded` row, so it never re-imports over your edits).
+
+**Plan note.** Vercel's Hobby plan is officially for non-commercial use;
+a business site with a backend should be on Pro.
 
 ## File structure inside the HTML
 
@@ -232,15 +302,13 @@ the end of `<body>`. Section order top to bottom:
 12. **Floating WhatsApp button** (`#waFloat`) — appears after the hero,
    hides while the contact section or footer (which have their own
    WhatsApp links) are on screen, or while the mobile menu is open.
-13. **Contact form** (`#contactForm`) actually delivers. With
-   `WEB3FORMS_KEY` set in the script, it POSTs to Web3Forms, which emails
-   craftwaretech@gmail.com (the access key is public by design — it can
-   only send to that inbox). With the key empty, or if the email API
-   fails, the message is handed to WhatsApp (`wa.me/918722973448`,
-   pre-filled with name/email/message) so an enquiry is never dropped. It
-   used to be `onsubmit="return false;"`, which silently discarded every
-   message — never ship a form without a real destination again. Has a
-   hidden `botcheck` honeypot (Web3Forms convention) and inline validation.
+13. **Contact form** (`#contactForm`) POSTs to `/api/lead` (saved to the
+   admin inbox + emailed). On any failure — not deployed yet, offline,
+   rate-limited — it shows a pre-filled WhatsApp link instead, so an
+   enquiry is never dropped. It used to be `onsubmit="return false;"`,
+   which silently discarded every message — never ship a form without a
+   real destination again. Honeypot (`botcheck`), fill-time trap (`t`)
+   and inline validation.
 
 ## Design tokens (CSS custom properties on `:root`)
 
@@ -391,28 +459,31 @@ update it in four places: the `<link rel="canonical">`, `og:url`,
 
 Pushed via git to GitHub (`main`), deployed on Vercel
 (`craftware-site.vercel.app`, also reachable at `craftware.co.in` once DNS
-finishes propagating). `vercel.json` pins `framework`/`buildCommand` etc.
-to `null` — without that, Vercel falls back to a cached Next.js build
-config from an earlier version of this project and the deploy fails
-looking for an `app/` directory that no longer exists. No `/admin` rewrite
-anymore (removed along with the backend). No CI beyond Vercel's own
-git-push deploy.
+finishes propagating). No CI beyond Vercel's own git-push deploy (plus
+the admin's Publish button, which triggers the same production build via
+a Deploy Hook).
 
 **`.vercelignore` is a whitelist — keep it that way.** Only
-`craftware-design-v2.html`, `assets/`, `robots.txt`, `sitemap.xml` and
-`vercel.json` are ever uploaded. Before it existed, a CLI deploy
+the site files (and, since the admin, the API/build files listed below)
+are ever uploaded. Before it existed, a CLI deploy
 (`vercel --prod`) uploaded the whole working folder, tracked or not, and
 the team notes (`MEMORY.md`, `CLAUDE.md`, `SESSION-HANDOFF.md`, `KB.md`),
 a 5MB source zip and the untracked `legacy-red-white/` Next.js app were all
 publicly downloadable at `craftware.co.in/<file>`. If the site ever needs
 a new top-level file, add it to the whitelist explicitly.
 
-`vercel.json` also sets security headers on every response
+`vercel.json` runs `npm ci` + `node scripts/build.mjs` and serves `dist/`
+(`framework` stays `null` — without that, Vercel falls back to a cached
+Next.js config from an early version of this project). It also sets
+security headers on every response
 (`X-Content-Type-Options`, `Referrer-Policy`, `X-Frame-Options`,
 `Permissions-Policy`) and a 1-day cache (+7-day stale-while-revalidate) on
 `/assets/*`. Asset names aren't content-hashed, so after replacing an
 asset in place expect up to a day of stale copies for returning visitors;
 rename the file if a change must be instant.
+
+`.vercelignore` whitelists `api/`, `lib/`, `scripts/`, `content/`,
+`admin.html` and `package*.json` alongside the site files.
 
 Big changes go through a branch first: pushing a non-`main` branch gets a
 Vercel **preview** deployment (the team can review it logged in to

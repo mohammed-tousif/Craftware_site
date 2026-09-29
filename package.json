@@ -1,0 +1,16 @@
+{
+  "name": "craftware-site",
+  "private": true,
+  "type": "module",
+  "description": "craftware.co.in — static site + admin API (Vercel functions)",
+  "engines": { "node": ">=20" },
+  "scripts": {
+    "build": "node scripts/build.mjs",
+    "render-source": "node scripts/build.mjs --source",
+    "setup-admin": "node scripts/setup-admin.mjs"
+  },
+  "dependencies": {
+    "@neondatabase/serverless": "^1.1.0",
+    "@vercel/blob": "^2.8.0"
+  }
+}

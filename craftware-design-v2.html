@@ -899,6 +899,17 @@
     .client-float{ display:none; }
   }
 
+  /* testimonials — rendered into the clients section only when real, approved quotes exist */
+  .quotes{ margin-top:clamp(56px,7vw,96px); }
+  .quotes-kicker{ font-size:12px; font-weight:700; letter-spacing:.2em; text-transform:uppercase; color:rgba(242,237,226,0.5); }
+  .quote-grid{ display:grid; grid-template-columns:repeat(auto-fit, minmax(280px, 1fr)); gap:18px; margin-top:24px; }
+  .quote{ position:relative; padding:34px 28px 26px; border:1px solid var(--line-dark); border-radius:20px; background:linear-gradient(160deg, rgba(242,237,226,0.06), rgba(242,237,226,0.01)); }
+  .quote::before{ content:"\201C"; position:absolute; top:-26px; left:22px; font-family:var(--display); font-weight:900; font-size:90px; line-height:1; color:var(--yellow); }
+  .quote blockquote{ font-size:16px; line-height:1.65; color:var(--cream); text-transform:none; }
+  .quote figcaption{ margin-top:18px; display:flex; flex-direction:column; gap:3px; font-size:13px; text-transform:none; }
+  .q-name{ font-weight:700; color:var(--cream); }
+  .q-role{ color:rgba(242,237,226,0.5); }
+
   /* ---- floating WhatsApp ---- */
   .wa-float{
     position:fixed; right:clamp(16px,2.2vw,28px); bottom:clamp(16px,2.2vw,28px); z-index:550;
@@ -1426,6 +1437,7 @@
   <section class="cases">
     <div class="grid-tex"></div>
     <div class="wrap" style="padding:0;">
+      <!-- cms:work -->
       <div class="case" data-cat="web marketing">
         <div class="case-info">
           <span class="case-idx">01</span>
@@ -1458,7 +1470,7 @@
         <div class="case-info">
           <span class="case-idx">03</span>
           <h3 class="case-title">Her Shield</h3>
-          <p class="case-desc">A women's safety platform built around real-time protection — live location tracking with trusted contacts, one-tap SOS alerts over SMS, WhatsApp and email, a safety map, and a community space. Firebase Auth on the front end, an Express and Firestore backend, Socket.IO powering the live tracking rooms.</p>
+          <p class="case-desc">A women&#39;s safety platform built around real-time protection — live location tracking with trusted contacts, one-tap SOS alerts over SMS, WhatsApp and email, a safety map, and a community space. Firebase Auth on the front end, an Express and Firestore backend, Socket.IO powering the live tracking rooms.</p>
           <div class="case-tags"><span>Web development</span><span>Live project</span><span>Full-stack build</span></div>
         </div>
         <a class="case-visual case-visual--scroll" href="https://hershield-web.web.app" target="_blank" rel="noopener noreferrer" data-cursor="view" style="--pan-dur:6s">
@@ -1513,17 +1525,19 @@
           <div class="case-badge"><svg viewBox="0 0 120 120"><defs><path id="cp6" d="M60,60 m-46,0 a46,46 0 1,1 92,0 a46,46 0 1,1 -92,0"/></defs><circle cx="60" cy="60" r="58" fill="none" stroke="var(--cream)" stroke-width="1" opacity="0.3"/><text font-size="10" font-weight="700" letter-spacing="1.4" fill="var(--cream)"><textPath href="#cp6">VISIT SITE • VISIT SITE • </textPath></text></svg><div class="arrow"><svg viewBox="0 0 24 24" fill="none" stroke="var(--cream)" stroke-width="1.8"><path d="M7 17L17 7M17 7H8M17 7V16"/></svg></div></div>
         </a>
       </div>
+      <!-- /cms:work -->
     </div>
   </section>
 
   <!-- NUMBERS -->
   <section class="stats" aria-label="CraftWare in numbers">
     <div class="wrap">
-      <div class="stats-grid">
+      <div class="stats-grid"><!-- cms:stats -->
         <div class="stat"><div class="stat-num"><span class="count" data-to="6">6</span></div><p class="stat-label">Live projects<br>shipped</p></div>
         <div class="stat"><div class="stat-num"><span class="count" data-to="8">8</span></div><p class="stat-label">Services under<br>one roof</p></div>
         <div class="stat"><div class="stat-num"><span class="count" data-to="3">3</span></div><p class="stat-label">Founders,<br>hands-on</p></div>
         <div class="stat"><div class="stat-num"><span class="count" data-to="100">100</span><span class="stat-suf">%</span></div><p class="stat-label">Designed, built<br>&amp; marketed in-house</p></div>
+      <!-- /cms:stats -->
       </div>
     </div>
   </section>
@@ -1575,7 +1589,7 @@
     </div>
   </section>
 
-  <!-- BUILT WITH CRAFTWARE (real, live projects only — add client quotes here once they're real and approved) -->
+  <!-- BUILT WITH CRAFTWARE — regions marked cms:* are generated from the admin panel at build time (scripts/build.mjs); edit content in /admin, not here -->
   <section class="clients pad" id="clients">
     <div class="grid-tex"></div>
     <div class="wrap">
@@ -1584,14 +1598,16 @@
         <h2 class="clients-h2" data-split>Real businesses.<br>Real launches.</h2>
         <p class="clients-sub">Every name here is a live project we designed, built or keep growing.</p>
       </div>
-      <ol class="client-list">
+      <ol class="client-list"><!-- cms:clients -->
         <li><a class="client" href="https://www.qubainternationaltravelshubli.com/" target="_blank" rel="noopener noreferrer" data-preview="assets/work-previews/quba.jpg" data-cursor="link"><span class="client-idx">01</span><span class="client-name">Quba International</span><span class="client-what">Hajj, Umrah &amp; Ziyarat travel · Hubli</span><span class="client-did">Website · Meta ads · SEO · WhatsApp automation</span><span class="client-go"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M7 17L17 7M17 7H8M17 7V16"/></svg></span></a></li>
-        <li><a class="client" href="https://mi-auto-link.vercel.app" target="_blank" rel="noopener noreferrer" data-preview="assets/work-previews/mi-auto-link.jpg" data-cursor="link"><span class="client-idx">02</span><span class="client-name">MI Auto Link</span><span class="client-what">Vehicle dealership · Hubli</span><span class="client-did">Dealership website · Call &amp; WhatsApp enquiries</span><span class="client-go"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M7 17L17 7M17 7H8M17 7V16"/></svg></span></a></li>
-        <li><a class="client" href="https://kaksha-attendance-manager.onrender.com" target="_blank" rel="noopener noreferrer" data-preview="assets/work-previews/kaksha.jpg" data-cursor="link"><span class="client-idx">03</span><span class="client-name">Kaksha</span><span class="client-what">Attendance platform for schools &amp; colleges</span><span class="client-did">Full-stack, multi-tenant build</span><span class="client-go"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M7 17L17 7M17 7H8M17 7V16"/></svg></span></a></li>
-        <li><a class="client" href="https://hershield-web.web.app" target="_blank" rel="noopener noreferrer" data-preview="assets/work-previews/hershield.jpg" data-cursor="link"><span class="client-idx">04</span><span class="client-name">Her Shield</span><span class="client-what">Women's safety platform</span><span class="client-did">Full-stack build · Real-time tracking</span><span class="client-go"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M7 17L17 7M17 7H8M17 7V16"/></svg></span></a></li>
+        <li><a class="client" href="https://kaksha-attendance-manager.onrender.com" target="_blank" rel="noopener noreferrer" data-preview="assets/work-previews/kaksha.jpg" data-cursor="link"><span class="client-idx">02</span><span class="client-name">Kaksha</span><span class="client-what">Attendance platform for schools &amp; colleges</span><span class="client-did">Full-stack, multi-tenant build</span><span class="client-go"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M7 17L17 7M17 7H8M17 7V16"/></svg></span></a></li>
+        <li><a class="client" href="https://hershield-web.web.app" target="_blank" rel="noopener noreferrer" data-preview="assets/work-previews/hershield.jpg" data-cursor="link"><span class="client-idx">03</span><span class="client-name">Her Shield</span><span class="client-what">Women&#39;s safety platform</span><span class="client-did">Full-stack build · Real-time tracking</span><span class="client-go"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M7 17L17 7M17 7H8M17 7V16"/></svg></span></a></li>
+        <li><a class="client" href="https://mi-auto-link.vercel.app" target="_blank" rel="noopener noreferrer" data-preview="assets/work-previews/mi-auto-link.jpg" data-cursor="link"><span class="client-idx">04</span><span class="client-name">MI Auto Link</span><span class="client-what">Vehicle dealership · Hubli</span><span class="client-did">Dealership website · Call &amp; WhatsApp enquiries</span><span class="client-go"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M7 17L17 7M17 7H8M17 7V16"/></svg></span></a></li>
         <li><a class="client" href="https://gabriella-zachary.vercel.app" target="_blank" rel="noopener noreferrer" data-preview="assets/work-previews/sumera-hayat.jpg" data-cursor="link"><span class="client-idx">05</span><span class="client-name">Celebrations</span><span class="client-what">Nikah &amp; Chilla ceremony invitations</span><span class="client-did">Custom animated digital invites</span><span class="client-go"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M7 17L17 7M17 7H8M17 7V16"/></svg></span></a></li>
         <li class="client-next"><a class="client" href="#contact" data-cursor="link"><span class="client-idx">06</span><span class="client-name">Your brand<em>, next.</em></span><span class="client-what">Let's build something worth showing.</span><span class="client-did">Start a project</span><span class="client-go"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M7 17L17 7M17 7H8M17 7V16"/></svg></span></a></li>
-      </ol>
+      <!-- /cms:clients -->      </ol>
+      <!-- cms:testimonials -->
+      <!-- /cms:testimonials -->
     </div>
     <div class="client-float" id="clientFloat" aria-hidden="true"><img alt="" decoding="async"></div>
   </section>
@@ -2123,14 +2139,13 @@
     });
   }
 
-  // contact form. With a Web3Forms access key set, messages are emailed to
-  // craftwaretech@gmail.com (the key is public by design — it only allows
-  // sending to that inbox). Without one — or if the email API fails — the
-  // message is handed to WhatsApp instead, so an enquiry is never dropped.
-  const WEB3FORMS_KEY = '';
+  // contact form → /api/lead (saved to the admin inbox + emailed to the
+  // team). If that fails for any reason — offline, not deployed yet, rate
+  // limited — the message is offered on WhatsApp instead, never dropped.
   const WA_NUMBER = '918722973448';
   const contactForm = document.getElementById('contactForm');
   if (contactForm) {
+    const formShownAt = performance.now();
     const f = { name: document.getElementById('cfName'), email: document.getElementById('cfEmail'), msg: document.getElementById('cfMsg') };
     const sendBtn = document.getElementById('cfSend');
     const statusEl = document.getElementById('cfStatus');
@@ -2141,14 +2156,11 @@
     };
     const setStatus = (html, kind) => { statusEl.className = 'form-status' + (kind ? ' ' + kind : ''); statusEl.innerHTML = html; };
     const waLink = (text) => 'https://wa.me/' + WA_NUMBER + '?text=' + encodeURIComponent(text);
-    const openWhatsApp = (text) => {
-      const url = waLink(text);
-      const w = window.open(url, '_blank');
-      if (w) { try { w.opener = null; } catch (e) {} } else { window.location.href = url; }
-    };
+    const safe = (t) => String(t).replace(/[<>&"]/g, '');
     Object.values(f).forEach(input => input.addEventListener('input', () => { if (input.closest('.field').classList.contains('has-err')) setErr(input, ''); }));
     contactForm.addEventListener('submit', async (e) => {
       e.preventDefault();
+      if (sendBtn.disabled) return;
       if (contactForm.botcheck.checked) return;
       const name = f.name.value.trim(), email = f.email.value.trim(), message = f.msg.value.trim();
       let bad = null;
@@ -2157,24 +2169,20 @@
       if (message.length < 10) { setErr(f.msg, 'A little more detail helps — at least 10 characters.'); bad = bad || f.msg; } else setErr(f.msg, '');
       if (bad) { bad.focus(); setStatus('', ''); return; }
       const waText = 'Hi CraftWare! I\'m ' + name + ' (' + email + ').\n\n' + message;
-      if (!WEB3FORMS_KEY) {
-        openWhatsApp(waText);
-        setStatus('Opening WhatsApp with your message — just hit send there. Prefer email? Write to <a href="mailto:craftwaretech@gmail.com">craftwaretech@gmail.com</a>.', 'ok');
-        return;
-      }
       sendBtn.disabled = true; sendBtn.textContent = 'Sending…'; setStatus('', '');
       try {
-        const res = await fetch('https://api.web3forms.com/submit', {
+        const res = await fetch('/api/lead', {
           method: 'POST',
-          headers: { 'Content-Type': 'application/json', 'Accept': 'application/json' },
-          body: JSON.stringify({ access_key: WEB3FORMS_KEY, subject: 'New enquiry from ' + name + ' — craftware.co.in', from_name: 'CraftWare website', name, email, message, botcheck: false }),
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ name, email, message, botcheck: false, t: Math.round(performance.now() - formShownAt) }),
         });
         const data = await res.json().catch(() => ({}));
-        if (!res.ok || !data.success) throw new Error(data.message || 'send failed');
+        if (!res.ok || !data.ok) { const err = new Error(data.error || 'failed'); err.status = res.status; throw err; }
         contactForm.reset();
-        setStatus('Thanks, ' + name.replace(/[<>&]/g, '') + ' — your message is in our inbox. We\'ll get back to you soon. Need us faster? <a href="' + waLink('Hi CraftWare! I just sent a message through your website.') + '" target="_blank" rel="noopener">Ping us on WhatsApp</a>.', 'ok');
+        setStatus('Thanks, ' + safe(name) + ' — your message is in. We\'ll get back to you soon. Need us faster? <a href="' + waLink('Hi CraftWare! I just sent a message through your website.') + '" target="_blank" rel="noopener">Ping us on WhatsApp</a>.', 'ok');
       } catch (err) {
-        setStatus('We couldn\'t send that just now. <a href="' + waLink(waText) + '" target="_blank" rel="noopener">Send it on WhatsApp instead</a> or email <a href="mailto:craftwaretech@gmail.com">craftwaretech@gmail.com</a>.', 'err');
+        const reason = err.status === 400 || err.status === 429 ? safe(err.message) + ' ' : 'We couldn\'t send that just now. ';
+        setStatus(reason + '<a href="' + waLink(waText) + '" target="_blank" rel="noopener">Send it on WhatsApp instead</a> or email <a href="mailto:craftwaretech@gmail.com">craftwaretech@gmail.com</a>.', 'err');
       } finally {
         sendBtn.disabled = false; sendBtn.textContent = 'Send message';
       }
