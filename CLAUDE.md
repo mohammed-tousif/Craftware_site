@@ -23,11 +23,11 @@ links, not rebuilding a custom backend.
 - `craftware-design-v2.html` — the entire site (HTML + inline `<style>` +
   inline `<script>`). This is the only file to edit for on-page changes.
 - `assets/hero-showreel.mp4` — desktop hero background video, 1920×1080
-  (16:9), 60fps, 20s seamless loop, ~4.4MB. Must stay in an `assets/`
+  (16:9), 60fps, 20s seamless loop, ~3.2MB. Must stay in an `assets/`
   folder **sitting next to** the HTML file — referenced by a relative
   path, not embedded.
 - `assets/hero-showreel-mobile.mp4` — separate hero video for narrow
-  screens, 1080×1920 (9:16), 60fps, 20s loop, ~3.4MB — composed for a
+  screens, 1080×1920 (9:16), 60fps, 20s loop, ~3.2MB — composed for a
   tall mobile frame instead of being a cropped desktop video. Picked by a
   small inline `<script>` right after the hero `<video>` that swaps the
   `<source>` src (and the poster) via `matchMedia('(max-width:700px)')`
@@ -47,6 +47,16 @@ links, not rebuilding a custom backend.
   bottom-left headline on desktop / in the upper band on mobile, and that
   headline zone is dimmed and effect-damped inside the video itself.
   Encode muted (`-an`), `+faststart`, and keep each file ≲5MB.
+  **Desktop safe area (hard-won):** the hero is `object-fit:cover` in a
+  `100svh` box, so on short, wide laptop windows (≈1366×650 once browser
+  chrome and the taskbar are gone) the 1080p frame is cropped ~140px top
+  and bottom, and the fixed nav hides the next ~70px. Anything that must
+  be read — scene titles, chips — has to sit inside roughly y 260–920 of
+  the 1920×1080 frame, and right of x≈1000 (at 1280–1366px widths the
+  site headline reaches ~x900 of the frame). The first v2 render put
+  titles at y≈180 and they vanished under the nav on a real laptop. Test
+  a new hero video at 1366×650, not just 1440×900/1920×1080 — those
+  aspect ratios crop sideways instead and hide the problem.
 - `assets/hero-poster.jpg` / `assets/hero-poster-mobile.jpg` — poster
   frames (frame 0) for the desktop/mobile hero videos. The `<video
   poster>` attribute can't media-query itself, so the same inline script
@@ -214,7 +224,11 @@ the end of `<body>`. Section order top to bottom:
    the Work section's screenshots are real files in
    `assets/work-previews/*.jpg`, referenced by a normal `<img src>`, not
    inlined. Keep them small (crop to 1200×750, JPEG q~80) when adding or
-   replacing one.
+   replacing one. Same story for the hero: `.hero-media` once carried the
+   old video's full 1920×1080 poster as a ~166KB base64 CSS background,
+   which flashed a stale frame before the video started (and survived the
+   video being replaced). It's plain `var(--navy)` now — the `<video
+   poster>` covers that moment; don't re-inline a placeholder.
 4. **Windows zip-preview ≠ extraction.** Double-clicking into a `.zip` in
    File Explorer only pulls the one file you open into a temp folder — the
    `assets` folder won't come with it. Users must fully extract first.
