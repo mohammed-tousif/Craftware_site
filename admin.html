@@ -374,12 +374,13 @@
   }
 
   // ---------------- work ----------------
+  const imgSrc = (u) => !u ? '' : u.startsWith('upload:') ? '/api/admin/image?ref=' + encodeURIComponent(u.slice(7)) : u.startsWith('assets/') ? '/' + u : u;
   const loadProjects = guard(async () => { state.projects = (await api('projects')).projects; renderProjects(); if (state.stats.length) renderStats(); });
   function renderProjects() {
     const wrap = $('#projectCards'); wrap.replaceChildren();
     if (!state.projects.length) { wrap.append(h('div', { class: 'empty', text: 'No projects yet — add your first one.' })); return; }
     state.projects.forEach((p, i) => {
-      const img = h('div', { class: 'card-img' }); img.style.backgroundImage = p.image_url ? 'url("' + p.image_url.replace(/"/g, '') + '")' : 'none';
+      const img = h('div', { class: 'card-img' }); img.style.backgroundImage = p.image_url ? 'url("' + imgSrc(p.image_url).replace(/"/g, '') + '")' : 'none';
       wrap.append(h('article', { class: 'card' + (p.visible ? '' : ' off') }, img,
         h('div', { class: 'card-body' },
           h('h3', { text: p.title }),
@@ -410,7 +411,7 @@
   }
   function imageField(label, value, hint, maxW, maxH, nameFn) {
     const prev = h('div', { class: 'img-prev' });
-    const setPrev = (u) => { prev.style.backgroundImage = u ? 'url("' + u.replace(/"/g, '') + '")' : 'none'; };
+    const setPrev = (u) => { prev.style.backgroundImage = u ? 'url("' + imgSrc(u).replace(/"/g, '') + '")' : 'none'; };
     const input = h('input', { class: 'in', value: value || '', placeholder: 'https://… or upload' });
     input.addEventListener('input', () => setPrev(input.value));
     const file = h('input', { type: 'file', accept: 'image/jpeg,image/png,image/webp', hidden: true });

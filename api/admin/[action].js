@@ -6,17 +6,18 @@ import { send, fail, readJson, str, HttpError } from '../../lib/http.js';
 import { verifyPassword, createSession, sessionCookie, clearCookie, requireAdmin, readSession, cookies, checkOrigin, ipHash } from '../../lib/auth.js';
 import { q, ensureReady, touchContent, getMeta, setMeta } from '../../lib/db.js';
 import { safeUrl } from '../../lib/render.js';
-import { storeImage } from '../../lib/storage.js';
+import { storeImage, readImage, isUploadRef } from '../../lib/storage.js';
 
 const STATUSES = ['new', 'contacted', 'won', 'lost', 'spam'];
 const CATS = ['web', 'branding', 'marketing'];
 const id = (v) => { const n = Number(v); if (!Number.isInteger(n) || n <= 0) throw new HttpError(400, 'Invalid id'); return n; };
 const bool = (v) => v === true || v === 'true';
 const list = (v, max, itemMax) => (Array.isArray(v) ? v : String(v || '').split(',')).map((x) => str(x, itemMax)).filter(Boolean).slice(0, max);
-const url = (v, label, required = false) => {
+const url = (v, label, required = false, allowUpload = false) => {
   const s = str(v, 500);
   if (!s) { if (required) throw new HttpError(400, `${label} is required.`); return ''; }
-  if (!safeUrl(s)) throw new HttpError(400, `${label} must be an https:// link.`);
+  if (allowUpload && isUploadRef(s)) return s;
+  if (!safeUrl(s)) throw new HttpError(400, `${label} must be an https:// link${allowUpload ? ' or an uploaded image' : ''}.`);
   return s;
 };
 
@@ -97,9 +98,9 @@ function projectFields(b, partial) {
   if (has('tags')) f.tags = list(b.tags, 12, 40);
   if (has('categories')) { f.categories = list(b.categories, 3, 20).filter((c) => CATS.includes(c)); if (!f.categories.length) f.categories = ['web']; }
   if (has('live_url')) f.live_url = url(b.live_url, 'Live link');
-  if (has('image_url')) f.image_url = url(b.image_url, 'Preview image', !partial);
+  if (has('image_url')) f.image_url = url(b.image_url, 'Preview image', !partial, true);
   if (has('image_alt')) f.image_alt = str(b.image_alt, 160);
-  if (has('image_full_url')) f.image_full_url = url(b.image_full_url, 'Tall preview image') || null;
+  if (has('image_full_url')) f.image_full_url = url(b.image_full_url, 'Tall preview image', false, true) || null;
   if (has('pan_seconds')) f.pan_seconds = b.pan_seconds === '' || b.pan_seconds == null ? null : Math.min(12, Math.max(1, Number(b.pan_seconds) || 4));
   // new projects are visible + featured unless told otherwise
   const defaults = { featured: true, visible: true, in_clients: false };
@@ -217,6 +218,17 @@ async function upload(req, res) {
   send(res, 200, { ok: true, url: await storeImage(dataUrl, name) });
 }
 
+// admin-only view of a privately stored upload (the public site gets its own
+// copy at build time)
+async function image(req, res, u) {
+  const { buf, type } = await readImage('upload:' + (u.searchParams.get('ref') || ''));
+  res.statusCode = 200;
+  res.setHeader('Content-Type', type);
+  res.setHeader('Cache-Control', 'private, max-age=3600');
+  res.setHeader('X-Content-Type-Options', 'nosniff');
+  res.end(buf);
+}
+
 async function publish(req, res) {
   const status = async () => {
     const changed = await getMeta('content_changed_at'), published = await getMeta('published_at');
@@ -248,6 +260,7 @@ const ROUTES = {
   testimonials: { GET: testimonials, POST: testimonials, PATCH: testimonials, DELETE: testimonials },
   'testimonials-order': { POST: (req, res) => reorder(req, res, 'testimonials') },
   upload: { POST: upload },
+  image: { GET: image },
   publish: { GET: publish, POST: publish },
 };
 
