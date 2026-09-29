@@ -1,0 +1,11 @@
+# Deploy ONLY the public website. Everything else in this folder — team
+# notes (*.md), backups, the legacy Next.js app, local tooling — must never
+# be uploaded: the CLI deploy ships the whole working directory, tracked or
+# not, and anything uploaded is publicly downloadable at craftware.co.in/<path>.
+# Whitelist approach, so a new stray file can't leak by default.
+/*
+!/craftware-design-v2.html
+!/assets
+!/robots.txt
+!/sitemap.xml
+!/vercel.json

@@ -169,7 +169,20 @@ the end of `<body>`. Section order top to bottom:
    — space-separated if more than one applies). Only add a project here
    with real, verifiable detail (what it is, why it was built, a live
    URL if one exists) — never a placeholder entry.
-6. Marquee, About, Process, Testimonials, Contact, Footer.
+6. Marquee, About, Process, Contact, Footer. The old Testimonials section
+   was **removed on purpose**: its four quotes (Emma R., Daniel K., Priya
+   M., Rohan S.) were invented, not real clients — a credibility and
+   consumer-protection risk. Only ever add testimonials that are real,
+   attributable quotes from real clients who agreed to be quoted.
+7. **Contact form** (`#contactForm`) actually delivers. With
+   `WEB3FORMS_KEY` set in the script, it POSTs to Web3Forms, which emails
+   craftwaretech@gmail.com (the access key is public by design — it can
+   only send to that inbox). With the key empty, or if the email API
+   fails, the message is handed to WhatsApp (`wa.me/918722973448`,
+   pre-filled with name/email/message) so an enquiry is never dropped. It
+   used to be `onsubmit="return false;"`, which silently discarded every
+   message — never ship a form without a real destination again. Has a
+   hidden `botcheck` honeypot (Web3Forms convention) and inline validation.
 
 ## Design tokens (CSS custom properties on `:root`)
 
@@ -259,6 +272,12 @@ the end of `<body>`. Section order top to bottom:
 7. Don't build effects that depend on WebGPU or other narrow browser
    support without a fallback — a hard `navigator.gpu` check means the
    whole feature silently fails on unsupported browsers.
+8. **No dead dependencies.** The page used to load three.js (~150KB,
+   render-blocking, from a CDN) for a WebGL black-hole shader that was
+   switched off (`USE_SHADER = false`) in favour of the video — every
+   visitor paid for it and nothing used it. Both the library and the
+   ~220-line parked shader were removed. If an effect is parked, remove its
+   code and dependency too; git history has it if it's ever wanted back.
 
 ## SEO
 
@@ -286,3 +305,12 @@ config from an earlier version of this project and the deploy fails
 looking for an `app/` directory that no longer exists. No `/admin` rewrite
 anymore (removed along with the backend). No CI beyond Vercel's own
 git-push deploy.
+
+**`.vercelignore` is a whitelist — keep it that way.** Only
+`craftware-design-v2.html`, `assets/`, `robots.txt`, `sitemap.xml` and
+`vercel.json` are ever uploaded. Before it existed, a CLI deploy
+(`vercel --prod`) uploaded the whole working folder, tracked or not, and
+the team notes (`MEMORY.md`, `CLAUDE.md`, `SESSION-HANDOFF.md`, `KB.md`),
+a 5MB source zip and the untracked `legacy-red-white/` Next.js app were all
+publicly downloadable at `craftware.co.in/<file>`. If the site ever needs
+a new top-level file, add it to the whitelist explicitly.
