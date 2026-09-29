@@ -22,27 +22,39 @@ links, not rebuilding a custom backend.
 
 - `craftware-design-v2.html` — the entire site (HTML + inline `<style>` +
   inline `<script>`). This is the only file to edit for on-page changes.
-- `assets/hero-showreel.mp4` — desktop hero background video, 1600×900
-  (16:9). Must stay in an `assets/` folder **sitting next to** the HTML
-  file — referenced by a relative path, not embedded.
+- `assets/hero-showreel.mp4` — desktop hero background video, 1920×1080
+  (16:9), 60fps, 20s seamless loop, ~4.4MB. Must stay in an `assets/`
+  folder **sitting next to** the HTML file — referenced by a relative
+  path, not embedded.
 - `assets/hero-showreel-mobile.mp4` — separate hero video for narrow
-  screens, 1080×1920 (9:16, portrait) — composed for a tall mobile frame
-  instead of being a cropped desktop video. Selected automatically via a
-  `<source media="(max-width:700px)">` on the hero `<video>` (first
-  matching `<source>` wins, evaluated once at load — doesn't re-select on
-  resize) and a matching conditional `<link rel="preload" media="...">`
-  in `<head>` so only one of the two videos is ever fetched. Re-encoded
-  with `ffmpeg -an -c:v libx264 -crf 26 -movflags +faststart` (audio
-  stripped — it's a muted background video) to ~2Mbps/~5MB for an ~18s
-  clip; keep new mobile hero videos in that ballpark rather than shipping
-  a raw phone-camera export.
+  screens, 1080×1920 (9:16), 60fps, 20s loop, ~3.4MB — composed for a
+  tall mobile frame instead of being a cropped desktop video. Picked by a
+  small inline `<script>` right after the hero `<video>` that swaps the
+  `<source>` src (and the poster) via `matchMedia('(max-width:700px)')`
+  before the video starts fetching — deliberately NOT `<source media>`,
+  which has autoplay quirks on mobile browsers (see the comment in that
+  script). A matching conditional `<link rel="preload" media="...">` in
+  `<head>` means only one of the two videos is ever fetched.
+- Both hero videos are motion graphics rendered frame-by-frame (not stock
+  footage, not a screen recording) by a separate local project that is
+  **not in this repo**: `C:\Users\mdtou\project\craftware-hero\` on
+  Tousif's machine — `node render3d.mjs --f=desk|mob --crf=24
+  --tune=animation --suffix=web` (WebGL2 in headless Chrome → ffmpeg).
+  Design rules they follow, which any replacement should keep: every
+  moving layer is periodic in the loop length so the loop point is
+  invisible; frame 0 is the bare background (so the poster = frame 0 and
+  playback starts without a flash); all motion stays right of the
+  bottom-left headline on desktop / in the upper band on mobile, and that
+  headline zone is dimmed and effect-damped inside the video itself.
+  Encode muted (`-an`), `+faststart`, and keep each file ≲5MB.
 - `assets/hero-poster.jpg` / `assets/hero-poster-mobile.jpg` — poster
-  frames for the desktop/mobile hero videos respectively. `hero-poster.jpg`
-  is also reused as the Open Graph / Twitter share image (see `<head>`).
-  The `<video poster>` attribute can't media-query itself the way
-  `<source>` can, so a small inline `<script>` right after the hero
-  `<video>` swaps it to the mobile poster via `matchMedia` before the
-  video loads.
+  frames (frame 0) for the desktop/mobile hero videos. The `<video
+  poster>` attribute can't media-query itself, so the same inline script
+  swaps in the mobile poster.
+- `assets/og-image.jpg` — 1200×630 Open Graph / Twitter share image (the
+  logo + wordmark end card of the hero video). Separate from the posters
+  on purpose: frame 0 is an empty background, which makes a blank share
+  card.
 - `assets/blackhole-bg.mp4` — Integrations section background video.
   Deliberately **lazy-loaded** (see "Known gotchas" #6) — don't add
   `autoplay` back to its `<video>` tag or give the `<source>` a real `src`
@@ -98,9 +110,7 @@ the end of `<body>`. Section order top to bottom:
 
 1. **Hero** (`section.hero`) — full-bleed video background, left-aligned
    headline, reveals 1.5s after load. See "Known gotchas" #5 for the
-   mobile-specific overlay/brightness treatment — the video is a busy,
-   landscape-composed stock asset and needs real help staying legible on
-   a narrow screen.
+   mobile-specific overlay/brightness treatment.
 2. **Brand statement / "glass card"** (`section.brand-glass`) — the
    CraftWare logo stamp card. Circular reveal-mask wipe on scroll-in, curtain
    wipe + stamp-in animation on the card itself. Repeats every time scrolled
@@ -208,16 +218,18 @@ the end of `<body>`. Section order top to bottom:
 4. **Windows zip-preview ≠ extraction.** Double-clicking into a `.zip` in
    File Explorer only pulls the one file you open into a temp folder — the
    `assets` folder won't come with it. Users must fully extract first.
-5. **The hero video needs real help on mobile.** It's a busy,
-   landscape-composed stock asset (faces, fake UI mockups) that dominates
-   almost the whole viewport on a narrow phone, with the headline text
-   sitting on top of it. The `@media (max-width:700px)` block for
-   `section.hero` dampens the video's brightness, replaces the desktop's
-   left-to-right scrim (which fades out by 55% width — useless on a
-   single-column mobile layout) with a full-width, bottom-weighted one,
-   and adds a text-shadow as insurance. Don't remove that block thinking
-   it's redundant with the desktop styles — it's the fix for a real
-   legibility bug, not decoration. Also: the CSS previously had a whole
+5. **The mobile hero keeps its own scrim.** On a phone the headline sits
+   on top of the video, bottom-anchored. The `@media (max-width:700px)`
+   block for `section.hero` replaces the desktop's left-to-right scrim
+   (which fades out by 55% width — useless on a single-column layout)
+   with a full-width, bottom-weighted one, adds a text-shadow as
+   insurance, and applies a light `brightness(0.85)` dim. The dim used to
+   be a heavy `brightness(0.6) saturate(0.85)` because the old video was a
+   busy stock clip (faces, fake UI mockups); the current mobile video is
+   composed around the headline, so the heavy dim just muddied it. Don't
+   remove the block thinking it's redundant with the desktop styles, and
+   if the hero video is ever swapped for busier footage, the heavier dim
+   probably needs to come back. Also: the CSS previously had a whole
    family of `.hm-*` decorative "floating dashboard card" rules (blobs,
    browser-mockup cards, chat bubbles, etc.) — those were leftover from an
    earlier hero iteration and matched no HTML; removed as dead code. If a
@@ -238,8 +250,8 @@ the end of `<body>`. Section order top to bottom:
 
 `<head>` carries a real title/description (Hubli/Karnataka + service
 keywords), canonical URL, Open Graph + Twitter card tags (image is
-`assets/hero-poster.jpg` — an actual frame from the real hero video, not a
-generated asset), and a `ProfessionalService` JSON-LD block listing the
+`assets/og-image.jpg`, 1200×630 — the end card of the real hero video,
+with explicit `og:image:width/height/alt`), and a `ProfessionalService` JSON-LD block listing the
 real services from the Expertise section. `sitemap.xml` + `robots.txt` live
 at the repo root. Deliberately **no `<meta name="keywords">` tag** — Google
 has ignored it for years; real keyword coverage comes from the title,

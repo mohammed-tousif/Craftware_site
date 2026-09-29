@@ -22,12 +22,16 @@
 <meta property="og:title" content="CraftWare — Web Development &amp; Digital Marketing Agency in Hubli &amp; Dharwad">
 <meta property="og:description" content="Web development, Meta &amp; Google Ads, SEO, branding and WhatsApp automation — one team managing your entire digital presence in Hubli and Dharwad, Karnataka.">
 <meta property="og:url" content="https://craftware.co.in/">
-<meta property="og:image" content="https://craftware.co.in/assets/hero-poster.jpg">
+<meta property="og:image" content="https://craftware.co.in/assets/og-image.jpg">
+<meta property="og:image:width" content="1200">
+<meta property="og:image:height" content="630">
+<meta property="og:image:alt" content="CraftWare logo — Design. Code. Growth.">
+<meta name="twitter:image:alt" content="CraftWare logo — Design. Code. Growth.">
 <meta property="og:locale" content="en_IN">
 <meta name="twitter:card" content="summary_large_image">
 <meta name="twitter:title" content="CraftWare — Web Development &amp; Digital Marketing Agency in Hubli &amp; Dharwad">
 <meta name="twitter:description" content="Web development, Meta &amp; Google Ads, SEO, branding and WhatsApp automation — one team managing your entire digital presence in Hubli and Dharwad, Karnataka.">
-<meta name="twitter:image" content="https://craftware.co.in/assets/hero-poster.jpg">
+<meta name="twitter:image" content="https://craftware.co.in/assets/og-image.jpg">
 
 <script defer src="/_vercel/insights/script.js"></script>
 <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -201,14 +205,13 @@
   @media (max-width:700px){
     section.hero{ height:100svh; min-height:560px; }
     .hero-title{ font-size:clamp(28px,8vw,44px); }
-    /* the showreel video is a busy, landscape-composed asset (faces, UI
-       mockups) — on a narrow phone it fills most of the frame instead of
-       sitting beside the text like it does on desktop. Dampen it and
-       replace the desktop's left-to-right scrim (which fades out by 55%
-       width — fine on a wide screen, useless on a narrow one) with a
-       full-width scrim weighted toward the bottom, where the
-       bottom-anchored text actually sits. */
-    .hero-video-el{ filter:brightness(0.6) saturate(0.85); }
+    /* the mobile showreel is composed for this layout (motion kept in the
+       upper band, the lower band already dimmed and calm), so it only
+       needs a light dim — a heavy one just muddies it. The desktop's
+       left-to-right scrim (fades out by 55% width — useless on a narrow
+       screen) is replaced with a full-width scrim weighted toward the
+       bottom, where the bottom-anchored text actually sits. */
+    .hero-video-el{ filter:brightness(0.85); }
     .hero-overlay{
       background:
         linear-gradient(to bottom, rgba(5,8,15,0.4) 0%, rgba(5,8,15,0.3) 28%, rgba(5,8,15,0.74) 66%, rgba(5,8,15,0.9) 100%);
