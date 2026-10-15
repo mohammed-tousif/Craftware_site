@@ -126,6 +126,74 @@
   .qitem blockquote{ font-size:14.5px; line-height:1.55; flex:1; }
   .qitem cite{ display:block; font-style:normal; font-size:12.5px; color:var(--muted); margin-top:8px; }
 
+  /* ---- expenses ---- */
+  .sum-cards{ display:grid; grid-template-columns:repeat(auto-fit,minmax(190px,1fr)); gap:12px; margin-bottom:16px; }
+  .sum{ border:1px solid var(--line); border-radius:16px; background:var(--navy-2); padding:16px 18px; min-width:0; }
+  .sum small{ display:block; font-size:11px; font-weight:700; letter-spacing:.08em; text-transform:uppercase; color:var(--muted); }
+  .sum b{ display:block; font-family:var(--display); font-weight:900; font-size:clamp(28px,3.4vw,36px); line-height:1.05; margin:8px 0 4px; font-variant-numeric:tabular-nums; overflow-wrap:anywhere; }
+  .sum span{ font-size:12px; color:var(--muted); }
+  .in-c{ color:var(--green); } .out-c{ color:var(--red); }
+  .filters{ display:flex; gap:8px; flex-wrap:wrap; align-items:center; margin-bottom:14px; }
+  .filters select.in{ width:auto; max-width:100%; height:38px; padding:0 12px; font-size:13.5px; border-radius:999px; }
+  .filters .search{ height:38px; border-radius:999px; padding:0 16px; font-size:13.5px; }
+  .break{ display:grid; grid-template-columns:repeat(auto-fit,minmax(280px,1fr)); gap:12px; margin-bottom:16px; }
+  .break-box{ border:1px solid var(--line); border-radius:16px; background:var(--navy-2); padding:14px 18px 10px; }
+  .break-box h4{ font-size:11px; font-weight:700; letter-spacing:.08em; text-transform:uppercase; color:var(--muted); margin-bottom:4px; }
+  .bar-row{ display:grid; grid-template-columns:minmax(0,1fr) auto; gap:5px 12px; font-size:13px; padding:7px 0; }
+  .bar-row span:first-child{ overflow:hidden; text-overflow:ellipsis; white-space:nowrap; }
+  .bar-row span:last-child{ font-variant-numeric:tabular-nums; font-weight:600; }
+  .bar{ grid-column:1 / -1; height:5px; border-radius:99px; background:rgba(242,237,226,.08); overflow:hidden; }
+  .bar i{ display:block; height:100%; border-radius:inherit; background:var(--red); }
+  .bar i.g{ background:var(--green); }
+  .txns{ display:flex; flex-direction:column; gap:8px; }
+  .txn{ display:grid; grid-template-columns:112px minmax(0,1fr) 120px 150px; gap:14px; align-items:center; padding:14px 18px; border:1px solid var(--line); border-radius:16px; background:var(--navy-2); text-align:left; width:100%; transition:border-color .2s, background-color .2s; }
+  .txn:hover{ border-color:rgba(242,237,226,.3); background:var(--navy-3); }
+  .txn-when{ font-size:12px; color:var(--muted); line-height:1.4; }
+  .txn-when b{ display:block; color:var(--cream); font-size:14px; font-weight:600; }
+  .txn-what{ min-width:0; }
+  .txn-what b{ display:block; font-size:14.5px; font-weight:600; overflow:hidden; text-overflow:ellipsis; white-space:nowrap; }
+  .txn-what .tags{ margin-top:7px; }
+  .txn-who{ font-size:13px; color:rgba(242,237,226,.8); }
+  .txn-who small{ display:block; font-size:11.5px; color:var(--muted); margin-top:2px; }
+  .txn-amt{ font-family:var(--display); font-weight:900; font-size:24px; text-align:right; font-variant-numeric:tabular-nums; white-space:nowrap; }
+  .txn.is-deleted{ opacity:.6; border-style:dashed; }
+  .txn.is-deleted .txn-amt{ text-decoration:line-through; }
+  .tag.r{ background:rgba(255,122,122,.14); color:var(--red); }
+  .seg{ display:grid; grid-template-columns:1fr 1fr; gap:6px; background:var(--navy); border:1px solid var(--line); border-radius:14px; padding:5px; }
+  .seg label{ display:flex; align-items:center; justify-content:center; gap:8px; height:42px; border-radius:10px; font-weight:700; font-size:14px; color:var(--muted); cursor:pointer; transition:background-color .2s, color .2s; }
+  .seg input{ position:absolute; opacity:0; pointer-events:none; }
+  .seg label:has(input:checked){ background:var(--navy-3); color:var(--cream); box-shadow:inset 0 0 0 1px var(--line); }
+  .seg label:has(input[value=debit]:checked){ color:var(--red); }
+  .seg label:has(input[value=credit]:checked){ color:var(--green); }
+  .seg label:has(input:focus-visible){ outline:2px solid var(--sky); outline-offset:2px; }
+  .amt-in{ font-family:var(--display); font-weight:900; font-size:30px !important; padding:8px 14px !important; letter-spacing:.01em; }
+  .when-row{ display:flex; gap:8px; }
+  .when-row .in{ flex:1; min-width:0; color-scheme:dark; }
+  .txn-head{ border:1px solid var(--line); border-radius:16px; background:var(--navy); padding:16px 18px; margin-top:16px; }
+  .txn-head .big{ font-family:var(--display); font-weight:900; font-size:40px; line-height:1; font-variant-numeric:tabular-nums; }
+  .txn-head p{ font-size:13px; color:var(--muted); margin-top:8px; line-height:1.6; }
+  .del-banner{ border:1px solid rgba(255,122,122,.4); background:rgba(255,122,122,.08); border-radius:14px; padding:12px 16px; font-size:13.5px; line-height:1.55; margin-top:16px; }
+  .hist{ list-style:none; margin-top:10px; border-left:2px solid var(--line); padding-left:16px; display:flex; flex-direction:column; gap:14px; }
+  .hist li{ position:relative; font-size:13px; line-height:1.55; }
+  .hist li::before{ content:""; position:absolute; left:-22px; top:5px; width:10px; height:10px; border-radius:50%; background:var(--navy-2); border:2px solid var(--muted); }
+  .hist li.h-created::before{ border-color:var(--green); } .hist li.h-edited::before{ border-color:var(--yellow); }
+  .hist li.h-deleted::before{ border-color:var(--red); } .hist li.h-restored::before{ border-color:var(--sky); }
+  .hist .who{ color:var(--cream); font-weight:700; }
+  .hist .when{ color:var(--muted); font-size:12px; }
+  .hist .chg{ color:rgba(242,237,226,.78); margin-top:4px; }
+  .hist .chg s{ color:var(--muted); }
+  .hist .why{ color:var(--yellow); margin-top:4px; }
+  .hist button.link{ background:none; border:0; padding:0; color:var(--sky); font-weight:600; text-decoration:underline; text-underline-offset:2px; }
+  .rcpt{ display:block; width:100%; max-height:260px; object-fit:contain; border-radius:12px; border:1px solid var(--line); background:var(--navy); margin-top:8px; }
+  @media (max-width:760px){
+    .txn{ grid-template-columns:minmax(0,1fr) auto; gap:8px 12px; }
+    .txn-when{ grid-column:1; grid-row:1; }
+    .txn-amt{ grid-column:2; grid-row:1; }
+    .txn-what{ grid-column:1 / -1; }
+    .txn-who{ grid-column:1 / -1; }
+    .txn-who small{ display:inline; margin-left:6px; }
+  }
+
   /* ---- drawer ---- */
   .scrim{ position:fixed; inset:0; background:rgba(0,0,0,.55); z-index:40; opacity:0; pointer-events:none; transition:opacity .25s; }
   .scrim.on{ opacity:1; pointer-events:auto; }
@@ -167,7 +235,7 @@
   <form class="login-card" id="loginForm" autocomplete="on">
     <div class="brand"><img src="/assets/brand/logo-nav.png" alt="">CraftWare<small>ADMIN</small></div>
     <h1>Sign in</h1>
-    <p>Leads, work, numbers and testimonials for craftware.co.in.</p>
+    <p>Leads, expenses, work, numbers and testimonials for craftware.co.in.</p>
     <label class="f" for="pw">Password</label>
     <input class="in" id="pw" name="password" type="password" autocomplete="current-password" required>
     <button class="btn primary full" type="submit" style="margin-top:18px">Sign in</button>
@@ -180,6 +248,7 @@
     <div class="brand"><img src="/assets/brand/logo-nav.png" alt="">CraftWare<small>ADMIN</small></div>
     <nav class="tabs" aria-label="Sections">
       <button class="tab on" data-tab="leads">Leads <span class="badge" id="newBadge" hidden></span></button>
+      <button class="tab" data-tab="expenses">Expenses</button>
       <button class="tab" data-tab="work">Work</button>
       <button class="tab" data-tab="numbers">Numbers</button>
       <button class="tab" data-tab="quotes">Testimonials</button>
@@ -200,6 +269,30 @@
       </div>
       <div class="chips" id="leadChips"></div>
       <div class="leads" id="leadList"></div>
+    </section>
+
+    <section data-view="expenses" hidden>
+      <div class="head">
+        <div><h2>Expenses</h2><p>Money in and out of CraftWare — only you three see this, it never appears on the website. Nothing is ever erased: every edit and deletion is kept in the history.</p></div>
+        <div class="row">
+          <button class="btn" id="ledgerActivity">Activity log</button>
+          <a class="btn" id="ledgerExport" href="/api/admin/transactions-export" download>Export CSV</a>
+          <button class="btn primary" id="addTxn">Add transaction</button>
+        </div>
+      </div>
+      <p class="notice" id="ledgerGuardWarn" hidden>The database protection that keeps the history permanent isn’t active, so entries can still be changed outside the admin. Everything still works and every change is still logged — but ask Tousif to check the server logs.</p>
+      <div class="sum-cards" id="ledgerSum"></div>
+      <div class="filters" role="group" aria-label="Filter transactions">
+        <select class="in" id="fPeriod" aria-label="Period"></select>
+        <select class="in" id="fKind" aria-label="Type"><option value="">Money in &amp; out</option><option value="debit">Money out</option><option value="credit">Money in</option></select>
+        <select class="in" id="fPerson" aria-label="Person"></select>
+        <select class="in" id="fCategory" aria-label="Category"></select>
+        <select class="in" id="fMethod" aria-label="Payment method"></select>
+        <input class="in search" id="fSearch" type="search" placeholder="Search descriptions" aria-label="Search descriptions">
+        <button class="chip" id="fDeleted" type="button">Deleted <span class="n" id="fDeletedN">0</span></button>
+      </div>
+      <div class="break" id="ledgerBreak"></div>
+      <div class="txns" id="txnList"></div>
     </section>
 
     <section data-view="work" hidden>
@@ -295,7 +388,7 @@
   async function enterApp() {
     $('#loginView').hidden = true; $('#appView').hidden = false;
     await loadProjects(); // the Numbers tab counts visible projects
-    await Promise.all([loadLeads(), loadStats(), loadQuotes(), loadPublish()]);
+    await Promise.all([loadLeads(), loadStats(), loadQuotes(), loadPublish(), loadLedger()]);
   }
 
   // ---------------- tabs ----------------
@@ -303,6 +396,7 @@
     state.tab = t.dataset.tab;
     document.querySelectorAll('.tab').forEach((x) => x.classList.toggle('on', x === t));
     document.querySelectorAll('[data-view]').forEach((v) => { v.hidden = v.dataset.view !== state.tab; });
+    if (state.tab === 'expenses') loadLedger(); // another founder may have added something
   }));
 
   // ---------------- publish ----------------
@@ -535,6 +629,286 @@
         closeDrawer(); toast(isNew ? 'Testimonial added' : 'Testimonial saved'); loadQuotes(); changed();
       }) }, isNew ? 'Add' : 'Save'),
     ]);
+  }
+
+  // ---------------- expenses ----------------
+  // Money is integer paise everywhere (₹1 = 100). Periods and dates are India time.
+  const IST_NOW_MONTH = () => new Date(Date.now() + 330 * 60e3).toISOString().slice(0, 7);
+  const ledger = { f: { period: IST_NOW_MONTH(), kind: '', person: '', category: '', method: '', q: '', deleted: false }, d: null, meta: null };
+  const inr = (paise, signed) => {
+    const n = Number(paise) || 0, abs = Math.abs(n) / 100;
+    const s = abs.toLocaleString('en-IN', { minimumFractionDigits: n % 100 ? 2 : 0, maximumFractionDigits: 2 });
+    return (signed && n < 0 ? '−' : signed && n > 0 ? '+' : '') + '₹' + s;
+  };
+  const fmtDay = (d) => new Date(d).toLocaleDateString('en-IN', { day: 'numeric', month: 'short', year: 'numeric' });
+  const fmtTime = (d) => new Date(d).toLocaleTimeString('en-IN', { hour: 'numeric', minute: '2-digit' });
+  const fmtFull = (d) => fmtDay(d) + ', ' + fmtTime(d);
+  const toLocalInput = (d) => { const x = new Date(d); return new Date(x.getTime() - x.getTimezoneOffset() * 60e3).toISOString().slice(0, 16); };
+  const monthLabel = (m) => new Date(m + '-01T12:00:00').toLocaleDateString('en-IN', { month: 'long', year: 'numeric' });
+  const periodLabel = (p) => !p ? 'All time' : p.startsWith('FY') ? 'FY ' + p.slice(2) + '–' + String(+p.slice(2) + 1).slice(2) : monthLabel(p);
+  const fyOf = (m) => { const [y, mo] = m.split('-').map(Number); return 'FY' + (mo >= 4 ? y : y - 1); };
+  const KIND_LABEL = { debit: 'Money out', credit: 'Money in' };
+  const FIELD_LABEL = { kind: 'Type', amount_paise: 'Amount', occurred_at: 'Date & time', person: 'Person', category: 'Category', method: 'Payment method', description: 'Description', receipt_ref: 'Receipt' };
+  const fieldValue = (k, v) => v == null || v === '' ? '—' : k === 'amount_paise' ? inr(v) : k === 'occurred_at' ? fmtFull(v) : k === 'kind' ? KIND_LABEL[v] : k === 'receipt_ref' ? 'attached' : String(v);
+  const device = (ua) => /iPhone|iPad/.test(ua) ? 'iPhone/iPad' : /Android/.test(ua) ? 'Android' : /Windows/.test(ua) ? 'Windows' : /Mac OS X/.test(ua) ? 'Mac' : /Linux/.test(ua) ? 'Linux' : 'unknown device';
+  // who is using the admin right now — remembered on this device only
+  const ACTOR_KEY = 'cw_ledger_actor';
+  const getActor = () => { try { return localStorage.getItem(ACTOR_KEY) || ''; } catch { return ''; } };
+  const setActor = (v) => { try { localStorage.setItem(ACTOR_KEY, v); } catch { /* private mode */ } };
+
+  function ledgerQuery() {
+    const f = ledger.f, q = {};
+    for (const k of ['period', 'kind', 'person', 'category', 'method', 'q']) if (f[k]) q[k] = f[k];
+    if (f.deleted) q.deleted = '1';
+    return q;
+  }
+  const loadLedger = guard(async () => {
+    const d = await api('transactions', { query: ledgerQuery() });
+    ledger.d = d; ledger.meta = d.meta; renderLedger();
+  });
+
+  const opt = (value, label, sel) => h('option', { value, selected: value === sel }, label);
+  function fillSelect(sel, items, current) { sel.replaceChildren(...items.map(([v, l]) => opt(v, l, current))); sel.value = current; }
+
+  function renderLedger() {
+    const { d, f, meta } = ledger;
+    if (!d) return;
+    // filter controls (option lists come from the server so they always match validation)
+    const months = Array.from(new Set([IST_NOW_MONTH(), ...d.months])).sort().reverse();
+    const fys = Array.from(new Set(months.map(fyOf))).sort().reverse();
+    fillSelect($('#fPeriod'), [...months.map((m) => [m, (m === IST_NOW_MONTH() ? 'This month · ' : '') + monthLabel(m)]), ...fys.map((p) => [p, periodLabel(p)]), ['', 'All time']], f.period);
+    fillSelect($('#fPerson'), [['', 'Everyone'], ...meta.people.map((p) => [p, p])], f.person);
+    const cats = f.kind ? meta.categories[f.kind] : Array.from(new Set([...meta.categories.debit, ...meta.categories.credit]));
+    fillSelect($('#fCategory'), [['', 'All categories'], ...cats.map((c) => [c, c])], cats.includes(f.category) ? f.category : '');
+    fillSelect($('#fMethod'), [['', 'Any method'], ...meta.methods.map((m) => [m, m])], f.method);
+    $('#fKind').value = f.kind;
+    $('#fDeleted').classList.toggle('on', f.deleted);
+    $('#fDeletedN').textContent = d.deletedCount;
+    $('#ledgerGuardWarn').hidden = meta.guard !== false;
+    $('#ledgerExport').href = '/api/admin/transactions-export?' + new URLSearchParams(ledgerQuery());
+
+    // totals for what's on screen (deleted entries never count)
+    const filtered = f.kind || f.person || f.category || f.method || f.q;
+    const credit = d.groups.filter((g) => g.kind === 'credit').reduce((a, g) => a + g.total, 0);
+    const debit = d.groups.filter((g) => g.kind === 'debit').reduce((a, g) => a + g.total, 0);
+    const scope = periodLabel(f.period) + (filtered ? ' · filtered' : '');
+    const card = (label, val, cls, sub) => h('div', { class: 'sum' }, h('small', { text: label }), h('b', { class: cls, text: val }), h('span', { text: sub }));
+    $('#ledgerSum').replaceChildren(
+      card('Balance (all time)', inr(d.balance, true), d.balance < 0 ? 'out-c' : 'in-c', d.live + (d.live === 1 ? ' transaction' : ' transactions')),
+      card('Money in', inr(credit), 'in-c', scope),
+      card('Money out', inr(debit), 'out-c', scope),
+      card('Net', inr(credit - debit, true), credit - debit < 0 ? 'out-c' : 'in-c', scope),
+    );
+
+    // where the money went / who handled it
+    const brk = $('#ledgerBreak'); brk.replaceChildren();
+    const byCat = {};
+    d.groups.filter((g) => g.kind === 'debit').forEach((g) => { byCat[g.category] = (byCat[g.category] || 0) + g.total; });
+    const catRows = Object.entries(byCat).sort((a, b) => b[1] - a[1]);
+    if (catRows.length) {
+      const max = catRows[0][1];
+      brk.append(h('div', { class: 'break-box' }, h('h4', { text: 'Money out by category · ' + scope }),
+        catRows.map(([c, v]) => h('div', { class: 'bar-row' }, h('span', { text: c }), h('span', { text: inr(v) }), h('div', { class: 'bar' }, h('i', { style: { width: Math.max(2, (v / max) * 100) + '%' } }))))));
+    }
+    const byPerson = {};
+    d.groups.forEach((g) => { const p = (byPerson[g.person] = byPerson[g.person] || { credit: 0, debit: 0 }); p[g.kind] += g.total; });
+    const people = meta.people.filter((p) => byPerson[p]);
+    if (people.length) {
+      const max = Math.max(...people.map((p) => Math.max(byPerson[p].credit, byPerson[p].debit)));
+      brk.append(h('div', { class: 'break-box' }, h('h4', { text: 'By person · ' + scope }),
+        people.map((p) => h('div', {},
+          byPerson[p].debit ? h('div', { class: 'bar-row' }, h('span', { text: p + ' paid' }), h('span', { class: 'out-c', text: inr(byPerson[p].debit) }), h('div', { class: 'bar' }, h('i', { style: { width: Math.max(2, (byPerson[p].debit / max) * 100) + '%' } }))) : null,
+          byPerson[p].credit ? h('div', { class: 'bar-row' }, h('span', { text: p + ' received' }), h('span', { class: 'in-c', text: inr(byPerson[p].credit) }), h('div', { class: 'bar' }, h('i', { class: 'g', style: { width: Math.max(2, (byPerson[p].credit / max) * 100) + '%' } }))) : null))));
+    }
+
+    // the list
+    const list = $('#txnList'); list.replaceChildren();
+    if (!d.transactions.length) {
+      list.append(h('div', { class: 'empty', text: f.deleted ? 'No deleted transactions here.' : d.live ? 'Nothing matches these filters for ' + periodLabel(f.period) + '.' : 'No transactions yet. Press “Add transaction” to record the first one — the date and time fill in automatically.' }));
+      return;
+    }
+    d.transactions.forEach((t) => {
+      const sign = t.kind === 'credit' ? 1 : -1;
+      list.append(h('button', { class: 'txn' + (t.deleted_at ? ' is-deleted' : ''), onclick: () => openTxn(t) },
+        h('div', { class: 'txn-when' }, h('b', { text: fmtDay(t.occurred_at) }), fmtTime(t.occurred_at)),
+        h('div', { class: 'txn-what' }, h('b', { text: t.description }),
+          h('div', { class: 'tags' }, h('span', { class: 'tag', text: t.category }), h('span', { class: 'tag', text: t.method }),
+            t.receipt_ref && h('span', { class: 'tag b', text: 'Receipt' }),
+            t.deleted_at ? h('span', { class: 'tag r', text: 'Deleted' }) : t.version > 1 && h('span', { class: 'tag y', text: 'Edited' }))),
+        h('div', { class: 'txn-who' }, t.person, h('small', { text: t.kind === 'credit' ? 'received' : 'paid' })),
+        h('div', { class: 'txn-amt ' + (sign > 0 ? 'in-c' : 'out-c'), text: inr(sign * t.amount_paise, true) })));
+    });
+    if (d.truncated) list.append(h('p', { class: 'hint', text: 'Showing the latest 2,000. Pick a month to see older ones.' }));
+  }
+
+  // filters
+  const setF = (k, v) => { ledger.f[k] = v; loadLedger(); };
+  $('#fPeriod').addEventListener('change', (e) => setF('period', e.target.value));
+  $('#fKind').addEventListener('change', (e) => setF('kind', e.target.value));
+  $('#fPerson').addEventListener('change', (e) => setF('person', e.target.value));
+  $('#fCategory').addEventListener('change', (e) => setF('category', e.target.value));
+  $('#fMethod').addEventListener('change', (e) => setF('method', e.target.value));
+  $('#fDeleted').addEventListener('click', () => setF('deleted', !ledger.f.deleted));
+  let ledgerSearchT;
+  $('#fSearch').addEventListener('input', (e) => { clearTimeout(ledgerSearchT); ledgerSearchT = setTimeout(() => setF('q', e.target.value.trim()), 300); });
+  $('#addTxn').addEventListener('click', () => openTxn(null));
+  $('#ledgerActivity').addEventListener('click', guard(async () => {
+    const { history } = await api('transactions-history');
+    openDrawer('Activity log', [
+      h('p', { class: 'hint', text: 'Every change to the expenses, newest first — including edits and deletions. This log can’t be edited or deleted by anyone.' }),
+      h('a', { class: 'btn sm', href: '/api/admin/transactions-export?audit=1', download: true, style: { marginTop: '12px' } }, 'Download full history (CSV)'),
+      history.length ? historyList(history, true) : h('div', { class: 'empty', style: { marginTop: '16px' }, text: 'No activity yet.' }),
+    ], [h('span'), h('button', { class: 'btn', onclick: closeDrawer }, 'Close')]);
+  }));
+
+  // one entry per change: who, when, from which device, what changed and why
+  function historyList(items, withTxn) {
+    return h('ul', { class: 'hist' }, items.map((e) => {
+      const snap = e.after || e.before || {};
+      const lines = [];
+      if (e.action === 'created') lines.push(h('div', { class: 'chg', text: 'Added ' + KIND_LABEL[snap.kind].toLowerCase() + ' ' + inr(snap.amount_paise) + ' · ' + snap.category + ' · ' + snap.method + ' · ' + snap.person + ' · dated ' + fmtFull(snap.occurred_at) }));
+      if (e.action === 'edited') e.changed.forEach((k) => lines.push(h('div', { class: 'chg' }, FIELD_LABEL[k] + ': ', h('s', { text: fieldValue(k, e.before[k]) }), ' → ' + fieldValue(k, e.after[k]))));
+      if (e.reason) lines.push(h('div', { class: 'why', text: '“' + e.reason + '”' }));
+      const verb = { created: 'added', edited: 'edited', deleted: 'deleted', restored: 'restored' }[e.action];
+      return h('li', { class: 'h-' + e.action },
+        h('span', { class: 'who', text: e.actor }), ' ' + verb + ' ',
+        withTxn ? h('button', { class: 'link', onclick: guard(async () => {
+          const t = (ledger.d.transactions || []).find((x) => x.id === e.txn_id) || await findTxn(e.txn_id);
+          if (t) openTxn(t); else toast('That transaction is outside the current filters.', true);
+        }) }, '#' + e.txn_id + ' ' + (snap.description || '').slice(0, 48)) : null,
+        h('div', { class: 'when', text: fmtFull(e.at) + ' · ' + device(e.user_agent) }),
+        lines);
+    }));
+  }
+  async function findTxn(id) {
+    for (const deleted of ['', '1']) {
+      const q = { period: '' }; if (deleted) q.deleted = '1';
+      const d = await api('transactions', { query: q });
+      const t = d.transactions.find((x) => x.id === id);
+      if (t) return t;
+    }
+    return null;
+  }
+
+  function actorSelect(id) {
+    const sel = h('select', { class: 'in', id }, h('option', { value: '' }, 'Choose your name'), ledger.meta.people.map((p) => opt(p, p, getActor())));
+    sel.addEventListener('change', () => { if (sel.value) setActor(sel.value); });
+    return sel;
+  }
+  const needActor = (sel) => { if (!sel.value) { sel.focus(); throw new Error('Choose your name under “You are” — it’s saved in the history with this change.'); } return sel.value; };
+
+  async function openTxn(t) {
+    if (!ledger.meta) await loadLedger();
+    const meta = ledger.meta, isNew = !t, deleted = !!(t && t.deleted_at);
+    const cur = t || { kind: 'debit', amount_paise: 0, occurred_at: new Date().toISOString(), person: getActor() || '', category: '', method: 'UPI', description: '', receipt_ref: null };
+    // type
+    const kindIn = (v) => h('input', { type: 'radio', name: 'txnKind', value: v, checked: cur.kind === v, disabled: deleted });
+    const kOut = kindIn('debit'), kIn = kindIn('credit');
+    const seg = h('div', { class: 'seg', role: 'radiogroup', 'aria-label': 'Type' }, h('label', {}, kOut, '− Money out'), h('label', {}, kIn, '+ Money in'));
+    const kind = () => (kIn.checked ? 'credit' : 'debit');
+    // amount
+    const amount = h('input', { class: 'in amt-in', id: 'tAmount', inputmode: 'decimal', autocomplete: 'off', placeholder: '₹0', disabled: deleted });
+    amount.value = cur.amount_paise ? (cur.amount_paise / 100).toFixed(cur.amount_paise % 100 ? 2 : 0) : '';
+    // when — filled with "now" automatically, can be moved into the past
+    const when = h('input', { class: 'in', id: 'tWhen', type: 'datetime-local', step: 60, max: toLocalInput(Date.now()), disabled: deleted });
+    when.value = toLocalInput(cur.occurred_at);
+    const nowBtn = h('button', { class: 'btn sm', type: 'button', disabled: deleted, onclick: () => { when.value = toLocalInput(Date.now()); } }, 'Now');
+    // person / category / method / description
+    const person = h('select', { class: 'in', id: 'tPerson', disabled: deleted }, h('option', { value: '' }, 'Choose…'), meta.people.map((p) => opt(p, p, cur.person)));
+    const personLabel = h('label', { class: 'f', for: 'tPerson' });
+    const category = h('select', { class: 'in', id: 'tCategory', disabled: deleted });
+    const fillCats = () => {
+      const keep = category.value || cur.category;
+      fillSelect(category, [['', 'Choose…'], ...meta.categories[kind()].map((c) => [c, c])], meta.categories[kind()].includes(keep) ? keep : '');
+      personLabel.textContent = kind() === 'credit' ? 'Received by' : 'Paid by';
+    };
+    [kOut, kIn].forEach((r) => r.addEventListener('change', fillCats));
+    fillCats();
+    const method = h('select', { class: 'in', id: 'tMethod', disabled: deleted }, meta.methods.map((m) => opt(m, m, cur.method)));
+    const desc = h('textarea', { class: 'in', id: 'tDesc', maxlength: 500, disabled: deleted, placeholder: 'What was it for, and where was the money spent? e.g. Hostinger renewal for the Quba site' });
+    desc.value = cur.description;
+    // receipt photo — only when switched on in Vercel (EXPENSE_RECEIPTS=on)
+    let receipt = cur.receipt_ref || '';
+    let receiptBox = null;
+    if (meta.receipts || receipt) {
+      const prev = h('div');
+      const showPrev = () => prev.replaceChildren(receipt ? h('a', { href: imgSrc(receipt), target: '_blank', rel: 'noopener' }, h('img', { class: 'rcpt', src: imgSrc(receipt), alt: 'Receipt photo' })) : h('p', { class: 'hint', text: 'No receipt attached.' }));
+      const file = h('input', { type: 'file', accept: 'image/jpeg,image/png,image/webp', capture: 'environment', hidden: true });
+      const up = h('button', { class: 'btn sm', type: 'button', disabled: deleted || !meta.receipts, onclick: () => file.click() }, receipt ? 'Replace photo' : 'Add photo');
+      const rm = h('button', { class: 'btn sm', type: 'button', disabled: deleted || !meta.receipts, onclick: () => { receipt = ''; showPrev(); } }, 'Remove');
+      file.addEventListener('change', guard(async () => {
+        const fl = file.files[0]; if (!fl) return;
+        up.disabled = true; up.textContent = 'Uploading…';
+        try {
+          const dataUrl = await resizeImage(fl, 1600, 1600);
+          receipt = (await api('upload', { method: 'POST', body: { dataUrl, name: 'receipt', folder: 'receipts' } })).url;
+          showPrev(); toast('Receipt uploaded');
+        } finally { up.disabled = false; up.textContent = 'Replace photo'; file.value = ''; }
+      }));
+      showPrev();
+      receiptBox = h('div', {}, h('label', { class: 'f', text: 'Receipt photo' }), prev, meta.receipts ? h('div', { class: 'row', style: { marginTop: '8px' } }, up, rm, file) : h('p', { class: 'hint', text: 'Receipt uploads are switched off.' }));
+    }
+    const reason = h('input', { class: 'in', id: 'tReason', maxlength: 300, placeholder: 'e.g. typed the wrong amount' });
+    const actor = actorSelect('tActor');
+
+    // existing transaction: summary + full history
+    let head = null, hist = null, banner = null;
+    if (!isNew) {
+      const sign = t.kind === 'credit' ? 1 : -1;
+      head = h('div', { class: 'txn-head' },
+        h('div', { class: 'big ' + (sign > 0 ? 'in-c' : 'out-c'), text: inr(sign * t.amount_paise, true) }),
+        h('p', {}, KIND_LABEL[t.kind] + ' · ' + t.category + ' · ' + t.method, h('br'),
+          'Added by ' + t.created_by + ' on ' + fmtFull(t.created_at),
+          t.version > 1 ? h('span', {}, h('br'), 'Last changed by ' + t.updated_by + ' on ' + fmtFull(t.updated_at) + ' · version ' + t.version) : null));
+      if (deleted) banner = h('div', { class: 'del-banner', text: 'Deleted by ' + t.deleted_by + ' on ' + fmtFull(t.deleted_at) + '. It doesn’t count in any totals. Restore it to bring it back — the deletion stays in the history.' });
+      hist = h('div', {}, h('label', { class: 'f', text: 'History' }), h('p', { class: 'hint', text: 'Loading…' }));
+      api('transactions-history', { query: { id: t.id } }).then((r) => hist.replaceChildren(h('label', { class: 'f', text: 'History' }), historyList(r.history, false))).catch(() => {});
+    }
+
+    const body = () => ({ kind: kind(), amount: amount.value, occurred_at: when.value ? new Date(when.value).toISOString() : '', person: person.value, category: category.value, method: method.value, description: desc.value, receipt });
+    openDrawer(isNew ? 'New transaction' : deleted ? 'Deleted transaction' : 'Transaction #' + t.id, [
+      banner, head,
+      h('label', { class: 'f', text: 'Type' }), seg,
+      h('label', { class: 'f', for: 'tAmount', text: 'Amount (₹)' }), amount,
+      h('label', { class: 'f', for: 'tWhen', text: 'Date & time' }), h('div', { class: 'when-row' }, when, nowBtn),
+      h('p', { class: 'hint', text: isNew ? 'Filled in with the current date and time. If this happened earlier, change it.' : 'When the money actually moved.' }),
+      h('div', { class: 'grid2' }, h('div', {}, personLabel, person), h('div', {}, h('label', { class: 'f', for: 'tMethod', text: 'Payment method' }), method)),
+      h('label', { class: 'f', for: 'tCategory', text: 'Category' }), category,
+      h('label', { class: 'f', for: 'tDesc', text: 'Description' }), desc,
+      receiptBox,
+      !deleted && !isNew && h('div', {}, h('label', { class: 'f', for: 'tReason', text: 'Reason for this change (optional)' }), reason),
+      h('fieldset', {}, h('legend', { text: 'You are' }), actor, h('p', { class: 'hint', text: 'Your name is saved in the history with this ' + (isNew ? 'entry' : 'change') + '. Remembered on this device.' })),
+      hist,
+    ], [
+      isNew ? h('span') : deleted
+        ? h('span')
+        : h('button', { class: 'btn danger', onclick: guard(async () => {
+          const who = needActor(actor);
+          const why = prompt('Why are you deleting this transaction? (Kept in the history — the entry can be restored later.)');
+          if (why == null) return;
+          await api('transactions', { method: 'DELETE', body: { id: t.id, version: t.version, actor: who, reason: why } });
+          closeDrawer(); toast('Transaction deleted — kept in the history'); loadLedger();
+        }) }, 'Delete'),
+      deleted
+        ? h('button', { class: 'btn primary', onclick: guard(async () => {
+          const who = needActor(actor);
+          await api('transactions-restore', { method: 'POST', body: { id: t.id, actor: who } });
+          closeDrawer(); toast('Transaction restored'); loadLedger();
+        }) }, 'Restore')
+        : h('button', { class: 'btn primary', onclick: guard(async (e) => {
+          const who = needActor(actor);
+          const btn = e.currentTarget; btn.disabled = true;
+          try {
+            if (isNew) await api('transactions', { method: 'POST', body: { ...body(), actor: who } });
+            else {
+              const r = await api('transactions', { method: 'PATCH', body: { ...body(), id: t.id, version: t.version, actor: who, reason: reason.value } });
+              if (r.unchanged) { toast('Nothing changed'); return; }
+            }
+            closeDrawer(); toast(isNew ? 'Transaction added' : 'Transaction updated — previous version kept in the history'); loadLedger();
+          } finally { btn.disabled = false; }
+        }) }, isNew ? 'Add transaction' : 'Save changes'),
+    ]);
+    if (isNew) setTimeout(() => amount.focus(), 80);
   }
 
   // ---------------- drawer ----------------

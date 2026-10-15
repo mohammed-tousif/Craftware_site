@@ -147,10 +147,38 @@ The contact form and `/admin` need the API: run `vercel dev` after
 
 ## Admin panel & API
 
-**What it does.** `/admin` (one shared password) has four tabs:
+**What it does.** `/admin` (one shared password) has five tabs:
 - **Leads** — every contact-form enquiry (also emailed to
   craftwaretech@gmail.com with Reply-To set to the visitor): status
   new/contacted/won/lost/spam, private notes, search, CSV export.
+- **Expenses** — the founders' private ledger of money in (credit) and
+  out (debit). Never rendered into the site and never needs Publish.
+  Each entry: type, amount (stored as integer **paise**), date & time
+  (pre-filled with "now", can be set to the past, never the future),
+  person (Nisar/Tousif/Mahir), category and payment method (fixed lists
+  in `lib/expenses.js` — change them there, the admin reads them from the
+  API), description, optional receipt photo. Totals for whatever is
+  filtered (period = month / financial year Apr–Mar / all time, all in
+  India time), all-time balance, breakdowns by category and person, CSV
+  export of the filtered list and of the full change history.
+  **Nothing is ever erased:** every write names who made it (the "You
+  are" picker, remembered per device) and appends a full before/after
+  snapshot to `transaction_history` in the *same* SQL statement (data-
+  modifying CTE), with reason, device (user agent) and hashed IP. Edits
+  bump `version` and stale saves get a 409 (no silent overwrite when two
+  founders edit at once); deletes are soft (`deleted_at`, reason
+  required) and can be restored. Postgres triggers (`cw_append_only`)
+  refuse UPDATE/DELETE/TRUNCATE on history and DELETE/TRUNCATE on
+  transactions — so even a hand-written query can't quietly rewrite the
+  record; if they ever fail to install the tab shows a warning. With one
+  shared password the "who" is self-declared — the device + IP hash in
+  the history is what backs it up.
+  **Receipt photos are built but switched off**: set `EXPENSE_RECEIPTS=on`
+  (Production) in Vercel and redeploy — no code change. They're stored
+  privately in Blob under `receipts/`, viewable only through the
+  authenticated `/api/admin/image` route, and can never be copied into the
+  public site (the build only accepts `work/` references —
+  `isUploadRef` vs `isReceiptRef` in `lib/storage.js`).
 - **Work** — the Work cards and the "Built with CraftWare" list: add/edit/
   hide/reorder, preview + optional tall hover-scroll image (uploads are
   resized in the browser, stored in Vercel Blob), categories, flags.
@@ -188,6 +216,15 @@ pre-filled WhatsApp link on any API failure, so an enquiry is never lost.
 | `ADMIN_PASSWORD_HASH`, `SESSION_SECRET` | `npm run setup-admin` | admin login |
 | `DEPLOY_HOOK_URL` | you, Settings → Git → Deploy Hooks (branch `main`) | the Publish button |
 | `LEAD_FROM` (optional) | you, after verifying craftware.co.in in Resend | e.g. `CraftWare <hello@craftware.co.in>` |
+| `EXPENSE_RECEIPTS` (optional) | you, set to `on` when wanted | turns on receipt photos in the Expenses tab |
+
+Testing the API without a real database: `lib/db.js` and `lib/storage.js`
+accept test drivers through `globalThis.__CW_TEST_SQL__` /
+`__CW_TEST_PUT__` / `__CW_TEST_GET__`. The Expenses tab was verified that
+way against PGlite (real Postgres in wasm) — 53 API checks with receipts
+off, 56 with them on, including the history triggers — plus a click-
+through of the admin UI on a local server. The harness lived outside the
+repo; rebuild it the same way if the ledger changes.
 
 Until `craftware.co.in` is verified in Resend, emails come from
 `onboarding@resend.dev`, which Resend only delivers to the Resend
